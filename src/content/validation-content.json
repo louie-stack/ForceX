@@ -1,0 +1,180 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "last_updated": "2026-04-16",
+    "authoritative_source": "/opt/forcex/docs/requirements/fx-web-req-lvr-quality-panel.md — Appendix 'Approved Public Content for All LVRs'",
+    "engine_spec": "/opt/forcex/docs/specifications/fx-indexer-spec-dqr-gates.md",
+    "content_flow_rule": "docs → bundle, never bundle → docs. This bundle is a derived delivery artifact. All LVR copy edits (title, meaning, what_it_checks, why_it_matters, helps_prevent, technical_basis) MUST originate in the authoritative_source appendix, be reviewed there, then synced verbatim into this file.",
+    "description": "Static plain-language content for ForceX Data Quality surface. Per fx-env-pln-validation-surface.md §0, §6.3, §6.5, §8. Runtime status fields are merged at render time from /api/v1/xplorer/{chain}/quality/controls using static-first union merge (every control in this bundle is always rendered; missing runtime → pending). Static bundle is the authoritative LIST of controls — runtime-only codes are logged and NOT rendered."
+  },
+  "domains": {
+    "monetary": {
+      "title": "Monetary Integrity",
+      "description": "Every coin ForceX publishes is backed by a real, unspent output and reconciles against the independent Litecoin node."
+    },
+    "address": {
+      "title": "Address Integrity",
+      "description": "Address balances, received totals, sent totals, and transaction counts all reconcile across ForceX's address ledger and its per-transaction links."
+    },
+    "block_write": {
+      "title": "Block & Write Integrity",
+      "description": "Block composition and write-path commitments are verified against the data ForceX actually stored for each block."
+    }
+  },
+  "controls": {
+    "FX-LVR-001": {
+      "domain": "monetary",
+      "title": "Address balance reconciliation",
+      "verb": "reconciles",
+      "meaning": "Every coin held by an address is backed by a real, unspent output on the chain.",
+      "what_it_checks": "Total balance across all addresses reconciles with the unspent-output set at the validated tip.",
+      "why_it_matters": "Prevents silent drift between what ForceX says users hold and what the chain actually shows as unspent.",
+      "helps_prevent": "Internal accounting drift.",
+      "technical_basis": "ForceX reconciles address balance changes against transparent UTXO creation and spend activity over the validated interval.",
+      "cadence_type": "per_block"
+    },
+    "FX-LVR-002": {
+      "domain": "monetary",
+      "title": "MWEB pool conservation",
+      "verb": "reconciles",
+      "meaning": "The confidential MWEB pool balance reconciles with the sum of all pegins, pegouts, and fees since the last anchor.",
+      "what_it_checks": "The current MWEB pool balance equals the last trusted anchor balance plus the net flow recorded since that anchor.",
+      "why_it_matters": "MWEB outputs are confidential — the pool balance is the only public anchor for the entire confidential ledger. Conservation here is the difference between provable supply and unprovable supply.",
+      "helps_prevent": "Internal accounting drift across the confidential ledger.",
+      "technical_basis": "ForceX reconciles MWEB pool balance movement against peg-in activity, peg-out activity, and fee-related net flow over the validated interval.",
+      "cadence_type": "per_block"
+    },
+    "FX-LVR-003": {
+      "domain": "address",
+      "title": "Address received reconciliation",
+      "verb": "reconciles",
+      "meaning": "Every coin recorded as received by an address matches a real output paid to that address.",
+      "what_it_checks": "The total received value per address reconciles against the source transaction outputs paying to that address over the same window.",
+      "why_it_matters": "The 'Total received' figure shown on every address page must match what the chain actually paid that address — never over- or under-counted.",
+      "helps_prevent": "Internal accounting drift in the address ledger.",
+      "technical_basis": "ForceX reconciles address-level received totals against transparent outputs attributed to those addresses over the validated interval.",
+      "cadence_type": "per_block"
+    },
+    "FX-LVR-004": {
+      "domain": "address",
+      "title": "Address sent reconciliation",
+      "verb": "reconciles",
+      "meaning": "Every coin recorded as sent by an address matches a real input spent from that address.",
+      "what_it_checks": "The total sent value per address reconciles against the source transaction inputs spending from that address over the same window.",
+      "why_it_matters": "The 'Total sent' figure on every address page must match what the chain actually spent from that address.",
+      "helps_prevent": "Internal accounting drift in the address ledger.",
+      "technical_basis": "ForceX reconciles address-level sent totals against transparent input spend activity attributed to those addresses over the validated interval.",
+      "cadence_type": "per_block"
+    },
+    "FX-LVR-005": {
+      "domain": "address",
+      "title": "Address received cross-reconciliation",
+      "verb": "reconciles",
+      "meaning": "Address-level received totals and per-transaction received links agree with each other.",
+      "what_it_checks": "Address-ledger received totals reconcile against the sum of received values recorded in address-to-transaction links for the same window.",
+      "why_it_matters": "Two independently built views of the same data must agree — if they diverge, one of them is wrong.",
+      "helps_prevent": "Divergence between the address ledger and its transaction link index.",
+      "technical_basis": "ForceX reconciles address received totals against the recorded per-transaction received value linked to each address over the validated interval.",
+      "cadence_type": "per_block"
+    },
+    "FX-LVR-006": {
+      "domain": "address",
+      "title": "Address sent cross-reconciliation",
+      "verb": "reconciles",
+      "meaning": "Address-level sent totals and per-transaction sent links agree with each other.",
+      "what_it_checks": "Address-ledger sent totals reconcile against the sum of sent values recorded in address-to-transaction links for the same window.",
+      "why_it_matters": "Two independently built views of the same data must agree — if they diverge, one of them is wrong.",
+      "helps_prevent": "Divergence between the address ledger and its transaction link index.",
+      "technical_basis": "ForceX reconciles address sent totals against the recorded per-transaction sent value linked to each address over the validated interval.",
+      "cadence_type": "per_block"
+    },
+    "FX-LVR-007": {
+      "domain": "address",
+      "title": "Address transaction count reconciliation",
+      "verb": "reconciles",
+      "meaning": "The transaction count on each address matches the number of recorded transaction links for that address.",
+      "what_it_checks": "Address-ledger transaction counts reconcile against the actual number of transaction links stored for each address.",
+      "why_it_matters": "The transaction count on an address page must match the number of transactions you can actually list for that address.",
+      "helps_prevent": "Divergence between the address ledger and its transaction link index.",
+      "technical_basis": "ForceX reconciles address transaction counts against the number of recorded transaction links associated with each address over the validated interval.",
+      "cadence_type": "per_block"
+    },
+    "FX-LVR-008": {
+      "domain": "block_write",
+      "title": "MWEB pool write-path verification",
+      "verb": "verifies",
+      "meaning": "The MWEB pool balance stored after each MWEB block matches the balance the parser was tracking in memory.",
+      "what_it_checks": "After each MWEB block is processed, the pool balance ForceX records matches the running balance it tracked during block processing.",
+      "why_it_matters": "Catches write-path corruption immediately on the block it occurred, before any downstream metric is affected.",
+      "helps_prevent": "Write-path corruption or incomplete ingestion of MWEB blocks.",
+      "technical_basis": "ForceX verifies that the MWEB balance state committed to storage matches the balance state tracked during live block processing.",
+      "cadence_type": "per_block"
+    },
+    "FX-LVR-009": {
+      "domain": "block_write",
+      "title": "Rolling snapshot reconciliation",
+      "verb": "reconciles",
+      "meaning": "The current chain-state snapshot used by the explorer is anchored to the real tip and has not drifted from source.",
+      "what_it_checks": "The rolling snapshot’s tip height, block count, transaction count, and pool balance reconcile against ForceX’s current indexed chain state at each new block.",
+      "why_it_matters": "The summary numbers shown across the explorer come from this snapshot — if it drifts from source, every surface is subtly wrong.",
+      "helps_prevent": "Stale or misaligned snapshot data leaking into explorer summaries.",
+      "technical_basis": "ForceX reconciles the explorer’s rolling chain snapshot against live indexed chain-state totals and current tip state.",
+      "cadence_type": "per_block"
+    },
+    "FX-LVR-010": {
+      "domain": "block_write",
+      "title": "Block transaction count match",
+      "verb": "matches",
+      "meaning": "The transaction count stored on each block matches the transactions actually written for that block.",
+      "what_it_checks": "The transaction count shown for each block matches the transactions ForceX recorded for that block.",
+      "why_it_matters": "Catches partial-write or duplicate-write bugs on the block they occurred.",
+      "helps_prevent": "Write-path corruption producing inconsistent block metadata.",
+      "technical_basis": "ForceX reconciles each block’s stored transaction count against the transactions committed for that block during ingestion.",
+      "cadence_type": "per_block"
+    },
+    "FX-LVR-011": {
+      "domain": "monetary",
+      "title": "Issued supply cap verification",
+      "verb": "verifies",
+      "meaning": "The total spendable LTC on the chain never exceeds what the Litecoin halving schedule says can exist.",
+      "what_it_checks": "The total unspent-output value at the validated tip is no greater than the deterministic issued supply for that height under Litecoin's halving schedule.",
+      "why_it_matters": "A supply violation would mean ForceX is reporting more coins than can possibly exist — an unambiguous integrity failure.",
+      "helps_prevent": "Internal accounting drift producing impossible supply totals.",
+      "technical_basis": "ForceX validates indexed spendable supply against Litecoin’s deterministic issuance schedule at the current validated height.",
+      "cadence_type": "per_block"
+    },
+    "FX-LVR-012": {
+      "domain": "block_write",
+      "title": "Block input count match",
+      "verb": "matches",
+      "meaning": "The input count stored on each block matches the inputs actually written for that block.",
+      "what_it_checks": "The input count shown for each block matches the inputs ForceX recorded for that block.",
+      "why_it_matters": "Catches partial-write or miscounted-input bugs on the block they occurred.",
+      "helps_prevent": "Write-path corruption producing inconsistent block metadata.",
+      "technical_basis": "ForceX reconciles each block’s stored input count against the committed input records written for that block.",
+      "cadence_type": "per_block"
+    },
+    "FX-LVR-013": {
+      "domain": "block_write",
+      "title": "Block output count match",
+      "verb": "matches",
+      "meaning": "The output count stored on each block matches the outputs actually written for that block.",
+      "what_it_checks": "The output count shown for each block matches the outputs ForceX recorded for that block.",
+      "why_it_matters": "Catches partial-write or miscounted-output bugs on the block they occurred.",
+      "helps_prevent": "Write-path corruption producing inconsistent block metadata.",
+      "technical_basis": "ForceX reconciles each block’s stored output count against the committed output records written for that block.",
+      "cadence_type": "per_block"
+    },
+    "FX-LVR-014": {
+      "domain": "monetary",
+      "title": "Independent node cross-check",
+      "verb": "cross-checks",
+      "meaning": "The total UTXO amount ForceX has indexed matches what the Litecoin node itself reports.",
+      "what_it_checks": "The ForceX UTXO total at a checkpointed height cross-checks against the Litecoin node's independent UTXO total at the same height.",
+      "why_it_matters": "The only layer that verifies ForceX against a system outside itself. Catches drift between an internally self-consistent index and source truth.",
+      "helps_prevent": "Source divergence — internal self-consistency while drifting from Litecoin node truth.",
+      "technical_basis": "ForceX cross-checks indexed UTXO-equivalent supply against Litecoin node-reported chain state at controlled checkpoint heights.",
+      "cadence_type": "periodic_external"
+    }
+  }
+}

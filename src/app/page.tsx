@@ -1,69 +1,107 @@
-import Image from "next/image";
+import Link from "next/link";
+import { getNetworkSummary } from "@/lib/api";
+import { LiveNetworkPanel } from "@/components/LiveNetworkPanel";
+import { VerificationStream } from "@/components/VerificationStream";
+import { ArrowUpRight, ArrowRight } from "@/components/Icons";
+import { Statement } from "@/components/home/Statement";
+import { Surfaces } from "@/components/home/Surfaces";
+import { QualityLayers } from "@/components/home/QualityLayers";
+import { DeveloperStrip } from "@/components/home/DeveloperStrip";
+import { McpSection } from "@/components/home/McpSection";
+import { Belief } from "@/components/home/Belief";
+import { CtaBand } from "@/components/CtaBand";
 
-export default function Home() {
+export const revalidate = 30;
+
+export default async function Home() {
+  const summary = await getNetworkSummary();
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
+    <>
+      <section className="hero">
+        <div className="glow hero__glow" />
+        <div className="grid-bg" />
+        <div className="container">
+          <span className="eyebrow" data-reveal="fade">
+            Verified Litecoin data · public beta
+          </span>
+          <h1 className="display hero__title" data-reveal-lines style={{ marginTop: 22 }}>
+            <span className="line">
+              <span>Blockchain data</span>
+            </span>
+            <span className="line">
+              <span>
+                should be <em className="serif">verified</em>
+              </span>
+            </span>
+            <span className="line">
+              <span>before it is displayed.</span>
+            </span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+
+          <div className="hero__row">
+            <div className="hero__copy">
+              <p className="lead" data-reveal style={{ margin: 0, ["--d" as string]: "120ms" }}>
+                ForceX is a data-quality-first blockchain intelligence platform starting with Litecoin. Every block is
+                reconciled, validated, and cross-checked against the node before you see it.
+              </p>
+              <div className="hero__actions" data-reveal style={{ ["--d" as string]: "200ms" }}>
+                <Link href="/signup" className="btn btn--accent btn--lg">
+                  Create free account
+                  <span className="btn__ico">
+                    <ArrowUpRight />
+                  </span>
+                </Link>
+                <Link href="/about" className="btn btn--ghost btn--lg">
+                  Who we are
+                </Link>
+              </div>
+              <div className="hero__trust" data-reveal style={{ ["--d" as string]: "280ms" }}>
+                <span className="chip">
+                  <span className="chip__dot" />
+                  242 enforcement points
+                </span>
+                <span className="chip">
+                  <span className="chip__dot" />
+                  Node cross-check every 1,000 blocks
+                </span>
+                <span className="chip">
+                  <span className="chip__dot" />
+                  ISO 8000 framework
+                </span>
+              </div>
+            </div>
+            <div data-reveal="scale" style={{ ["--d" as string]: "160ms" }}>
+              <LiveNetworkPanel initial={summary} />
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </section>
+
+      <VerificationStream height={summary.asOf.height} />
+
+      <Statement />
+
+      <Surfaces />
+
+      <QualityLayers quality={summary.quality} />
+
+      <DeveloperStrip quality={summary.quality} />
+
+      <McpSection height={summary.asOf.height} />
+
+      <Belief />
+
+      <CtaBand />
+
+      <div className="container" style={{ paddingBottom: 24 }}>
+        <p className="small" style={{ margin: 0, display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
+          Litecoin is the starting point. The standard is the product.
+          <Link href="/about" className="link-arrow" style={{ fontSize: 14 }}>
+            Read why <ArrowRight size={14} />
+          </Link>
+        </p>
+      </div>
+    </>
   );
 }
