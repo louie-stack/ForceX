@@ -39,7 +39,7 @@ export function FeaturePage({
         lead={lead}
         actions={
           <>
-            <a href={AUTH_LINKS_SERVER.signinTo(appPath)} className="btn btn--accent btn--lg" data-cursor="Open">
+            <a href={AUTH_LINKS_SERVER.signinTo(appPath)} className="btn btn--accent btn--lg">
               Sign in to open
               <span className="btn__ico">
                 <ArrowUpRight />

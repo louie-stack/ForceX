@@ -72,7 +72,7 @@ export function LayersScroll() {
           <div className="hz__panel hz__panel--end">
             <span className="eyebrow">242 enforcement points</span>
             <h3 style={{ marginTop: 16 }}>Read the methodology and the public control catalog.</h3>
-            <Link href="/data-quality" className="btn btn--accent" style={{ marginTop: 28 }} data-cursor="Read">
+            <Link href="/data-quality" className="btn btn--accent" style={{ marginTop: 28 }}>
               Data quality
               <span className="btn__ico">
                 <ArrowUpRight />

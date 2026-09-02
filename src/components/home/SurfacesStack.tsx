@@ -106,7 +106,7 @@ export function SurfacesStack() {
                         </span>
                       ))}
                     </div>
-                    <Link href={it.href} className="btn btn--ghost" style={{ justifySelf: "start", borderColor: `color-mix(in srgb, ${it.tint} 50%, var(--line))` }} data-cursor="Open">
+                    <Link href={it.href} className="btn btn--ghost" style={{ justifySelf: "start", borderColor: `color-mix(in srgb, ${it.tint} 50%, var(--line))` }}>
                       {it.cta}
                       <span className="btn__ico">
                         <ArrowUpRight />

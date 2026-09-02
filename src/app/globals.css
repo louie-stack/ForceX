@@ -155,6 +155,10 @@ button {
   cursor: pointer;
 }
 
+a, button, summary, [role="button"] {
+  cursor: pointer;
+}
+
 ::selection {
   background: var(--accent);
   color: #fff;

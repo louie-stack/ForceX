@@ -16,7 +16,7 @@ export function FinalCta() {
         </Split>
         <div className="final__actions" data-reveal>
           <Magnetic>
-            <Link href="/signup" className="btn btn--accent btn--lg" data-cursor="Go">
+            <Link href="/signup" className="btn btn--accent btn--lg">
               Create free account
               <span className="btn__ico">
                 <ArrowUpRight />

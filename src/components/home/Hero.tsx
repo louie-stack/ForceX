@@ -31,7 +31,7 @@ export function Hero({ summary }: { summary: NetworkSummary }) {
 
           <div className="hero3__actions" data-reveal style={{ ["--d" as string]: "1400ms" }}>
             <Magnetic>
-              <Link href="/signup" className="btn btn--accent btn--lg" data-cursor="Go">
+              <Link href="/signup" className="btn btn--accent btn--lg">
                 Create free account
                 <span className="btn__ico">
                   <ArrowUpRight />

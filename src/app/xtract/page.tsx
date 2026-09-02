@@ -64,7 +64,7 @@ export default async function XtractPage() {
         lead="Programmatic access to validated Litecoin data for builders, wallets, analysts, and institutions."
         actions={
           <>
-            <Link href="/signup?return_to=/account/%23api-keys" className="btn btn--accent btn--lg" data-cursor="Go">
+            <Link href="/signup?return_to=/account/%23api-keys" className="btn btn--accent btn--lg">
               Get API access
               <span className="btn__ico">
                 <ArrowUpRight />

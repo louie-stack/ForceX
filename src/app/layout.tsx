@@ -11,7 +11,6 @@ import { Footer } from "@/components/Footer";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { RevealObserver } from "@/components/RevealObserver";
 import { Preloader } from "@/components/fx/Preloader";
-import { Cursor } from "@/components/fx/Cursor";
 import { PageTransition } from "@/components/fx/PageTransition";
 import { ScrollProgress } from "@/components/fx/ScrollProgress";
 import { Spotlight } from "@/components/fx/Spotlight";
@@ -99,7 +98,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <SmoothScroll />
         <RevealObserver />
         <PageTransition />
-        <Cursor />
         <Nav />
         <main id="main">{children}</main>
         <Footer />
