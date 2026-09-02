@@ -4,6 +4,12 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { gsap } from "@/lib/gsap";
 import { Wordmark } from "@/components/Wordmark";
 
+declare global {
+  interface Window {
+    __fxLoaded?: boolean;
+  }
+}
+
 /**
  * First-visit-per-session loader. The markup is server-rendered and shown
  * instantly by the inline boot script (html[data-pre]) so there is no blank
@@ -19,12 +25,27 @@ export function Preloader({ height }: { height: number | null }) {
 
   const wanted = useSyncExternalStore(
     () => () => {},
-    () => document.documentElement.hasAttribute("data-pre"),
+    () => {
+      try {
+        if (sessionStorage.getItem("fx-loaded") === "1") return false;
+      } catch {}
+      return !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    },
     () => true,
   );
 
   useEffect(() => {
-    if (!wanted || !root.current) return;
+    const d = document.documentElement;
+    if (!wanted) {
+      d.removeAttribute("data-pre");
+      d.setAttribute("data-loaded", "1");
+      window.__fxLoaded = true;
+      window.dispatchEvent(new Event("fx:loaded"));
+      return;
+    }
+    // Re-assert the flag in case a hydration recovery reset html attributes.
+    d.setAttribute("data-pre", "1");
+    if (!root.current) return;
     const target = height ?? 3_170_000;
     const obj = { v: Math.max(0, target - 4200) };
     const el = root.current;
@@ -35,6 +56,7 @@ export function Preloader({ height }: { height: number | null }) {
         } catch {}
         document.documentElement.removeAttribute("data-pre");
         document.documentElement.setAttribute("data-loaded", "1");
+        window.__fxLoaded = true;
         window.dispatchEvent(new Event("fx:loaded"));
         setDone(true);
       },

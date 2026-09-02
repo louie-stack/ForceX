@@ -68,7 +68,7 @@ export function Split({
     const go = () => {
       ready().then(() => {
         if (cancelled) return;
-        if (now && !document.documentElement.hasAttribute("data-loaded")) {
+        if (now && !window.__fxLoaded && !document.documentElement.hasAttribute("data-loaded")) {
           window.addEventListener("fx:loaded", run, { once: true });
         } else run();
       });

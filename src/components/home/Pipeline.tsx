@@ -98,7 +98,7 @@ export function Pipeline({ height, hash }: { height: number | null; hash?: strin
   const hx = hash ?? "854a9df1b80613e4ba1be4dfb2402d7bcb77b7709de9ac33268e46781cff67c2";
 
   return (
-    <section className="pipe" ref={root} aria-label="How ForceX verifies a block">
+    <section className="pipe" id="pipeline" ref={root} aria-label="How ForceX verifies a block">
       <div className="pipe__pin">
         <div className="container">
           <div className="pipe__head">

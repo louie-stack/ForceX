@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { NetworkSummary } from "@/lib/api";
-import { fmtBytes, fmtInt, fmtLtc, fmtSignedPct, pctTone, timeAgo } from "@/lib/format";
+import { fmtBytes, fmtInt, fmtLtc, fmtSignedPct, pctTone } from "@/lib/format";
+import { TimeAgo } from "@/components/TimeAgo";
 import { Counter } from "./Counter";
 import { LtcMark, ArrowUpRight } from "./Icons";
 
@@ -11,7 +12,6 @@ const REFRESH_MS = 60_000;
 
 export function LiveNetworkPanel({ initial }: { initial: NetworkSummary }) {
   const [data, setData] = useState<NetworkSummary>(initial);
-  const [tick, setTick] = useState(0);
 
   useEffect(() => {
     let alive = true;
@@ -21,17 +21,14 @@ export function LiveNetworkPanel({ initial }: { initial: NetworkSummary }) {
         .then((j) => alive && j?.data && setData(j.data))
         .catch(() => {});
     const iv = window.setInterval(load, REFRESH_MS);
-    const clock = window.setInterval(() => setTick((t) => t + 1), 15_000);
     return () => {
       alive = false;
       window.clearInterval(iv);
-      window.clearInterval(clock);
     };
   }, []);
 
   const q = data.quality;
   const validated = q?.state === "validated";
-  void tick;
 
   return (
     <div className="panel" aria-live="polite">
@@ -46,13 +43,13 @@ export function LiveNetworkPanel({ initial }: { initial: NetworkSummary }) {
           <span className="pulse" />
           <span>Live</span>
           <span className="hide-sm" style={{ color: "var(--muted)" }}>
-            {data.asOf.height ? `Block ${fmtInt(data.asOf.height)} · ${timeAgo(data.asOf.time)}` : "Connecting"}
+            {data.asOf.height ? <>Block {fmtInt(data.asOf.height)} · <TimeAgo iso={data.asOf.time} /></> : "Connecting"}
           </span>
         </div>
       </div>
 
       <div className="panel__grid">
-        <Tile label="Latest block" value={data.asOf.height} meta={timeAgo(data.asOf.time)} />
+        <Tile label="Latest block" value={data.asOf.height} meta={<TimeAgo iso={data.asOf.time} />} />
         <Tile label="Transactions, 24h" value={data.tx.count} meta={fmtSignedPct(data.tx.changePct)} tone={pctTone(data.tx.changePct)} />
         <Tile label="Active addresses, 24h" value={data.addresses.active} meta={fmtSignedPct(data.addresses.changePct)} tone={pctTone(data.addresses.changePct)} />
         <Tile label="Avg block size, 24h" value={data.blockSize.bytes} format={fmtBytes} meta={fmtSignedPct(data.blockSize.changePct)} tone={pctTone(data.blockSize.changePct)} />
@@ -99,7 +96,7 @@ function Tile({
 }: {
   label: string;
   value: number | null;
-  meta: string;
+  meta: React.ReactNode;
   tone?: "good" | "bad" | "";
   format?: (n: number) => string;
 }) {

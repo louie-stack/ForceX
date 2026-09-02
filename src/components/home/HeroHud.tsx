@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import type { NetworkSummary } from "@/lib/api";
-import { fmtInt, fmtSignedPct, pctTone, timeAgo } from "@/lib/format";
+import { fmtInt, fmtSignedPct, pctTone } from "@/lib/format";
+import { TimeAgo } from "@/components/TimeAgo";
 import { Counter } from "@/components/Counter";
 import { LtcMark } from "@/components/Icons";
 import { useLiveSummary } from "./useLiveSummary";
@@ -19,7 +20,7 @@ export function HeroHud({ initial }: { initial: NetworkSummary }) {
         </b>
         <span>
           <span className="pulse" style={{ marginRight: 8, verticalAlign: "middle" }} />
-          {d.asOf.height ? timeAgo(d.asOf.time) : "connecting"}
+          {d.asOf.height ? <TimeAgo iso={d.asOf.time} /> : "connecting"}
         </span>
       </div>
       <div className="hud__grid">

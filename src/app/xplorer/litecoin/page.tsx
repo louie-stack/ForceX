@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { FX_APP_ORIGIN, getChainHome, getNetworkSummary } from "@/lib/api";
-import { fmtBytes, fmtInt, fmtLtc, fmtSignedPct, pctTone, timeAgo } from "@/lib/format";
+import { fmtBytes, fmtInt, fmtLtc, fmtSignedPct, pctTone } from "@/lib/format";
+import { TimeAgo } from "@/components/TimeAgo";
 import { SeriesChart } from "@/components/SeriesChart";
 import { ExplorerSearch } from "@/components/ExplorerSearch";
 import { Counter } from "@/components/Counter";
@@ -70,7 +71,7 @@ export default async function XplorerLitecoin() {
               <span className="xp-metric">
                 <Counter value={chain?.height ?? summary.asOf.height} />
               </span>
-              <span className="small">{timeAgo(summary.asOf.time)}</span>
+              <span className="small"><TimeAgo iso={summary.asOf.time} /></span>
             </a>
             <div className="xp-card" data-spot="">
               <div className="xp-card__head">Total addresses</div>

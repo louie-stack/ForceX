@@ -3,7 +3,8 @@ import Link from "next/link";
 import { PageHero } from "@/components/PageHero";
 import { CtaBand } from "@/components/CtaBand";
 import { fetchPublic, type QualityStatus } from "@/lib/api";
-import { fmtInt, timeAgo } from "@/lib/format";
+import { fmtInt } from "@/lib/format";
+import { TimeAgo } from "@/components/TimeAgo";
 import catalog from "@/content/validation-content.json";
 import { ArrowUpRight } from "@/components/Icons";
 import { Counter } from "@/components/Counter";
@@ -90,7 +91,7 @@ export default async function DataQualityPage() {
                 {status ? (validated ? "Validated" : status.state) : "Pending"}
               </span>
               <span className="stat__label">{status ? `Through block ${fmtInt(status.tip_height)}` : "Live status unavailable"}</span>
-              <span className="stat__meta">{status ? `Validated ${timeAgo(status.validated_at)}` : "Status endpoint unreachable"}</span>
+              <span className="stat__meta">{status ? <>Validated <TimeAgo iso={status.validated_at} /></> : "Status endpoint unreachable"}</span>
             </div>
             <div className="stat">
               <span className="stat__value">
