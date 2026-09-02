@@ -3,14 +3,13 @@ import type { NetworkSummary } from "@/lib/api";
 import { Magnetic } from "@/components/fx/Magnetic";
 import { HeroStage } from "@/components/fx/HeroStage";
 import { ArrowUpRight } from "@/components/Icons";
-import { HeroAnnotations } from "./HeroAnnotations";
 import { HeroMotion } from "./HeroMotion";
 import { LiveTicker } from "./LiveTicker";
 
 /**
  * The hero is the block. Particles assemble into VERIFIED, then cycle
- * through the cube and the sphere, with a caption that completes the
- * sentence differently each time. Live readouts orbit the stage.
+ * through the cube and the sphere; each shape carries its own live facts
+ * and a caption that completes the sentence.
  */
 export function Hero({ summary }: { summary: NetworkSummary }) {
   return (
@@ -21,18 +20,14 @@ export function Hero({ summary }: { summary: NetworkSummary }) {
         <div className="container hero3__inner">
           <div className="hero3__top">
             <span className="eyebrow" data-reveal="fade" style={{ ["--d" as string]: "500ms" }}>
-              Verified Litecoin data
+              Litecoin on-chain intelligence
             </span>
             <span className="hero3__live mono" data-reveal="fade" style={{ ["--d" as string]: "600ms" }}>
               <span className="pulse" /> Live at tip
             </span>
           </div>
 
-          <HeroStage>
-            <div className="hero3__stage">
-              <HeroAnnotations initial={summary} />
-            </div>
-          </HeroStage>
+          <HeroStage initial={summary} />
 
           <div className="hero3__actions" data-reveal style={{ ["--d" as string]: "1400ms" }}>
             <Magnetic>

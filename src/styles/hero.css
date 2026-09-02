@@ -79,7 +79,7 @@
 }
 .hero3__stage {
   position: relative;
-  min-height: clamp(280px, 50vh, 520px);
+  min-height: clamp(300px, 52vh, 560px);
 }
 .hero3__cap {
   margin: 0;
@@ -129,7 +129,7 @@
   padding-block: 12px;
 }
 
-/* Annotations */
+/* Readouts attached to the shapes */
 .ann {
   position: absolute;
   display: grid;
@@ -137,17 +137,18 @@
   padding: 12px 14px;
   border-radius: 14px;
   border: 1px solid var(--line);
-  background: color-mix(in srgb, var(--surface) 55%, transparent);
+  background: color-mix(in srgb, var(--surface) 62%, transparent);
   backdrop-filter: blur(18px) saturate(150%);
   -webkit-backdrop-filter: blur(18px) saturate(150%);
   box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  min-width: 168px;
-  transition: border-color 0.3s, transform 0.5s var(--ease-out);
-  animation: ann-float 6s var(--ease-io) infinite;
+  min-width: 176px;
+  opacity: 0;
+  visibility: hidden;
+  transition: border-color 0.3s;
+  z-index: 3;
 }
 .ann:hover {
   border-color: var(--line-strong);
-  transform: translateY(-2px);
 }
 .ann__label {
   font-size: 11px;
@@ -163,110 +164,118 @@
   letter-spacing: -0.02em;
   color: var(--text);
   font-variant-numeric: tabular-nums;
-  text-transform: capitalize;
 }
 .ann__meta {
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--muted);
 }
+.ann--stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  height: 40px;
+  padding: 0 16px 0 14px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.ann__line {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--text-2);
+}
+.ann__line b {
+  font-weight: 500;
+  color: var(--text);
+}
+.ann--stamp::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  width: 1px;
+  height: var(--gap, 26px);
+  background: linear-gradient(0deg, var(--line-strong), transparent);
+}
 .ann__lead {
   position: absolute;
-  width: 56px;
+  top: 50%;
+  width: var(--gap, 26px);
   height: 1px;
-  background: linear-gradient(90deg, var(--line-strong), transparent);
+  background: var(--line-strong);
 }
 .ann__lead::before {
   content: "";
   position: absolute;
-  left: -3px;
   top: -3px;
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 999px;
   background: var(--accent);
-  box-shadow: 0 0 10px var(--accent-glow);
+  box-shadow: 0 0 12px var(--accent-glow);
 }
-.ann--tl {
-  left: 4%;
-  top: 14%;
-  animation-delay: 0s;
-}
-.ann--tr {
-  right: 4%;
-  top: 8%;
-  animation-delay: -1.5s;
-}
-.ann--bl {
-  left: 10%;
-  bottom: 4%;
-  animation-delay: -3s;
-}
-.ann--br {
-  right: 8%;
-  bottom: 12%;
-  animation-delay: -4.5s;
-}
-.ann--tl .ann__lead,
-.ann--bl .ann__lead {
+.ann[data-side="l"] .ann__lead {
   left: 100%;
-  top: 50%;
 }
-.ann--tr .ann__lead,
-.ann--br .ann__lead {
+.ann[data-side="l"] .ann__lead::before {
+  right: -3px;
+}
+.ann[data-side="r"] .ann__lead {
   right: 100%;
-  top: 50%;
-  transform: scaleX(-1);
 }
-@keyframes ann-float {
-  0%,
-  100% {
-    translate: 0 0;
-  }
-  50% {
-    translate: 0 -8px;
-  }
+.ann[data-side="r"] .ann__lead::before {
+  left: -3px;
 }
-@media (max-width: 900px) {
+@media (max-width: 759px) {
+  .hero3__top .eyebrow {
+    display: none;
+  }
+  .hero3__top {
+    justify-content: flex-end;
+  }
+  .hero3__live {
+    white-space: nowrap;
+  }
   .ann {
-    min-width: 140px;
+    min-width: 150px;
     padding: 10px 12px;
   }
   .ann__value {
     font-size: 16px;
   }
   .ann__lead {
-    display: none;
+    left: 50% !important;
+    right: auto !important;
+    top: auto;
+    width: 1px;
+    height: var(--gap, 14px);
   }
-  .ann--tl {
-    left: 0;
-    top: 6%;
+  .ann[data-side="l"] .ann__lead {
+    top: 100%;
   }
-  .ann--tr {
-    right: 0;
-    top: 6%;
+  .ann[data-side="l"] .ann__lead::before {
+    left: -3px;
+    right: auto;
+    top: auto;
+    bottom: -3px;
   }
-  .ann--bl {
-    left: 0;
-    bottom: 0;
+  .ann[data-side="r"] .ann__lead {
+    bottom: 100%;
   }
-  .ann--br {
-    right: 0;
-    bottom: 0;
+  .ann[data-side="r"] .ann__lead::before {
+    left: -3px;
+    top: -3px;
   }
   .hero3__stage {
-    min-height: clamp(300px, 46vh, 420px);
+    min-height: clamp(360px, 56vh, 480px);
   }
   .hero3__cap {
     font-size: clamp(26px, 7.4vw, 40px);
   }
   .hero3__cap .cap {
     white-space: normal;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .ann {
-    animation: none;
   }
 }
 
