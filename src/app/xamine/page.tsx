@@ -23,13 +23,15 @@ export default function XaminePage() {
   return (
     <>
       <PageHero
+        tint="xamine"
+        shape="sphere"
         eyebrow="Xamine · analytics and intelligence"
         title={
           <>
             Analytics designed to reveal insights with <span className="hi">confidence</span>.
           </>
         }
-        lead="Xamine is the analytics and intelligence surface of ForceX. Analyze trends, relationships, supply, network behavior, and address activity with governed, trusted data."
+        lead="Trends, supply, network behavior, and address relationships on governed data."
         actions={
           <>
             <a href={`${FX_APP_ORIGIN}/xamine`} className="btn btn--accent btn--lg">

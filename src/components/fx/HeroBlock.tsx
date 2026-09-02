@@ -4,11 +4,29 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
 /**
- * The block. Thirteen thousand points that morph between a cube lattice and
- * a sphere while a verification scan sweeps through them: raw grey above the
- * scan, a bright band at it, verified blue below. Slow rotation, mouse tilt,
- * additive glow.
+ * The block: a lattice of points that can hold a cube, a sphere, or morph
+ * between them while a verification scan sweeps through, turning raw grey
+ * points into tinted verified ones. Reused across the site with a different
+ * tint, mode, and placement per page.
  */
+export interface HeroBlockProps {
+  className?: string;
+  /** Accent hex for verified points (dark theme) and its light-theme counterpart. */
+  tint?: string;
+  tintLight?: string;
+  mode?: "morph" | "cube" | "sphere";
+  /** Object radius multiplier. */
+  scale?: number;
+  /** World-space offset; x is ignored on narrow screens (object centers). */
+  x?: number;
+  y?: number;
+  /** Lattice resolution per axis (n^3 points). */
+  density?: number;
+  opacity?: number;
+  /** Rotation speed multiplier. */
+  spin?: number;
+}
+
 const VERT = /* glsl */ `
 uniform float uTime;
 uniform float uMorph;
@@ -24,7 +42,6 @@ varying float vSeed;
 
 void main() {
   vec3 p = mix(position, aSphere, uMorph);
-  // Breathing jitter so the lattice never looks frozen.
   p += 0.06 * vec3(
     sin(uTime * 0.9 + aSeed * 31.0),
     cos(uTime * 0.7 + aSeed * 17.0),
@@ -34,7 +51,6 @@ void main() {
   vBand = 1.0 - smoothstep(0.0, 1.1, abs(d));
   vState = smoothstep(0.0, 1.6, d);
   vSeed = aSeed;
-
   vec4 mv = modelViewMatrix * vec4(p, 1.0);
   vDepth = clamp((-mv.z - 8.0) / 20.0, 0.0, 1.0);
   gl_Position = projectionMatrix * mv;
@@ -66,7 +82,18 @@ void main() {
 }
 `;
 
-export function HeroBlock({ className }: { className?: string }) {
+export function HeroBlock({
+  className,
+  tint = "#3b82f6",
+  tintLight = "#2563eb",
+  mode = "morph",
+  scale = 1,
+  x = 0,
+  y = 0,
+  density,
+  opacity = 1,
+  spin = 1,
+}: HeroBlockProps) {
   const host = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -84,27 +111,26 @@ export function HeroBlock({ className }: { className?: string }) {
     const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
     camera.position.set(0, 0.2, 17.5);
 
-    const n = isMobile ? 20 : 28;
+    const n = density ?? (isMobile ? 20 : 28);
     const count = n * n * n;
-    const half = 4.1;
+    const half = 4.1 * scale;
+    const R = 5.3 * scale;
     const cube = new Float32Array(count * 3);
     const sphere = new Float32Array(count * 3);
     const seed = new Float32Array(count);
-    const R = 5.3;
     let i = 0;
     const golden = Math.PI * (3 - Math.sqrt(5));
-    for (let x = 0; x < n; x++) {
-      for (let y = 0; y < n; y++) {
-        for (let z = 0; z < n; z++) {
-          cube[i * 3] = (x / (n - 1) - 0.5) * 2 * half;
-          cube[i * 3 + 1] = (y / (n - 1) - 0.5) * 2 * half;
-          cube[i * 3 + 2] = (z / (n - 1) - 0.5) * 2 * half;
-          // Fibonacci sphere with a little radial depth so it reads as a volume.
+    for (let ix = 0; ix < n; ix++) {
+      for (let iy = 0; iy < n; iy++) {
+        for (let iz = 0; iz < n; iz++) {
+          cube[i * 3] = (ix / (n - 1) - 0.5) * 2 * half;
+          cube[i * 3 + 1] = (iy / (n - 1) - 0.5) * 2 * half;
+          cube[i * 3 + 2] = (iz / (n - 1) - 0.5) * 2 * half;
           const t = i / count;
           const yy = 1 - t * 2;
           const rr = Math.sqrt(1 - yy * yy);
           const th = golden * i;
-          const rad = R * (0.86 + 0.14 * ((i * 7919) % 97) / 97);
+          const rad = R * (0.86 + (0.14 * ((i * 7919) % 97)) / 97);
           sphere[i * 3] = Math.cos(th) * rr * rad;
           sphere[i * 3 + 1] = yy * rad;
           sphere[i * 3 + 2] = Math.sin(th) * rr * rad;
@@ -119,12 +145,16 @@ export function HeroBlock({ className }: { className?: string }) {
     geo.setAttribute("aSeed", new THREE.BufferAttribute(seed, 1));
 
     const light = () => document.documentElement.getAttribute("data-theme") === "light";
-    const palette = () => ({
-      raw: new THREE.Color(light() ? "#a3abbf" : "#3b4357"),
-      verified: new THREE.Color(light() ? "#2563eb" : "#3b82f6"),
-      band: new THREE.Color(light() ? "#1d4ed8" : "#e0ecff"),
-      opacity: light() ? 0.9 : 1,
-    });
+    const palette = () => {
+      const v = new THREE.Color(light() ? tintLight : tint);
+      const band = light() ? v.clone().multiplyScalar(0.8) : v.clone().lerp(new THREE.Color("#ffffff"), 0.75);
+      return {
+        raw: new THREE.Color(light() ? "#a3abbf" : "#3b4357"),
+        verified: v,
+        band,
+        opacity: (light() ? 0.9 : 1) * opacity,
+      };
+    };
     const pal = palette();
     const mat = new THREE.ShaderMaterial({
       vertexShader: VERT,
@@ -134,7 +164,7 @@ export function HeroBlock({ className }: { className?: string }) {
       blending: light() ? THREE.NormalBlending : THREE.AdditiveBlending,
       uniforms: {
         uTime: { value: 0 },
-        uMorph: { value: 0 },
+        uMorph: { value: mode === "sphere" ? 1 : 0 },
         uScan: { value: -6 },
         uPixelRatio: { value: renderer.getPixelRatio() },
         uSize: { value: isMobile ? 2.8 : 2.6 },
@@ -147,8 +177,6 @@ export function HeroBlock({ className }: { className?: string }) {
     const points = new THREE.Points(geo, mat);
     const group = new THREE.Group();
     group.add(points);
-    group.position.x = isMobile ? 0 : 4.4;
-    group.position.y = isMobile ? 2.6 : 1.1;
     group.rotation.set(0.5, 0.6, 0);
     scene.add(group);
 
@@ -169,7 +197,12 @@ export function HeroBlock({ className }: { className?: string }) {
       renderer.setSize(w, h, false);
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
-      group.position.x = w < 760 ? 0 : Math.min(4.4, (w / h) * 2.5);
+      const narrow = w < 760;
+      group.position.x = narrow ? 0 : x;
+      group.position.y = narrow ? y + 1.2 : y;
+      // Keep the object a similar apparent size on very tall or wide viewports.
+      const fit = Math.min(1, (w / h) / 1.2);
+      camera.position.z = 17.5 / Math.max(0.72, fit);
     };
     resize();
     const ro = new ResizeObserver(resize);
@@ -195,23 +228,22 @@ export function HeroBlock({ className }: { className?: string }) {
       const t = reduce ? 0 : clock.getElapsedTime();
       mat.uniforms.uTime.value = t;
 
-      // Morph cycle: cube 3.5s, morph 1.6s, sphere 3.5s, morph 1.6s.
-      const period = 10.2;
-      const k = t % period;
-      let m = 0;
-      if (k < 3.5) m = 0;
-      else if (k < 5.1) m = ease((k - 3.5) / 1.6);
-      else if (k < 8.6) m = 1;
-      else m = 1 - ease((k - 8.6) / 1.6);
-      mat.uniforms.uMorph.value = reduce ? 0.5 : m;
-
-      // Scan sweeps bottom to top every 4.4s, then resets.
+      if (mode === "morph") {
+        const period = 10.2;
+        const k = t % period;
+        let m = 0;
+        if (k < 3.5) m = 0;
+        else if (k < 5.1) m = ease((k - 3.5) / 1.6);
+        else if (k < 8.6) m = 1;
+        else m = 1 - ease((k - 8.6) / 1.6);
+        mat.uniforms.uMorph.value = reduce ? 0.5 : m;
+      }
       const sp = (t % 4.4) / 4.4;
-      mat.uniforms.uScan.value = reduce ? 7 : -7.5 + sp * 15;
+      mat.uniforms.uScan.value = reduce ? 7 * scale : (-7.5 + sp * 15) * scale;
 
       mouse.x += (mouse.tx - mouse.x) * 0.04;
       mouse.y += (mouse.ty - mouse.y) * 0.04;
-      group.rotation.y = 0.6 + t * 0.12 + mouse.x * 0.25;
+      group.rotation.y = 0.6 + t * 0.12 * spin + mouse.x * 0.25;
       group.rotation.x = 0.5 + mouse.y * 0.18;
       renderer.render(scene, camera);
     };
@@ -228,7 +260,7 @@ export function HeroBlock({ className }: { className?: string }) {
       renderer.dispose();
       el.removeChild(renderer.domElement);
     };
-  }, []);
+  }, [tint, tintLight, mode, scale, x, y, density, opacity, spin]);
 
   return <div ref={host} className={className} aria-hidden="true" />;
 }

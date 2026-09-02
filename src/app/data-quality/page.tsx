@@ -60,13 +60,15 @@ export default async function DataQualityPage() {
   return (
     <>
       <PageHero
+        tint="good"
+        shape="cube"
         eyebrow="Data quality methodology"
         title={
           <>
             How ForceX verifies the <span className="hi">integrity</span> of published data.
           </>
         }
-        lead="Four layers of integrity control, 242 enforcement points, per-block validation, periodic external node confirmation, and the full public control catalog. This is the reference guide behind the live Data Quality panel."
+        lead="Four layers of control, 242 enforcement points, and the full public control catalog behind the live Data Quality panel."
         actions={
           <>
             <a href="#catalog" className="btn btn--accent">

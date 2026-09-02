@@ -36,24 +36,29 @@ export default function AboutPage() {
   return (
     <>
       <PageHero
+        tint="accent"
+        shape="sphere"
         eyebrow="Who we are"
         title={
           <>
             ForceX exists to bring <span className="hi">trust</span> back to on-chain data.
           </>
         }
-        lead="ForceX is a quality-first on-chain intelligence platform built to make blockchain data more trustworthy, explainable, and useful. We go beyond traditional explorers by applying a structured data quality framework to the way on-chain data is parsed, reconciled, validated, cross-checked, and displayed."
+        lead="A quality-first on-chain intelligence platform. Data is parsed, reconciled, validated, and cross-checked before it is displayed."
       />
 
       <section className="section" style={{ paddingTop: 0 }}>
         <div className="container">
-          <div className="values">
+          <div className="layers" style={{ marginTop: 0 }}>
             {PRINCIPLES.map(({ Icon, title, body }, i) => (
-              <div key={title} className="value" data-spot="" data-reveal style={{ ["--d" as string]: `${i * 70}ms` }}>
-                <span className="value__ico">
-                  <Icon />
-                </span>
-                <h3>{title}</h3>
+              <div key={title} className="layer" data-reveal style={{ ["--d" as string]: `${i * 70}ms` }}>
+                <span className="layer__idx">0{i + 1}</span>
+                <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                  <span className="value__ico" style={{ flex: "0 0 auto" }}>
+                    <Icon />
+                  </span>
+                  <h3>{title}</h3>
+                </div>
                 <p>{body}</p>
               </div>
             ))}

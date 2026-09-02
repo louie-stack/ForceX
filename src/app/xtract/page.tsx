@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CtaBand } from "@/components/CtaBand";
+import { PageHero } from "@/components/PageHero";
 import { CodeWindow, highlightJsonLines } from "@/components/CodeWindow";
 import { ArrowUpRight, Building, Check, Code, Database, Layers, Shield, Users, Wallet, Bolt } from "@/components/Icons";
 import { fetchPublic, type QualityStatus } from "@/lib/api";
@@ -51,50 +52,61 @@ export default async function XtractPage() {
 
   return (
     <>
-      <section className="page-hero">
-        <div className="glow page-hero__glow" />
-        <div className="grid-bg" />
-        <div className="container dev__grid">
-          <div>
-            <span className="eyebrow" data-reveal="fade">
-              Xtract · API and data services
+      <PageHero
+        tint="xtract"
+        shape="cube"
+        eyebrow="Xtract · API and data services"
+        title={
+          <>
+            Build on data you can <span className="hi">trust</span>.
+          </>
+        }
+        lead="Programmatic access to validated Litecoin data for builders, wallets, analysts, and institutions."
+        actions={
+          <>
+            <Link href="/signup?return_to=/account/%23api-keys" className="btn btn--accent btn--lg" data-cursor="Go">
+              Get API access
+              <span className="btn__ico">
+                <ArrowUpRight />
+              </span>
+            </Link>
+            <Link href="/xtract/docs" className="btn btn--ghost btn--lg">
+              API docs
+            </Link>
+            <Link href="/xtract/docs/mcp" className="btn btn--ghost btn--lg">
+              MCP docs
+            </Link>
+          </>
+        }
+        meta={
+          <>
+            <span>
+              Base <b>forcex.com/xtract/v1/litecoin</b>
             </span>
-            <h1 className="h1 page-hero__title" data-reveal>
-              Build with on-chain data you can <span className="hi">trust</span>.
-            </h1>
-            <p className="lead" data-reveal style={{ ["--d" as string]: "80ms" }}>
-              Xtract is the API and data services layer from ForceX. Get reliable, programmatic access to validated on-chain
-              data for builders, wallets, analysts, and institutions.
-            </p>
-            <div className="page-hero__actions" data-reveal style={{ ["--d" as string]: "160ms" }}>
-              <Link href="/signup?return_to=/account/%23api-keys" className="btn btn--accent btn--lg">
-                Get API access
-                <span className="btn__ico">
-                  <ArrowUpRight />
-                </span>
-              </Link>
-              <Link href="/xtract/docs" className="btn btn--ghost btn--lg">
-                API docs
-              </Link>
-              <Link href="/xtract/docs/mcp" className="btn btn--ghost btn--lg">
-                MCP docs
-              </Link>
-            </div>
-          </div>
-          <div>
-            <CodeWindow
-              reveal
-              path="/xtract/v1/litecoin/chain/home"
-              footer={
-                <div className="code__bar" style={{ borderTop: "1px solid var(--line)", borderBottom: 0 }}>
-                  <span style={{ color: "var(--muted)" }}>Authorization</span>
-                  <code style={{ color: "var(--text)" }}>Bearer fx_live_************</code>
-                </div>
-              }
-            >
-              {highlightJsonLines(sample)}
-            </CodeWindow>
-          </div>
+            <span>
+              Validation <b>{q?.state ?? "validated"}</b>
+            </span>
+            <span>
+              Tip <b>{(q?.tip_height ?? 3170723).toLocaleString("en-US")}</b>
+            </span>
+          </>
+        }
+      />
+
+      <section className="section--tight" style={{ paddingTop: 0 }}>
+        <div className="container" style={{ maxWidth: 900 }}>
+          <CodeWindow
+            reveal
+            path="/xtract/v1/litecoin/chain/home"
+            footer={
+              <div className="code__bar" style={{ borderTop: "1px solid var(--line)", borderBottom: 0 }}>
+                <span style={{ color: "var(--muted)" }}>Authorization</span>
+                <code style={{ color: "var(--text)" }}>Bearer fx_live_************</code>
+              </div>
+            }
+          >
+            {highlightJsonLines(sample)}
+          </CodeWindow>
         </div>
       </section>
 

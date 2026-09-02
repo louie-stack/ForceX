@@ -12,13 +12,16 @@ export default function ContactPage() {
   return (
     <>
       <PageHero
+        tint="accent"
+        shape="sphere"
+        compact
         eyebrow="Contact"
         title={
           <>
             Reach the ForceX <span className="hi">team</span>.
           </>
         }
-        lead="Questions about ForceX, beta access, the data platform, or anything else? Send us a message and we will get back to you."
+        lead="Questions about ForceX, beta access, or the platform. We reply to every message."
       />
       <section className="section" style={{ paddingTop: 0 }}>
         <div className="container split">

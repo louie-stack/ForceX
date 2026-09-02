@@ -40,6 +40,7 @@ export default function AddressLinxPage() {
       lead="Start from one address and trace the counterparties, clusters, and flows around it, on the same reconciled ledger the explorer uses."
       appPath="/xamine/diagrams/address-relationships"
       tint="var(--xplorer)"
+      heroTint="xplorer"
       facts={[
         ["Relationship graph", "Counterparties and repeat interactions in one view"],
         ["Reconciled ledger", "Balances and links pass address integrity controls first"],

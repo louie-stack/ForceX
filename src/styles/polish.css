@@ -204,9 +204,6 @@
 /*  Alignment + overflow fixes                                         */
 /* ------------------------------------------------------------------ */
 
-.hud__head span .pulse {
-  margin-right: 10px;
-}
 .code {
   min-width: 0;
   max-width: 100%;

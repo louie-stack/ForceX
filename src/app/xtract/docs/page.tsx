@@ -47,13 +47,16 @@ export default function XtractDocsPage() {
   return (
     <>
       <PageHero
+        tint="xtract"
+        shape="cube"
+        compact
         eyebrow="Xtract API documentation"
         title={
           <>
             Build against <span className="hi">validated</span> Litecoin data.
           </>
         }
-        lead="Xtract is the ForceX production API for validated on-chain data. Use these docs for authentication, response conventions, credits, rate limits, errors, and the current v0.2 Litecoin endpoint catalog."
+        lead="Authentication, response conventions, credits, limits, and the v0.2 Litecoin endpoint catalog."
         actions={
           <>
             <Link href="/signup" className="btn btn--accent">

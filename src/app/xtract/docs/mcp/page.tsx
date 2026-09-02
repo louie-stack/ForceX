@@ -22,13 +22,16 @@ export default function McpDocsPage() {
   return (
     <>
       <PageHero
+        tint="mcp"
+        shape="sphere"
+        compact
         eyebrow="Xtract MCP"
         title={
           <>
             Connect AI tools to <span className="hi">verified</span> Litecoin data.
           </>
         }
-        lead="Connect ChatGPT, Claude, Grok, Claude Code, MCP Inspector, the OpenAI API, or your own app to validated Litecoin data from Xtract. Every tool returns cited, validation-aware results."
+        lead="ChatGPT, Claude, Grok, Claude Code, the OpenAI API, or your own app, connected to validated Litecoin data."
         actions={
           <>
             <a href="https://forcex.com/xtract/docs/mcp/tools/" className="btn btn--accent">
