@@ -17,12 +17,12 @@ import { useLiveSummary } from "@/components/home/useLiveSummary";
  */
 type Phase = "text" | "cube" | "sphere";
 
-const PHASES: { phase: Phase; hold: number; caption: string }[] = [
-  { phase: "text", hold: 5.4, caption: "before it is displayed." },
-  { phase: "cube", hold: 4.2, caption: "Every block, reconciled." },
-  { phase: "sphere", hold: 4.2, caption: "Cross-checked against the node." },
+const PHASES: { phase: Phase; hold: number }[] = [
+  { phase: "text", hold: 5 },
+  { phase: "cube", hold: 4.2 },
+  { phase: "sphere", hold: 4.2 },
 ];
-const TRANSITION = 1.5;
+const TRANSITION = 1.3;
 const WORD = "VERIFIED";
 const FOV = 38;
 
@@ -45,7 +45,7 @@ varying float vSeed;
 
 void main() {
   vec3 p = aCloud * uW.x + position * uW.y + aText * uW.z + aSphere * uW.w;
-  p += normalize(p + 0.001) * uBurst * (0.6 + aSeed * 1.4);
+  p += normalize(p + 0.001) * uBurst * (0.4 + aSeed * 0.9);
   p += uJitter * vec3(
     sin(uTime * 0.9 + aSeed * 31.0),
     cos(uTime * 0.7 + aSeed * 17.0),
@@ -53,7 +53,7 @@ void main() {
   );
   float d = uScan - p.y;
   vBand = 1.0 - smoothstep(0.0, 1.0, abs(d));
-  vState = smoothstep(0.0, 1.5, d);
+  vState = max(smoothstep(0.0, 1.5, d), 0.72);
   vSeed = aSeed;
   vec4 mv = modelViewMatrix * vec4(p, 1.0);
   vDepth = clamp((-mv.z - 8.0) / 20.0, 0.0, 1.0);
@@ -81,7 +81,7 @@ void main() {
   vec3 col = mix(uRaw, uVerified, vState);
   col = mix(col, uBand, vBand);
   float tw = 0.85 + 0.15 * sin(vSeed * 50.0);
-  float a = soft * (0.45 + vState * 0.5 + vBand * 0.9) * tw * (1.0 - vDepth * 0.5) * uOpacity;
+  float a = soft * (0.6 + vState * 0.4 + vBand * 0.9) * tw * (1.0 - vDepth * 0.4) * uOpacity;
   gl_FragColor = vec4(col, a);
 }
 `;
@@ -119,15 +119,13 @@ export function HeroStage({ initial }: { initial: NetworkSummary }) {
   const d = useLiveSummary(initial);
   const host = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
-  const cap = useRef<HTMLSpanElement>(null);
   const q = d.quality;
   const ok = q?.state === "validated";
 
   useEffect(() => {
     const el = host.current;
     const stageEl = stage.current;
-    const capEl = cap.current;
-    if (!el || !stageEl || !capEl) return;
+    if (!el || !stageEl) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const isMobile = window.innerWidth < 760;
 
@@ -142,8 +140,8 @@ export function HeroStage({ initial }: { initial: NetworkSummary }) {
 
     const n = isMobile ? 24 : 29;
     const count = n * n * n;
-    const half = isMobile ? 1.9 : 3.0;
-    const R = isMobile ? 2.3 : 3.8;
+    const half = isMobile ? 1.9 : 2.8;
+    const R = isMobile ? 2.3 : 3.5;
     const cube = new Float32Array(count * 3);
     const sphere = new Float32Array(count * 3);
     const cloud = new Float32Array(count * 3);
@@ -165,11 +163,11 @@ export function HeroStage({ initial }: { initial: NetworkSummary }) {
           sphere[i * 3] = Math.cos(th) * rr * rad;
           sphere[i * 3 + 1] = yy * rad;
           sphere[i * 3 + 2] = Math.sin(th) * rr * rad;
-          const cr = 6 + Math.random() * 8;
+          const cr = 2.5 + Math.random() * 6;
           const ct = Math.random() * Math.PI * 2;
           const cp = Math.acos(2 * Math.random() - 1);
-          cloud[i * 3] = cr * Math.sin(cp) * Math.cos(ct);
-          cloud[i * 3 + 1] = cr * Math.sin(cp) * Math.sin(ct) * 0.6;
+          cloud[i * 3] = cr * Math.sin(cp) * Math.cos(ct) * 1.3;
+          cloud[i * 3 + 1] = cr * Math.sin(cp) * Math.sin(ct) * 0.55;
           cloud[i * 3 + 2] = cr * Math.cos(cp) * 0.6;
           seed[i] = Math.random();
           i++;
@@ -185,7 +183,7 @@ export function HeroStage({ initial }: { initial: NetworkSummary }) {
 
     const light = () => document.documentElement.getAttribute("data-theme") === "light";
     const palette = () => ({
-      raw: new THREE.Color(light() ? "#9aa3b8" : "#3b4357"),
+      raw: new THREE.Color(light() ? "#8d98b3" : "#5c6d94"),
       verified: new THREE.Color(light() ? "#2563eb" : "#3b82f6"),
       band: new THREE.Color(light() ? "#1d4ed8" : "#dbeafe"),
       opacity: light() ? 0.95 : 1,
@@ -255,9 +253,13 @@ export function HeroStage({ initial }: { initial: NetworkSummary }) {
         if (side === "stamp") {
           c.style.left = `${cx - w / 2}px`;
           c.style.top = `${cy + ry + gap}px`;
-        } else if (isMobile) {
+        } else if (side === "title") {
           c.style.left = `${cx - w / 2}px`;
-          c.style.top = side === "l" ? `${cy - ry - gap - h}px` : `${cy + ry + gap}px`;
+          c.style.top = `${Math.max(4, cy - ry - gap - h)}px`;
+        } else if (isMobile) {
+          // Phones: both readouts sit beneath the form, side by side, ticks pointing up.
+          c.style.left = side === "l" ? `${Math.max(0, cx - w - 5)}px` : `${Math.min(stageEl.clientWidth - w, cx + 5)}px`;
+          c.style.top = `${cy + ry + gap}px`;
         } else if (side === "l") {
           c.style.left = `${cx - rx - gap - w}px`;
           c.style.top = `${cy - h * 0.5 - 34}px`;
@@ -299,7 +301,7 @@ export function HeroStage({ initial }: { initial: NetworkSummary }) {
       camera.updateProjectionMatrix();
       const fit = Math.min(1, w / h / 1.55);
       camera.position.z = 17.5 / Math.max(0.78, fit);
-      group.position.y = w < 760 ? 0.9 : 0.5;
+      group.position.y = w < 760 ? 0.9 : 0.15;
       layout();
     };
     resize();
@@ -317,42 +319,6 @@ export function HeroStage({ initial }: { initial: NetworkSummary }) {
     const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting), { threshold: 0 });
     io.observe(el);
 
-    // ---- Caption
-    const setCaption = (txt: string, immediate = false) => {
-      const chars = Array.from(capEl.querySelectorAll<HTMLElement>(".cap__c"));
-      const build = () => {
-        capEl.style.opacity = "1";
-        capEl.innerHTML = "";
-        txt.split(" ").forEach((word, wi, words) => {
-          const w = document.createElement("span");
-          w.className = "cap__w";
-          for (const ch of word) {
-            const s = document.createElement("span");
-            s.className = "cap__c";
-            s.textContent = ch;
-            w.appendChild(s);
-          }
-          capEl.appendChild(w);
-          if (wi < words.length - 1) capEl.appendChild(document.createTextNode(" "));
-        });
-        return Array.from(capEl.querySelectorAll<HTMLElement>(".cap__c"));
-      };
-      if (immediate || reduce || chars.length === 0) {
-        gsap.fromTo(build(), { yPercent: 110, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.9, ease: "power4.out", stagger: 0.018 });
-        return;
-      }
-      gsap.to(chars, {
-        yPercent: -110,
-        opacity: 0,
-        duration: 0.4,
-        ease: "power3.in",
-        stagger: 0.012,
-        onComplete: () => {
-          gsap.fromTo(build(), { yPercent: 110, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.8, ease: "power4.out", stagger: 0.016 });
-        },
-      });
-    };
-
     // ---- Readouts per phase
     const showChips = (ph: Phase) => {
       layout();
@@ -361,7 +327,7 @@ export function HeroStage({ initial }: { initial: NetworkSummary }) {
       gsap.to(others, { autoAlpha: 0, duration: 0.3, overwrite: true });
       mine.forEach((c, k) => {
         const dir = c.dataset.side === "l" ? 18 : c.dataset.side === "r" ? -18 : 0;
-        const dy = c.dataset.side === "stamp" ? -10 : 0;
+        const dy = c.dataset.side === "stamp" ? -10 : c.dataset.side === "title" ? 10 : 0;
         gsap.fromTo(c, { autoAlpha: 0, x: dir, y: dy }, { autoAlpha: 1, x: 0, y: 0, duration: 0.7, ease: "power3.out", delay: 0.55 + k * 0.12, overwrite: true });
       });
     };
@@ -384,9 +350,9 @@ export function HeroStage({ initial }: { initial: NetworkSummary }) {
     let transitioning = false;
     let started = false;
     let elapsedAtStart = 0;
-    const cur = new THREE.Vector4();
+    const cur = new THREE.Vector4(1, 0, 0, 0);
     const rot = { y: 0, x: 0, ty: 0, tx: 0 };
-    const sizeFor = (ph: Phase) => (ph === "text" ? (isMobile ? 3.4 : 1.85) : isMobile ? 3.2 : 2.4);
+    const sizeFor = (ph: Phase) => (ph === "text" ? (isMobile ? 3.4 : 1.85) : ph === "cube" ? (isMobile ? 3 : 2) : isMobile ? 3.2 : 2.2);
     let sizeTarget = mat.uniforms.uSize.value as number;
     let jitterTarget = 0.035;
     let chipTimer: gsap.core.Tween | null = null;
@@ -399,10 +365,9 @@ export function HeroStage({ initial }: { initial: NetworkSummary }) {
       phaseStart = t;
       transitioning = true;
       sizeTarget = sizeFor(next.phase);
-      jitterTarget = next.phase === "text" ? 0.02 : 0.05;
+      jitterTarget = next.phase === "text" ? 0.02 : 0.03;
       rot.ty = next.phase === "text" ? 0 : 0.55;
       rot.tx = next.phase === "text" ? 0 : 0.45;
-      setCaption(next.caption, idx === 0 && !started);
       hideChips();
       chipTimer?.kill();
       chipTimer = gsap.delayedCall(TRANSITION * 0.55, () => showChips(next.phase));
@@ -442,6 +407,7 @@ export function HeroStage({ initial }: { initial: NetworkSummary }) {
         mat.uniforms.uW.value.copy(cur);
       } else {
         mat.uniforms.uW.value.copy(weights("cloud"));
+        mat.uniforms.uBurst.value = 0.15 + 0.1 * Math.sin(t * 0.8);
       }
       mat.uniforms.uSize.value += (sizeTarget - (mat.uniforms.uSize.value as number)) * 0.05;
       mat.uniforms.uJitter.value += (jitterTarget - (mat.uniforms.uJitter.value as number)) * 0.05;
@@ -490,6 +456,9 @@ export function HeroStage({ initial }: { initial: NetworkSummary }) {
           </span>
         </Link>
 
+        <span className="ann ann--stamp ann--title" data-phase="cube" data-side="title">
+          <span className="ann__line">Every block, reconciled</span>
+        </span>
         <Link href="/xplorer/litecoin" className="ann" data-phase="cube" data-side="l">
           <span className="ann__label">Transactions, 24h</span>
           <span className="ann__value">{fmtInt(d.tx.count)}</span>
@@ -503,6 +472,9 @@ export function HeroStage({ initial }: { initial: NetworkSummary }) {
           <i className="ann__lead" />
         </Link>
 
+        <span className="ann ann--stamp ann--title" data-phase="sphere" data-side="title">
+          <span className="ann__line">Cross-checked against the node</span>
+        </span>
         <Link href="/data-quality" className="ann" data-phase="sphere" data-side="l">
           <span className="ann__label">Live controls</span>
           <span className="ann__value">{q ? `${q.controls.passing} / ${q.controls.total}` : "—"}</span>
@@ -519,12 +491,7 @@ export function HeroStage({ initial }: { initial: NetworkSummary }) {
         </Link>
       </div>
 
-      <h1 className="display hero3__cap">
-        <span className="sr-only">{WORD.toLowerCase()} </span>
-        <span ref={cap} className="cap" aria-hidden="true">
-          {PHASES[0].caption}
-        </span>
-      </h1>
+      <h1 className="sr-only">Verified before it is displayed. Litecoin on-chain intelligence.</h1>
     </>
   );
 }
