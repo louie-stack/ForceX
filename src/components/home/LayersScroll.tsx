@@ -58,7 +58,7 @@ export function LayersScroll() {
             </span>
           </div>
           {LAYERS.map((l, i) => (
-            <div key={l.title} className="hz__panel">
+            <div key={l.title} className="hz__panel" data-spot="">
               <span className="hz__num">0{i + 1}</span>
               <div>
                 <h3>{l.title}</h3>

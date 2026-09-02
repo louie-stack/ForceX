@@ -92,7 +92,7 @@ export function HeroField({ className }: { className?: string }) {
     const isMobile = window.innerWidth < 720;
 
     const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, powerPreference: "high-performance" });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.setClearColor(0x000000, 0);
     el.appendChild(renderer.domElement);
 
@@ -190,7 +190,7 @@ export function HeroField({ className }: { className?: string }) {
     const period = 11; // seconds per full scan
     const render = () => {
       raf = requestAnimationFrame(render);
-      if (!visible) return;
+      if (!visible || document.hidden) return;
       const t = clock.getElapsedTime();
       mat.uniforms.uTime.value = reduce ? 0 : t;
       const phase = (t % period) / period;

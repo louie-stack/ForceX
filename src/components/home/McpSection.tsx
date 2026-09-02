@@ -6,9 +6,9 @@ export function McpSection({ height }: { height?: number | null }) {
   return (
     <section className="section">
       <div className="container mcp__grid">
-        <div className="chat" data-reveal="scale">
-          <div className="chat__msg chat__msg--user">How much LTC moved into MWEB over the last 24 hours, and can I trust the number?</div>
-          <div className="chat__msg chat__msg--ai">
+        <div className="chat">
+          <div className="chat__msg chat__msg--user" data-reveal style={{ ["--d" as string]: "0ms" }}>How much LTC moved into MWEB over the last 24 hours, and can I trust the number?</div>
+          <div className="chat__msg chat__msg--ai" data-reveal style={{ ["--d" as string]: "220ms" }}>
             <span className="chat__tool">
               <Sparkle size={12} /> forcex-xtract · get_mweb_summary
             </span>
@@ -21,8 +21,8 @@ export function McpSection({ height }: { height?: number | null }) {
               LVR-002 reconciled
             </span>
           </div>
-          <div className="chat__msg chat__msg--user">Cite the exact block you used.</div>
-          <div className="chat__msg chat__msg--ai">
+          <div className="chat__msg chat__msg--user" data-reveal style={{ ["--d" as string]: "520ms" }}>Cite the exact block you used.</div>
+          <div className="chat__msg chat__msg--ai" data-reveal style={{ ["--d" as string]: "760ms" }}>
             Block {h}, validated at tip with the external node cross-check aligned. I can link the block page if you want to
             inspect the peg-in transactions directly.
           </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FX_APP_ORIGIN } from "@/lib/api";
 import { Search } from "./Icons";
 
@@ -11,7 +11,19 @@ import { Search } from "./Icons";
  */
 export function ExplorerSearch() {
   const [q, setQ] = useState("");
+  const input = useRef<HTMLInputElement>(null);
   const base = `${FX_APP_ORIGIN}/xplorer/litecoin`;
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "/" && !/input|textarea/i.test((e.target as HTMLElement).tagName)) {
+        e.preventDefault();
+        input.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   const target = (raw: string) => {
     const s = raw.trim();
@@ -33,7 +45,8 @@ export function ExplorerSearch() {
       }}
     >
       <Search size={18} />
-      <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search block, tx, address…" aria-label="Search the Litecoin explorer" autoComplete="off" spellCheck={false} />
+      <input ref={input} value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search block, tx, address…" aria-label="Search the Litecoin explorer" autoComplete="off" spellCheck={false} />
+      <kbd aria-hidden="true">/</kbd>
       <button type="submit" className="btn btn--sm btn--accent">
         Search
       </button>

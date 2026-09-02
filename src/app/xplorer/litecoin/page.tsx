@@ -63,7 +63,7 @@ export default async function XplorerLitecoin() {
         <div className="container" style={{ display: "grid", gap: 14 }}>
           {/* Headline metrics */}
           <div className="xp-grid" data-reveal>
-            <a href={`${base}/blocks`} className="xp-card card--hover">
+            <a href={`${base}/blocks`} className="xp-card card--hover" data-spot="">
               <div className="xp-card__head">
                 Block height <ArrowUpRight size={14} />
               </div>
@@ -72,12 +72,12 @@ export default async function XplorerLitecoin() {
               </span>
               <span className="small">{timeAgo(summary.asOf.time)}</span>
             </a>
-            <div className="xp-card">
+            <div className="xp-card" data-spot="">
               <div className="xp-card__head">Total addresses</div>
               <span className="xp-metric">{chain?.totalAddresses ? <Counter value={chain.totalAddresses} /> : "—"}</span>
               <span className="small">Lifetime distinct addresses</span>
             </div>
-            <div className="xp-card">
+            <div className="xp-card" data-spot="">
               <div className="xp-card__head">Total transactions</div>
               <span className="xp-metric">{chain?.totalTransactions ? <Counter value={chain.totalTransactions} /> : "—"}</span>
               <span className="small">Confirmed on chain</span>
@@ -120,7 +120,7 @@ export default async function XplorerLitecoin() {
           </div>
 
           {/* Supply */}
-          <div className="xp-card" data-reveal>
+          <div className="xp-card" data-spot="" data-reveal>
             <div className="xp-card__head">Supply</div>
             <div className="xp-grid xp-grid--2" style={{ gap: 28 }}>
               <div style={{ display: "grid", gap: 10 }}>
@@ -164,11 +164,11 @@ export default async function XplorerLitecoin() {
 
           {/* Charts */}
           <div className="xp-grid xp-grid--2" data-reveal>
-            <div className="xp-card">
+            <div className="xp-card" data-spot="">
               <div className="xp-card__head">Daily transactions (30d, UTC)</div>
               <SeriesChart data={chain?.txDaily ?? []} color="var(--xplorer)" />
             </div>
-            <div className="xp-card">
+            <div className="xp-card" data-spot="">
               <div className="xp-card__head">MWEB pool balance (30d, UTC)</div>
               <SeriesChart data={chain?.mwebDaily ?? []} color="var(--xtract)" divisor={1e8} unit=" LTC" />
             </div>
@@ -176,7 +176,7 @@ export default async function XplorerLitecoin() {
 
           {/* MWEB + Network health */}
           <div className="xp-grid xp-grid--2" data-reveal>
-            <div className="xp-card">
+            <div className="xp-card" data-spot="">
               <div className="xp-card__head">
                 <span>MWEB privacy</span>
                 <span>{summary.asOf.height ? `Block ${fmtInt(summary.asOf.height)}` : ""}</span>
@@ -202,7 +202,7 @@ export default async function XplorerLitecoin() {
                 </div>
               </div>
             </div>
-            <div className="xp-card">
+            <div className="xp-card" data-spot="">
               <div className="xp-card__head">
                 <span>Network health</span>
                 <span>last 24h</span>

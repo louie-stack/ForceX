@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { QualityStatus } from "@/lib/api";
-import { CodeWindow, highlightJson } from "@/components/CodeWindow";
+import { CodeWindow, highlightJsonLines } from "@/components/CodeWindow";
 import { Marquee } from "@/components/Marquee";
 import { ArrowUpRight, Check } from "@/components/Icons";
 
@@ -105,8 +105,9 @@ export function DeveloperStrip({ quality }: { quality: QualityStatus | null }) {
               </a>
             </div>
           </div>
-          <div data-reveal="scale" style={{ ["--d" as string]: "120ms" }}>
+          <div>
             <CodeWindow
+              reveal
               path="/api/public/litecoin/quality/status"
               footer={
                 <div className="code__bar" style={{ borderTop: "1px solid var(--line)", borderBottom: 0 }}>
@@ -114,7 +115,7 @@ export function DeveloperStrip({ quality }: { quality: QualityStatus | null }) {
                 </div>
               }
             >
-              {highlightJson(sample)}
+              {highlightJsonLines(sample)}
             </CodeWindow>
           </div>
         </div>

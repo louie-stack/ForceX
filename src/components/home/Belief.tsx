@@ -19,9 +19,9 @@ export function Belief() {
           Data should not become trusted simply because it is displayed. It should become trusted because it has been
           verified, governed, and made worthy of confidence.
         </p>
-        <ol className="belief__list" data-reveal>
+        <ol className="belief__list">
           {items.map((t, i) => (
-            <li key={t}>
+            <li key={t} data-reveal style={{ ["--d" as string]: `${i * 80}ms` }}>
               <small>0{i + 1}</small>
               {t}
             </li>

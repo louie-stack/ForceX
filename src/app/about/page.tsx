@@ -49,7 +49,7 @@ export default function AboutPage() {
         <div className="container">
           <div className="values">
             {PRINCIPLES.map(({ Icon, title, body }, i) => (
-              <div key={title} className="value" data-reveal style={{ ["--d" as string]: `${i * 70}ms` }}>
+              <div key={title} className="value" data-spot="" data-reveal style={{ ["--d" as string]: `${i * 70}ms` }}>
                 <span className="value__ico">
                   <Icon />
                 </span>

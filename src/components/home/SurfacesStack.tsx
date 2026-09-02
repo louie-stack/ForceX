@@ -88,7 +88,7 @@ export function SurfacesStack() {
         <div className="stack" ref={root}>
           {ITEMS.map((it, i) => (
             <div key={it.name} className="stack__item">
-              <article className="stack__card" style={{ ["--tint" as string]: it.tint }}>
+              <article className="stack__card" data-spot="tint" style={{ ["--tint" as string]: it.tint }}>
                 <div className="stack__copy">
                   <div>
                     <span className="eyebrow eyebrow--plain">{it.eyebrow}</span>

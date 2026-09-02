@@ -4,6 +4,7 @@ import "./globals.css";
 import "@/styles/sections.css";
 import "@/styles/fx.css";
 import "@/styles/home.css";
+import "@/styles/polish.css";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { SmoothScroll } from "@/components/SmoothScroll";
@@ -11,6 +12,8 @@ import { RevealObserver } from "@/components/RevealObserver";
 import { Preloader } from "@/components/fx/Preloader";
 import { Cursor } from "@/components/fx/Cursor";
 import { PageTransition } from "@/components/fx/PageTransition";
+import { ScrollProgress } from "@/components/fx/ScrollProgress";
+import { Spotlight } from "@/components/fx/Spotlight";
 import { fetchPublic, type QualityStatus } from "@/lib/api";
 
 const geist = Geist({ variable: "--font-geist", subsets: ["latin"], display: "swap" });
@@ -94,7 +97,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }} />
       </head>
       <body>
+        <a href="#main" className="skip">
+          Skip to content
+        </a>
         <Preloader height={quality?.tip_height ?? null} />
+        <ScrollProgress />
+        <Spotlight />
         <SmoothScroll />
         <RevealObserver />
         <PageTransition />

@@ -63,11 +63,11 @@ export default function XaminePage() {
                 </>
               );
               return external ? (
-                <a key={title} href={href} className="value card--hover" data-reveal style={{ ["--d" as string]: `${(i % 3) * 60}ms` }}>
+                <a key={title} href={href} className="value card--hover" data-spot="" data-reveal style={{ ["--d" as string]: `${(i % 3) * 60}ms` }}>
                   {inner}
                 </a>
               ) : (
-                <Link key={title} href={href} className="value card--hover" data-reveal style={{ ["--d" as string]: `${(i % 3) * 60}ms` }}>
+                <Link key={title} href={href} className="value card--hover" data-spot="" data-reveal style={{ ["--d" as string]: `${(i % 3) * 60}ms` }}>
                   {inner}
                 </Link>
               );

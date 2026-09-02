@@ -27,16 +27,28 @@ export function Pipeline({ height, hash }: { height: number | null; hash?: strin
     const stamp = el.querySelector<HTMLElement>(".pipe__stamp")!;
 
     if (reduceMotion() || window.innerWidth < 900) {
-      // No pinning: show everything lit, in order.
+      // No pinning: the card lights up check by check as it enters view.
       steps.forEach((s, i) => gsap.set(s, { autoAlpha: i === 0 ? 1 : 0 }));
-      checks.forEach((c) => c.classList.add("is-on"));
-      ticks.forEach((t) => {
-        t.classList.add("is-on");
-        t.style.setProperty("--p", "1");
-      });
-      gsap.set(stamp, { opacity: 1, scale: 1, rotate: -4 });
-      card.style.setProperty("--tint", "var(--good)");
-      return;
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (!entries.some((e) => e.isIntersecting)) return;
+          io.disconnect();
+          checks.forEach((c, i) => window.setTimeout(() => c.classList.add("is-on"), 200 + i * 260));
+          ticks.forEach((t, i) =>
+            window.setTimeout(() => {
+              t.classList.add("is-on");
+              t.style.setProperty("--p", "1");
+            }, 200 + i * 260),
+          );
+          window.setTimeout(() => {
+            card.style.setProperty("--tint", "var(--good)");
+            gsap.to(stamp, { opacity: 1, scale: 1, rotate: -4, duration: 0.5, ease: "back.out(2)" });
+          }, 200 + checks.length * 260);
+        },
+        { threshold: 0.35 },
+      );
+      io.observe(card);
+      return () => io.disconnect();
     }
 
     const ctx = gsap.context(() => {

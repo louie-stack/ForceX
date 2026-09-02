@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CtaBand } from "@/components/CtaBand";
-import { CodeWindow, highlightJson } from "@/components/CodeWindow";
+import { CodeWindow, highlightJsonLines } from "@/components/CodeWindow";
 import { ArrowUpRight, Building, Check, Code, Database, Layers, Shield, Users, Wallet, Bolt } from "@/components/Icons";
 import { fetchPublic, type QualityStatus } from "@/lib/api";
 
@@ -81,8 +81,9 @@ export default async function XtractPage() {
               </Link>
             </div>
           </div>
-          <div data-reveal="scale" style={{ ["--d" as string]: "160ms" }}>
+          <div>
             <CodeWindow
+              reveal
               path="/xtract/v1/litecoin/chain/home"
               footer={
                 <div className="code__bar" style={{ borderTop: "1px solid var(--line)", borderBottom: 0 }}>
@@ -91,7 +92,7 @@ export default async function XtractPage() {
                 </div>
               }
             >
-              {highlightJson(sample)}
+              {highlightJsonLines(sample)}
             </CodeWindow>
           </div>
         </div>
@@ -120,7 +121,7 @@ export default async function XtractPage() {
           </div>
           <div className="values">
             {COVERAGE.map(({ Icon, title, body }, i) => (
-              <div key={title} className="value" data-reveal style={{ ["--d" as string]: `${(i % 3) * 60}ms` }}>
+              <div key={title} className="value" data-spot="" data-reveal style={{ ["--d" as string]: `${(i % 3) * 60}ms` }}>
                 <span className="value__ico">
                   <Icon />
                 </span>
@@ -188,7 +189,7 @@ export default async function XtractPage() {
           </div>
           <div className="plans">
             {PLANS.map((p, i) => (
-              <div key={p.name} className={`plan ${p.featured ? "plan--featured" : ""}`} data-reveal style={{ ["--d" as string]: `${i * 70}ms` }}>
+              <div key={p.name} className={`plan ${p.featured ? "plan--featured" : ""}`} data-spot="" data-reveal style={{ ["--d" as string]: `${i * 70}ms` }}>
                 <div className="plan__name">
                   <span>{p.name}</span>
                   {p.featured && <span style={{ color: "var(--accent)" }}>Most popular</span>}
@@ -237,7 +238,7 @@ export default async function XtractPage() {
           </div>
           <div className="extras" style={{ marginTop: 0 }}>
             {USERS.map(({ Icon, title, body }, i) => (
-              <div key={title} className="extra" data-reveal style={{ ["--d" as string]: `${i * 60}ms` }}>
+              <div key={title} className="extra" data-spot="" data-reveal style={{ ["--d" as string]: `${i * 60}ms` }}>
                 <span className="extra__ico">
                   <Icon />
                 </span>

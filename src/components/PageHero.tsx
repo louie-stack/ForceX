@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Split } from "@/components/fx/Split";
 
 export function PageHero({
   eyebrow,
@@ -22,13 +23,13 @@ export function PageHero({
         <span className="eyebrow" data-reveal="fade">
           {eyebrow}
         </span>
-        <h1 className="h1 page-hero__title" data-reveal style={center ? { marginInline: "auto" } : undefined}>
+        <Split as="h1" type="words" now className="h1 page-hero__title" style={center ? { marginInline: "auto" } : undefined}>
           {title}
-        </h1>
+        </Split>
         {lead && (
-          <p className="lead" data-reveal style={{ ["--d" as string]: "80ms", ...(center ? { marginInline: "auto" } : {}) }}>
+          <Split as="p" type="lines" now delay={0.35} className="lead" style={center ? { marginInline: "auto" } : undefined}>
             {lead}
-          </p>
+          </Split>
         )}
         {actions && (
           <div className="page-hero__actions" data-reveal style={{ ["--d" as string]: "160ms", ...(center ? { justifyContent: "center" } : {}) }}>

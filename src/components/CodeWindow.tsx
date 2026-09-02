@@ -35,21 +35,33 @@ export function highlightJson(src: string): ReactNode[] {
   return out;
 }
 
+/** Same highlighter, one animated line per source line. */
+export function highlightJsonLines(src: string): ReactNode[] {
+  return src.split("\n").map((line, i) => (
+    <span key={i} className="cl" style={{ ["--i" as string]: i }}>
+      {highlightJson(line)}
+      {"\n"}
+    </span>
+  ));
+}
+
 export function CodeWindow({
   method = "GET",
   path,
   status = "200 OK",
   children,
   footer,
+  reveal = false,
 }: {
   method?: string;
   path: string;
   status?: string;
   children: ReactNode;
   footer?: ReactNode;
+  reveal?: boolean;
 }) {
   return (
-    <div className="code">
+    <div className="code" data-reveal={reveal ? "fade" : undefined}>
       <div className="code__bar">
         <span className="code__dots" aria-hidden="true">
           <i />

@@ -49,7 +49,9 @@ export function Footer() {
             </ul>
           </div>
         </div>
-        <Wordmark className="footer__wordmark" height={0} style={{ width: "100%", aspectRatio: "1301 / 232", height: "auto" }} />
+        <div data-reveal="fade">
+          <Wordmark className="footer__wordmark" height={0} style={{ width: "100%", aspectRatio: "1301 / 232", height: "auto" }} />
+        </div>
         <div className="footer__rail">
           <p style={{ margin: 0 }}>© {year} OMIED LLC d/b/a ForceX.com. All rights reserved.</p>
           <div className="footer__social" aria-label="Social links">
