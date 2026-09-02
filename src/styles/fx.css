@@ -1,9 +1,9 @@
 /* ------------------------------------------------------------------ */
-/*  Display typography override (Bricolage Grotesque)                  */
+/*  Display typography (Geist, tight)                                   */
 /* ------------------------------------------------------------------ */
 
 :root {
-  --font-display: var(--font-bricolage), var(--font-sans);
+  --font-display: var(--font-sans);
 }
 .display,
 .h1,
@@ -17,22 +17,7 @@
 .mobile-menu a.big,
 .belief__title {
   font-family: var(--font-display);
-  font-variation-settings: "opsz" 96, "wdth" 100;
-  font-weight: 500;
-}
-.display {
-  letter-spacing: -0.045em;
-  line-height: 0.92;
-}
-.h1 {
-  letter-spacing: -0.04em;
-}
-.h2 {
-  letter-spacing: -0.035em;
-}
-.serif {
-  font-variation-settings: normal;
-  font-weight: 400;
+  font-weight: 600;
 }
 
 /* ------------------------------------------------------------------ */
@@ -160,16 +145,18 @@ html[data-pre] .pre__mark {
   will-change: transform;
 }
 .cur--dot {
-  width: 6px;
-  height: 6px;
-  margin: -3px 0 0 -3px;
-  background: var(--text);
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent-glow);
 }
 .cur--ring {
-  width: 34px;
-  height: 34px;
-  margin: -17px 0 0 -17px;
-  border: 1px solid color-mix(in srgb, var(--text) 55%, transparent);
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  border: 1.5px solid #fff;
+  mix-blend-mode: difference;
   transition:
     width 0.35s var(--ease-out),
     height 0.35s var(--ease-out),
@@ -182,7 +169,7 @@ html[data-pre] .pre__mark {
   font-size: 10px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--bg);
+  color: #fff;
 }
 .cur--ring::after {
   content: attr(data-label);
@@ -190,22 +177,21 @@ html[data-pre] .pre__mark {
   transition: opacity 0.2s;
 }
 .cur--ring.is-active {
-  width: 56px;
-  height: 56px;
-  margin: -28px 0 0 -28px;
-  background: color-mix(in srgb, var(--accent) 22%, transparent);
-  border-color: var(--accent);
+  width: 64px;
+  height: 64px;
+  margin: -32px 0 0 -32px;
+  background: rgba(255, 255, 255, 0.18);
 }
 .cur--ring.is-active[data-label]:not([data-label=""]) {
-  width: 88px;
-  height: 88px;
-  margin: -44px 0 0 -44px;
-  background: var(--accent);
-  border-color: var(--accent);
+  width: 92px;
+  height: 92px;
+  margin: -46px 0 0 -46px;
+  background: #fff;
+  border-color: #fff;
 }
 .cur--ring.is-active[data-label]:not([data-label=""])::after {
   opacity: 1;
-  color: #fff;
+  color: #000;
 }
 .cur--ring.is-down {
   transform: scale(0.85);
@@ -218,8 +204,14 @@ html.has-cursor [role="button"] {
   cursor: none;
 }
 html.has-cursor input,
-html.has-cursor textarea {
+html.has-cursor textarea,
+html.has-cursor select,
+html.cursor-native,
+html.cursor-native * {
   cursor: auto;
+}
+html.cursor-native .cur {
+  opacity: 0 !important;
 }
 
 /* ------------------------------------------------------------------ */

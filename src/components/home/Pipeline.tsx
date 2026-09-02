@@ -6,12 +6,12 @@ import { Check } from "@/components/Icons";
 import { fmtInt } from "@/lib/format";
 
 const STAGES = [
-  { name: "Parse", body: "Raw blocks are decoded straight from the node: headers, transactions, inputs, outputs, and MWEB extension data.", check: "Block decoded from node", tint: "var(--muted-2)" },
-  { name: "Store", body: "Structural constraints block invalid rows before they exist. Primary keys, foreign keys, uniqueness, and check constraints: 190 enforcement points at write time.", check: "Write-path commit confirmed", tint: "var(--muted-2)" },
-  { name: "Reconcile", body: "Balances, totals, counts, and supply-related values are reconciled across canonical and derived surfaces so independently built paths stay aligned.", check: "Accounting reconciled", tint: "var(--accent)" },
-  { name: "Validate", body: "Thirteen live controls run on every block at tip across three integrity domains: monetary, address, and block-and-write.", check: "13 per-block controls passing", tint: "var(--accent)" },
-  { name: "Cross-check", body: "Every 1,000 blocks the indexed UTXO set is compared against the Litecoin node itself, an independent source of truth outside the platform.", check: "Node cross-check aligned", tint: "var(--accent)" },
-  { name: "Verify", body: "Only then is a block worthy of display. Its result is recorded with the height it ran at, so evidence is preserved rather than implied.", check: "Verified and recorded", tint: "var(--good)" },
+  { name: "Parse", body: "Blocks decoded straight from the node, including MWEB extension data.", check: "Block decoded from node", tint: "var(--muted-2)" },
+  { name: "Store", body: "190 structural constraints block invalid rows before they exist.", check: "Write-path commit confirmed", tint: "var(--muted-2)" },
+  { name: "Reconcile", body: "Balances, totals, and supply reconciled across canonical and derived surfaces.", check: "Accounting reconciled", tint: "var(--accent)" },
+  { name: "Validate", body: "Thirteen live controls run on every block at tip.", check: "13 per-block controls passing", tint: "var(--accent)" },
+  { name: "Cross-check", body: "Every 1,000 blocks the indexed UTXO set is compared against the node itself.", check: "Node cross-check aligned", tint: "var(--accent)" },
+  { name: "Verify", body: "Only then is a block worthy of display. The result is recorded with its height.", check: "Verified and recorded", tint: "var(--good)" },
 ];
 
 export function Pipeline({ height, hash }: { height: number | null; hash?: string | null }) {

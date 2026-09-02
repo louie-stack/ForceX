@@ -13,7 +13,7 @@ export default function SignInPage() {
       eyebrow="Welcome back"
       quote={
         <>
-          Data should become trusted because it has been <em className="serif">verified</em>, not because it was displayed.
+          Data should become trusted because it has been <span className="hi">verified</span>, not because it was displayed.
         </>
       }
     >

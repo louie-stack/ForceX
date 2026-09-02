@@ -25,11 +25,10 @@ export function Manifesto() {
             Not just another explorer
           </span>
           <Split as="h2" type="lines" className="h2 ledger__title" style={{ margin: "18px 0 0" }}>
-            An explorer shows you what happened. ForceX proves that what is shown is <em className="serif">correct</em>.
+            An explorer shows what happened. ForceX proves it is <span className="hi">correct</span>.
           </Split>
-          <p className="body" data-reveal style={{ margin: "22px 0 0", maxWidth: "40ch" }}>
-            Every parse, index, transform, and join is a chance to drift from the chain while still looking perfectly
-            healthy. These are the failure modes ForceX is built to catch, and the live control that catches each one.
+          <p className="body" data-reveal style={{ margin: "18px 0 0", maxWidth: "34ch" }}>
+            Six ways an index drifts from the chain, and the live control that catches each one.
           </p>
           <Link href="#pipeline" className="link-arrow" data-reveal style={{ marginTop: 26, fontSize: 15 }}>
             See the six gates <ArrowDown size={16} />

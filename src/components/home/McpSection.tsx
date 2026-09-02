@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Split } from "@/components/fx/Split";
 import { ArrowUpRight, Sparkle } from "@/components/Icons";
 
 export function McpSection({ height }: { height?: number | null }) {
@@ -7,47 +8,31 @@ export function McpSection({ height }: { height?: number | null }) {
     <section className="section">
       <div className="container mcp__grid">
         <div className="chat">
-          <div className="chat__msg chat__msg--user" data-reveal style={{ ["--d" as string]: "0ms" }}>How much LTC moved into MWEB over the last 24 hours, and can I trust the number?</div>
-          <div className="chat__msg chat__msg--ai" data-reveal style={{ ["--d" as string]: "220ms" }}>
+          <div className="chat__msg chat__msg--user" data-reveal>
+            How much LTC moved into MWEB in the last 24 hours?
+          </div>
+          <div className="chat__msg chat__msg--ai" data-reveal style={{ ["--d" as string]: "260ms" }}>
             <span className="chat__tool">
               <Sparkle size={12} /> forcex-xtract · get_mweb_summary
             </span>
-            <div>
-              Over the last 24 hours, 8,155 LTC pegged into MWEB and 13,940 LTC pegged out, for a net outflow of about 5,785
-              LTC. The pool holds roughly 0.58% of circulating supply.
-            </div>
+            <div>8,155 LTC pegged in and 13,940 LTC pegged out. Net outflow of about 5,785 LTC.</div>
             <span className="chat__cite">
-              Source: ForceX Xtract · validated through block {h} · <b>14/14 controls passing</b> · MWEB pool conservation
-              LVR-002 reconciled
+              Validated through block {h} · <b>14/14 controls passing</b>
             </span>
-          </div>
-          <div className="chat__msg chat__msg--user" data-reveal style={{ ["--d" as string]: "520ms" }}>Cite the exact block you used.</div>
-          <div className="chat__msg chat__msg--ai" data-reveal style={{ ["--d" as string]: "760ms" }}>
-            Block {h}, validated at tip with the external node cross-check aligned. I can link the block page if you want to
-            inspect the peg-in transactions directly.
           </div>
         </div>
 
         <div>
           <span className="eyebrow" data-reveal="fade">
-            MCP Server
+            MCP server
           </span>
-          <h2 className="h2" data-reveal style={{ margin: "18px 0 0" }}>
-            Give your AI assistant data it can cite.
-          </h2>
-          <p className="lead" data-reveal style={{ marginTop: 22, maxWidth: 520 }}>
-            Connect ChatGPT, Claude, Grok, Claude Code, or your own agents to Xtract over the Model Context Protocol. Every
-            tool returns validated Litecoin data with the block it was verified at, so answers come with evidence instead of
-            confidence.
+          <Split as="h2" type="lines" className="h2" style={{ margin: "18px 0 0" }}>
+            Give your AI data it can cite.
+          </Split>
+          <p className="lead" data-reveal style={{ marginTop: 18, maxWidth: 440 }}>
+            ChatGPT, Claude, Grok, and your own agents, connected to validated data over MCP.
           </p>
-          <div className="clients" data-reveal>
-            {["ChatGPT", "Claude", "Grok", "Claude Code", "MCP Inspector", "OpenAI API", "Your own apps"].map((c) => (
-              <span key={c} className="chip">
-                {c}
-              </span>
-            ))}
-          </div>
-          <div className="hero__actions" data-reveal style={{ marginTop: 28 }}>
+          <div className="hero__actions" data-reveal style={{ marginTop: 26 }}>
             <Link href="/xtract/docs/mcp" className="btn btn--accent">
               Connect an AI tool
               <span className="btn__ico">
@@ -55,7 +40,7 @@ export function McpSection({ height }: { height?: number | null }) {
               </span>
             </Link>
             <code className="chip" style={{ height: 50, textTransform: "none", letterSpacing: 0, fontSize: 13 }}>
-              https://forcex.com/xtract/mcp
+              forcex.com/xtract/mcp
             </code>
           </div>
         </div>

@@ -196,7 +196,7 @@
   clip-path: inset(0 100% 0 0);
   transition: clip-path 1.6s var(--ease-out);
 }
-.footer__wordmark.is-in {
+.is-in > .footer__wordmark {
   clip-path: inset(0 0 0 0);
 }
 
@@ -238,8 +238,7 @@
 .xp-metric,
 .pre__num {
   font-family: var(--font-display);
-  font-variation-settings: "opsz" 96, "wdth" 100;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: -0.03em;
 }
 .xp-search kbd {

@@ -15,7 +15,7 @@ export default async function SignUpPage({ searchParams }: { searchParams: Promi
       eyebrow="Public beta is open"
       quote={
         <>
-          Verified Litecoin data, the explorer, analytics, watchlists, and API keys. <em className="serif">Free</em> to start.
+          Verified Litecoin data, the explorer, analytics, watchlists, and API keys. <span className="hi">Free</span> to start.
         </>
       }
     >

@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Wordmark } from "./Wordmark";
 import { XLogo } from "./Icons";
-import { FX_APP_ORIGIN } from "@/lib/api";
 import { FooterStatus } from "./FooterStatus";
 
 export function Footer() {
@@ -26,7 +25,8 @@ export function Footer() {
               <li><Link href="/xamine">Xamine</Link></li>
               <li><Link href="/xtract">Xtract</Link></li>
               <li><Link href="/xtract/docs/mcp">MCP Server</Link></li>
-              <li><a href={`${FX_APP_ORIGIN}/xamine/diagrams/address-relationships`}>Address LinX</a></li>
+              <li><Link href="/xamine/economic-throughput">Economic Throughput</Link></li>
+              <li><Link href="/xamine/address-linx">Address LinX</Link></li>
             </ul>
           </div>
           <div>

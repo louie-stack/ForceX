@@ -60,7 +60,7 @@ export default async function XtractPage() {
               Xtract · API and data services
             </span>
             <h1 className="h1 page-hero__title" data-reveal>
-              Build with on-chain data you can <em className="serif">trust</em>.
+              Build with on-chain data you can <span className="hi">trust</span>.
             </h1>
             <p className="lead" data-reveal style={{ ["--d" as string]: "80ms" }}>
               Xtract is the API and data services layer from ForceX. Get reliable, programmatic access to validated on-chain

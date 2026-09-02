@@ -10,7 +10,7 @@ export default function NotFound() {
           404 · not found
         </span>
         <h1 className="h1 page-hero__title" style={{ marginInline: "auto" }}>
-          This page failed <em className="serif">validation</em>.
+          This page failed <span className="hi">validation</span>.
         </h1>
         <p className="lead" style={{ margin: "24px auto 0", maxWidth: 480 }}>
           The address you requested does not exist on this chain. Try the explorer or head back home.

@@ -19,7 +19,7 @@ export function Statement() {
             Not just another explorer
           </span>
           <h2 className="statement__quote" data-reveal style={{ marginTop: 22 }}>
-            An explorer shows you what happened. ForceX is built to <em className="serif">prove</em> that what is shown is
+            An explorer shows you what happened. ForceX is built to <span className="hi">prove</span> that what is shown is
             correct.
           </h2>
           <p className="lead" data-reveal style={{ marginTop: 28, maxWidth: 560 }}>

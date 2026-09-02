@@ -12,11 +12,8 @@ export function FinalCta() {
           Public beta is open
         </span>
         <Split as="h2" type="words" className="display final__title">
-          Explore data that has been <em className="serif">verified</em>.
+          Trust is earned through <span className="hi">process</span>.
         </Split>
-        <p className="lead" data-reveal style={{ maxWidth: 560, margin: "24px auto 0" }}>
-          Free accounts include the explorer, analytics, watchlist alerts, and platform API keys.
-        </p>
         <div className="final__actions" data-reveal>
           <Magnetic>
             <Link href="/signup" className="btn btn--accent btn--lg" data-cursor="Go">
@@ -28,7 +25,7 @@ export function FinalCta() {
           </Magnetic>
           <Magnetic>
             <Link href="/xtract" className="btn btn--ghost btn--lg">
-              Explore Xtract
+              Get API access
             </Link>
           </Magnetic>
         </div>

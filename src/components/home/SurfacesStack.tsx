@@ -14,8 +14,8 @@ const ITEMS = [
     eyebrow: "01 · Explorer",
     name: "Xplorer",
     tint: "var(--xplorer)",
-    desc: "Inspect blocks, transactions, addresses, network activity, supply values, MWEB data, and chain details with clarity and confidence. Every page carries its own validation status.",
-    meta: ["Blocks and mempool", "Address history", "MWEB visibility", "Validation panel"],
+    desc: "Blocks, transactions, addresses, supply, and MWEB, each page carrying its own validation status.",
+    meta: ["Blocks", "Addresses", "MWEB"],
     cta: "Explore on-chain data",
   },
   {
@@ -23,8 +23,8 @@ const ITEMS = [
     eyebrow: "02 · Analytics",
     name: "Xamine",
     tint: "var(--xamine)",
-    desc: "Analyze trends, relationships, supply, network behavior, and address activity with governed, trusted data. Provisional windows are labelled, never silently mixed with completed history.",
-    meta: ["Economic throughput", "Address LinX", "Supply methodology", "Watchlists"],
+    desc: "Trends, supply, and address relationships on governed data.",
+    meta: ["Economic throughput", "Address LinX", "Watchlists"],
     cta: "Dive into analytics",
   },
   {
@@ -32,8 +32,8 @@ const ITEMS = [
     eyebrow: "03 · Data services",
     name: "Xtract",
     tint: "var(--xtract)",
-    desc: "Reliable, programmatic access to trusted on-chain data for builders, analysts, wallets, and institutions. REST and MCP share one credit model and carry validation metadata on every response.",
-    meta: ["REST API", "MCP server", "Validation metadata", "Predictable pricing"],
+    desc: "REST and MCP access with validation metadata on every response.",
+    meta: ["REST API", "MCP server", "Validation metadata"],
     cta: "Build with ForceX",
   },
 ];
@@ -74,11 +74,11 @@ export function SurfacesStack() {
               Platform surfaces
             </span>
             <Split as="h2" type="lines" className="h2" style={{ margin: "18px 0 0" }}>
-              Three products. One quality-first foundation.
+              Three products. One verified foundation.
             </Split>
           </div>
           <Link href="/signup" className="btn btn--ghost" data-reveal>
-            Get access to all three
+            Get access
             <span className="btn__ico">
               <ArrowUpRight />
             </span>
@@ -163,6 +163,23 @@ export function SurfacesStack() {
                 </div>
               </article>
             </div>
+          ))}
+        </div>
+
+        <div className="extras" style={{ marginTop: 14 }}>
+          {[
+            { href: "/xtract/docs/mcp", eyebrow: "AI tools", title: "MCP Server", tint: "var(--mcp)" },
+            { href: "/data-quality", eyebrow: "Methodology", title: "Data Quality", tint: "var(--accent)" },
+            { href: "/xamine/economic-throughput", eyebrow: "Xamine", title: "Economic Throughput", tint: "var(--xamine)" },
+            { href: "/xamine/address-linx", eyebrow: "Xamine", title: "Address LinX", tint: "var(--xplorer)" },
+          ].map((x, i) => (
+            <Link key={x.href} href={x.href} className="extra extra--row" data-spot="tint" data-reveal style={{ ["--tint" as string]: x.tint, ["--d" as string]: `${i * 60}ms` }}>
+              <span className="eyebrow eyebrow--plain">{x.eyebrow}</span>
+              <h4>{x.title}</h4>
+              <span className="link-arrow" style={{ color: "var(--tint)", fontSize: 14 }}>
+                Open <ArrowUpRight size={14} />
+              </span>
+            </Link>
           ))}
         </div>
       </div>

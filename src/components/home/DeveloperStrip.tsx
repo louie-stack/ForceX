@@ -70,25 +70,21 @@ export function DeveloperStrip({ quality }: { quality: QualityStatus | null }) {
               Xtract · API and data services
             </span>
             <h2 className="h2" data-reveal style={{ margin: "18px 0 0" }}>
-              Build with on-chain data you can trust.
+              Build on data you can trust.
             </h2>
-            <p className="lead" data-reveal style={{ marginTop: 22, maxWidth: 520 }}>
-              Xtract does not simply expose parsed blockchain data. Every response carries validation metadata, so your
-              application knows exactly what has been verified and through which block.
+            <p className="lead" data-reveal style={{ marginTop: 18, maxWidth: 440 }}>
+              Every Xtract response carries the block it was validated through.
             </p>
             <ul className="dev__list" data-reveal>
               {[
-                ["Validation metadata on every response", "status, validated height, and lag in blocks"],
-                ["Litecoin-first coverage", "blocks, transactions, addresses, MWEB, market, quality"],
-                ["Governance before display", "source-native data separated from derived calculations"],
-                ["One credit model", "REST and MCP share the same credits, limits, and keys"],
-              ].map(([b, s]) => (
+                "Validation metadata on every response",
+                "Blocks, transactions, addresses, MWEB, market",
+                "One credit model across REST and MCP",
+              ].map((b) => (
                 <li key={b}>
                   <Check size={18} />
                   <span>
                     <b>{b}</b>
-                    <br />
-                    <span className="small">{s}</span>
                   </span>
                 </li>
               ))}

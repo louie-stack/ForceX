@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 };
 
 const FEATURES = [
-  { Icon: Bolt, title: "Economic throughput", body: "Adjusted volume that strips change outputs and self-transfers so you see real economic activity, not raw transfer totals.", href: `${FX_APP_ORIGIN}/xamine/charts/adjusted-volume` },
-  { Icon: Nodes, title: "Address LinX", body: "Investigate address interactions and map relationship patterns across on-chain activity.", href: `${FX_APP_ORIGIN}/xamine/diagrams/address-relationships` },
+  { Icon: Bolt, title: "Economic throughput", body: "Adjusted volume that strips change outputs and self-transfers so you see real economic activity, not raw transfer totals.", href: "/xamine/economic-throughput" },
+  { Icon: Nodes, title: "Address LinX", body: "Investigate address interactions and map relationship patterns across on-chain activity.", href: "/xamine/address-linx" },
   { Icon: Layers, title: "Supply methodology", body: "Scheduled issuance versus miner-claimed subsidy, circulating maximums, and MWEB-aware supply visibility.", href: `${FX_APP_ORIGIN}/xamine` },
   { Icon: Chart, title: "Network behavior", body: "Transactions, fees, block sizes, and active addresses over time, with completed history kept separate from live windows.", href: `${FX_APP_ORIGIN}/xamine` },
   { Icon: Wallet, title: "Watchlist alerts", body: "Follow addresses and get notified on activity, backed by the same validated address ledger.", href: `${FX_APP_ORIGIN}/xamine` },
@@ -26,7 +26,7 @@ export default function XaminePage() {
         eyebrow="Xamine · analytics and intelligence"
         title={
           <>
-            Analytics designed to reveal insights with <em className="serif">confidence</em>.
+            Analytics designed to reveal insights with <span className="hi">confidence</span>.
           </>
         }
         lead="Xamine is the analytics and intelligence surface of ForceX. Analyze trends, relationships, supply, network behavior, and address activity with governed, trusted data."
@@ -83,7 +83,7 @@ export default function XaminePage() {
               Governed, not just graphed
             </span>
             <h2 className="statement__quote" data-reveal style={{ marginTop: 22 }}>
-              A chart can look authoritative even when the calculation behind it was never <em className="serif">verified</em>.
+              A chart can look authoritative even when the calculation behind it was never <span className="hi">verified</span>.
             </h2>
           </div>
           <div data-reveal style={{ ["--d" as string]: "100ms" }}>

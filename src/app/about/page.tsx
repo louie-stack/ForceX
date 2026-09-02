@@ -39,7 +39,7 @@ export default function AboutPage() {
         eyebrow="Who we are"
         title={
           <>
-            ForceX exists to bring <em className="serif">trust</em> back to on-chain data.
+            ForceX exists to bring <span className="hi">trust</span> back to on-chain data.
           </>
         }
         lead="ForceX is a quality-first on-chain intelligence platform built to make blockchain data more trustworthy, explainable, and useful. We go beyond traditional explorers by applying a structured data quality framework to the way on-chain data is parsed, reconciled, validated, cross-checked, and displayed."
@@ -84,7 +84,7 @@ export default function AboutPage() {
             <div className="quote-card" data-reveal="scale">
               <blockquote>
                 The goal is not simply to publish blockchain data faster. The goal is to publish blockchain data with{" "}
-                <em className="serif">clear evidence</em> that it has passed meaningful quality controls.
+                <span className="hi">clear evidence</span> that it has passed meaningful quality controls.
               </blockquote>
               <cite>ForceX founding principle</cite>
             </div>
@@ -143,7 +143,7 @@ export default function AboutPage() {
               Starting with Litecoin
             </span>
             <h2 className="statement__quote" data-reveal style={{ marginTop: 22 }}>
-              Litecoin is the starting point. The <em className="serif">standard</em> is the product.
+              Litecoin is the starting point. The <span className="hi">standard</span> is the product.
             </h2>
           </div>
           <div data-reveal style={{ ["--d" as string]: "100ms" }}>

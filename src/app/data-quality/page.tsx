@@ -63,7 +63,7 @@ export default async function DataQualityPage() {
         eyebrow="Data quality methodology"
         title={
           <>
-            How ForceX verifies the <em className="serif">integrity</em> of published data.
+            How ForceX verifies the <span className="hi">integrity</span> of published data.
           </>
         }
         lead="Four layers of integrity control, 242 enforcement points, per-block validation, periodic external node confirmation, and the full public control catalog. This is the reference guide behind the live Data Quality panel."

@@ -15,7 +15,7 @@ export default function ContactPage() {
         eyebrow="Contact"
         title={
           <>
-            Reach the ForceX <em className="serif">team</em>.
+            Reach the ForceX <span className="hi">team</span>.
           </>
         }
         lead="Questions about ForceX, beta access, the data platform, or anything else? Send us a message and we will get back to you."

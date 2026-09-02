@@ -7,7 +7,6 @@ import { LayersScroll } from "@/components/home/LayersScroll";
 import { BigStats } from "@/components/home/BigStats";
 import { DeveloperStrip } from "@/components/home/DeveloperStrip";
 import { McpSection } from "@/components/home/McpSection";
-import { Belief } from "@/components/home/Belief";
 import { FinalCta } from "@/components/home/FinalCta";
 
 export const revalidate = 30;
@@ -24,7 +23,6 @@ export default async function Home() {
       <BigStats quality={summary.quality} />
       <DeveloperStrip quality={summary.quality} />
       <McpSection height={summary.asOf.height} />
-      <Belief />
       <FinalCta />
     </>
   );

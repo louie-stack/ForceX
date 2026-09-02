@@ -50,7 +50,7 @@ export default function XtractDocsPage() {
         eyebrow="Xtract API documentation"
         title={
           <>
-            Build against <em className="serif">validated</em> Litecoin data.
+            Build against <span className="hi">validated</span> Litecoin data.
           </>
         }
         lead="Xtract is the ForceX production API for validated on-chain data. Use these docs for authentication, response conventions, credits, rate limits, errors, and the current v0.2 Litecoin endpoint catalog."

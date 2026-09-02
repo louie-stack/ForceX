@@ -25,7 +25,7 @@ export default function McpDocsPage() {
         eyebrow="Xtract MCP"
         title={
           <>
-            Connect AI tools to <em className="serif">verified</em> Litecoin data.
+            Connect AI tools to <span className="hi">verified</span> Litecoin data.
           </>
         }
         lead="Connect ChatGPT, Claude, Grok, Claude Code, MCP Inspector, the OpenAI API, or your own app to validated Litecoin data from Xtract. Every tool returns cited, validation-aware results."

@@ -20,12 +20,10 @@
   margin: 0;
   max-width: 14ch;
 }
-.hero__title .serif {
-  font-size: 1.08em;
-  line-height: 0.9;
+.hero__title .hi {
   color: var(--accent);
 }
-:root[data-theme="light"] .hero__title .serif {
+:root[data-theme="light"] .hero__title .hi {
   color: var(--accent-2);
 }
 .hero__row {
@@ -390,8 +388,7 @@
   margin: 0;
   text-wrap: balance;
 }
-.statement__quote .serif {
-  font-size: 1.06em;
+.statement__quote .hi {
   color: var(--accent);
 }
 .compare {
@@ -1102,9 +1099,8 @@
   max-width: 18ch;
   margin: 24px auto 0;
 }
-.belief__title .serif {
+.belief__title .hi {
   color: var(--accent);
-  font-size: 1.05em;
 }
 .belief__list {
   display: grid;
@@ -1194,9 +1190,8 @@
   margin: 20px 0 0;
   max-width: 16ch;
 }
-.page-hero__title .serif {
+.page-hero__title .hi {
   color: var(--accent);
-  font-size: 1.06em;
 }
 .page-hero .lead {
   max-width: 620px;
@@ -1329,9 +1324,8 @@
   letter-spacing: -0.025em;
   font-weight: 500;
 }
-.quote-card blockquote .serif {
+.quote-card blockquote .hi {
   color: var(--accent);
-  font-size: 1.05em;
 }
 .quote-card cite {
   display: block;
@@ -1477,9 +1471,8 @@
   font-weight: 500;
   max-width: 16ch;
 }
-.auth__side-quote .serif {
+.auth__side-quote .hi {
   color: var(--accent);
-  font-size: 1.05em;
 }
 @media (max-width: 900px) {
   .auth {
@@ -1760,4 +1753,13 @@
   .control__body dl {
     grid-template-columns: 1fr;
   }
+}
+
+.extra--row {
+  grid-template-rows: auto 1fr auto;
+  min-height: 150px;
+}
+.extra--row h4 {
+  font-size: 20px;
+  letter-spacing: -0.02em;
 }
