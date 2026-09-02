@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
 import { usePathname } from "next/navigation";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 
 declare global {
   interface Window {
@@ -10,29 +11,30 @@ declare global {
   }
 }
 
+/**
+ * Lenis drives native scroll; GSAP's ticker drives Lenis so ScrollTrigger and
+ * Lenis share one clock (no jitter on pinned sections).
+ */
 export function SmoothScroll() {
   const pathname = usePathname();
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const lenis = new Lenis({ lerp: 0.11, wheelMultiplier: 0.95, smoothWheel: true });
+    const lenis = new Lenis({ lerp: 0.1, wheelMultiplier: 0.9, smoothWheel: true });
     window.__lenis = lenis;
-    let raf = 0;
-    const loop = (t: number) => {
-      lenis.raf(t);
-      raf = requestAnimationFrame(loop);
-    };
-    raf = requestAnimationFrame(loop);
+    lenis.on("scroll", ScrollTrigger.update);
+    const tick = (t: number) => lenis.raf(t * 1000);
+    gsap.ticker.add(tick);
+    gsap.ticker.lagSmoothing(0);
     return () => {
-      cancelAnimationFrame(raf);
+      gsap.ticker.remove(tick);
       lenis.destroy();
       window.__lenis = undefined;
     };
   }, []);
 
   useEffect(() => {
-    // Route change: jump to top (or to the hash) without smoothing.
-    const hash = typeof window !== "undefined" ? window.location.hash : "";
+    const hash = window.location.hash;
     const lenis = window.__lenis;
     if (hash) {
       const el = document.querySelector(hash);
@@ -44,6 +46,9 @@ export function SmoothScroll() {
     }
     if (lenis) lenis.scrollTo(0, { immediate: true });
     else window.scrollTo(0, 0);
+    // Layout of the new route settles after paint; refresh triggers then.
+    const id = window.setTimeout(() => ScrollTrigger.refresh(), 120);
+    return () => window.clearTimeout(id);
   }, [pathname]);
 
   return null;

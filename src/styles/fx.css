@@ -1,0 +1,290 @@
+/* ------------------------------------------------------------------ */
+/*  Display typography override (Bricolage Grotesque)                  */
+/* ------------------------------------------------------------------ */
+
+:root {
+  --font-display: var(--font-bricolage), var(--font-sans);
+}
+.display,
+.h1,
+.h2,
+.h3,
+.statement__quote,
+.auth__side-quote,
+.quote-card blockquote,
+.prose h1,
+.surface__body h3,
+.mobile-menu a.big,
+.belief__title {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 96, "wdth" 100;
+  font-weight: 500;
+}
+.display {
+  letter-spacing: -0.045em;
+  line-height: 0.92;
+}
+.h1 {
+  letter-spacing: -0.04em;
+}
+.h2 {
+  letter-spacing: -0.035em;
+}
+.serif {
+  font-variation-settings: normal;
+  font-weight: 400;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Grain                                                              */
+/* ------------------------------------------------------------------ */
+
+.grain {
+  position: fixed;
+  inset: -50%;
+  z-index: 9000;
+  pointer-events: none;
+  width: 200%;
+  height: 200%;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 220px 220px;
+  animation: grain 0.6s steps(3) infinite;
+  mix-blend-mode: screen;
+}
+:root[data-theme="light"] .grain {
+  opacity: 0.06;
+  mix-blend-mode: multiply;
+}
+@keyframes grain {
+  0% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(-6%, 4%);
+  }
+  66% {
+    transform: translate(4%, -7%);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .grain {
+    animation: none;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Preloader                                                          */
+/* ------------------------------------------------------------------ */
+
+.pre {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: var(--bg);
+  color: var(--text);
+  display: grid;
+  place-items: center;
+  visibility: hidden;
+}
+html[data-pre] .pre {
+  visibility: visible;
+}
+html[data-pre] .pre__mark {
+  transform: translateY(110%);
+}
+.pre__inner {
+  width: min(560px, calc(100vw - 2 * var(--gutter)));
+  display: grid;
+  gap: 20px;
+}
+.pre__row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+.pre__clip {
+  display: block;
+  overflow: hidden;
+  line-height: 0;
+}
+.pre__mark {
+  display: inline-block;
+}
+.pre__meta {
+  display: grid;
+  justify-items: end;
+  gap: 4px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.pre__num {
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.pre__bar {
+  display: block;
+  height: 1px;
+  background: var(--line-2);
+  overflow: hidden;
+}
+.pre__bar span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Cursor                                                             */
+/* ------------------------------------------------------------------ */
+
+.cur {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9500;
+  pointer-events: none;
+  border-radius: 999px;
+  visibility: hidden;
+  opacity: 0;
+  will-change: transform;
+}
+.cur--dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  background: var(--text);
+}
+.cur--ring {
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border: 1px solid color-mix(in srgb, var(--text) 55%, transparent);
+  transition:
+    width 0.35s var(--ease-out),
+    height 0.35s var(--ease-out),
+    margin 0.35s var(--ease-out),
+    background-color 0.35s var(--ease-out),
+    border-color 0.35s var(--ease-out);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bg);
+}
+.cur--ring::after {
+  content: attr(data-label);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.cur--ring.is-active {
+  width: 56px;
+  height: 56px;
+  margin: -28px 0 0 -28px;
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  border-color: var(--accent);
+}
+.cur--ring.is-active[data-label]:not([data-label=""]) {
+  width: 88px;
+  height: 88px;
+  margin: -44px 0 0 -44px;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.cur--ring.is-active[data-label]:not([data-label=""])::after {
+  opacity: 1;
+  color: #fff;
+}
+.cur--ring.is-down {
+  transform: scale(0.85);
+}
+html.has-cursor,
+html.has-cursor a,
+html.has-cursor button,
+html.has-cursor summary,
+html.has-cursor [role="button"] {
+  cursor: none;
+}
+html.has-cursor input,
+html.has-cursor textarea {
+  cursor: auto;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Route curtain                                                      */
+/* ------------------------------------------------------------------ */
+
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 9800;
+  display: none;
+  background: var(--accent);
+  transform: translateY(100%);
+  will-change: transform;
+  place-items: center;
+}
+.curtain__mark {
+  position: absolute;
+  left: var(--gutter);
+  bottom: var(--gutter);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Split text                                                         */
+/* ------------------------------------------------------------------ */
+
+.st {
+  visibility: hidden;
+  text-wrap: initial;
+}
+.st .sl-mask {
+  display: block;
+  overflow: clip;
+}
+@media (prefers-reduced-motion: reduce) {
+  .st {
+    visibility: visible;
+  }
+}
+.st .sl {
+  display: block;
+}
+.st .sw,
+.st .sc {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Scrub text                                                         */
+/* ------------------------------------------------------------------ */
+
+.scrub .sw {
+  display: inline-block;
+  opacity: 0.18;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Nav on hero                                                        */
+/* ------------------------------------------------------------------ */
+
+.nav:not(.is-scrolled) .nav__bar {
+  padding-left: 0;
+  padding-right: 0;
+}

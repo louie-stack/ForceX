@@ -7,7 +7,7 @@ export function Belief() {
     "Make the quality results visible.",
   ];
   return (
-    <section className="section belief" style={{ paddingTop: 0 }}>
+    <section className="section belief" style={{ paddingBottom: 0 }}>
       <div className="container">
         <span className="eyebrow" data-reveal="fade">
           Our belief
