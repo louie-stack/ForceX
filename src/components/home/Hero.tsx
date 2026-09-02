@@ -4,7 +4,6 @@ import { Magnetic } from "@/components/fx/Magnetic";
 import { HeroStage } from "@/components/fx/HeroStage";
 import { ArrowUpRight } from "@/components/Icons";
 import { HeroMotion } from "./HeroMotion";
-import { LiveTicker } from "./LiveTicker";
 
 /**
  * The hero is the block. Particles assemble into VERIFIED, then cycle
@@ -46,9 +45,6 @@ export function Hero({ summary }: { summary: NetworkSummary }) {
           </div>
         </div>
 
-        <div className="hero3__ticker" data-reveal="fade" style={{ ["--d" as string]: "1600ms" }}>
-          <LiveTicker initial={summary} />
-        </div>
       </section>
     </HeroMotion>
   );

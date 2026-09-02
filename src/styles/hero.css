@@ -6,7 +6,7 @@
   position: relative;
   min-height: 100svh;
   display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-rows: minmax(0, 1fr);
   grid-template-columns: minmax(0, 1fr);
   overflow: clip;
   padding-top: var(--nav-h);
@@ -114,19 +114,6 @@
   justify-content: center;
   gap: 12px;
   margin-top: 8px;
-}
-.hero3__ticker {
-  position: relative;
-  z-index: 2;
-  min-width: 0;
-  width: 100%;
-  overflow: hidden;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  background: color-mix(in srgb, var(--bg) 60%, transparent);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  padding-block: 12px;
 }
 
 /* Readouts attached to the shapes */
