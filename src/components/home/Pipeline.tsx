@@ -5,13 +5,19 @@ import { gsap, ScrollTrigger, reduceMotion } from "@/lib/gsap";
 import { Check } from "@/components/Icons";
 import { fmtInt } from "@/lib/format";
 
+/**
+ * Copy is held to the published methodology at forcex.com/data-quality:
+ * four layers of integrity control, 190 structural constraints, 13 live
+ * per-block rules (LVR-001 to LVR-013) and one periodic node cross-check
+ * (LVR-014, default cadence every 1,000 blocks, against gettxoutsetinfo).
+ */
 const STAGES = [
-  { name: "Parse", body: "Blocks decoded straight from the node, including MWEB extension data.", check: "Block decoded from node", tint: "var(--muted-2)" },
-  { name: "Store", body: "190 structural constraints block invalid rows before they exist.", check: "Write-path commit confirmed", tint: "var(--muted-2)" },
-  { name: "Reconcile", body: "Balances, totals, and supply reconciled across canonical and derived surfaces.", check: "Accounting reconciled", tint: "var(--accent)" },
-  { name: "Validate", body: "Thirteen live controls run on every block at tip.", check: "13 per-block controls passing", tint: "var(--accent)" },
-  { name: "Cross-check", body: "Every 1,000 blocks the indexed UTXO set is compared against the node itself.", check: "Node cross-check aligned", tint: "var(--accent)" },
-  { name: "Verify", body: "Only then is a block worthy of display. The result is recorded with its height.", check: "Verified and recorded", tint: "var(--good)" },
+  { name: "Parse", body: "Every block is decoded directly from the Litecoin node, MWEB extension data included. Nothing is taken from a third-party feed.", check: "Block decoded from the node", tint: "var(--muted-2)" },
+  { name: "Store", body: "190 structural constraints are enforced by the schema itself, so an invalid relational state cannot be written in the first place.", check: "Write-path commit confirmed", tint: "var(--muted-2)" },
+  { name: "Reconcile", body: "Balances, totals, counts and supply values are reconciled across the address ledger, the transaction links and the unspent output set.", check: "Accounting reconciled", tint: "var(--accent)" },
+  { name: "Validate", body: "Thirteen live validation rules run against every block at the tip. Their result is recorded with the block height they were run at.", check: "13 per-block rules passing", tint: "var(--accent)" },
+  { name: "Cross-check", body: "Every 1,000 blocks the indexed unspent output total is compared with what the Litecoin node itself reports at a checkpoint height.", check: "Node cross-check aligned", tint: "var(--accent)" },
+  { name: "Verify", body: "Only then is the block published as validated, so every page can say exactly what has been checked, and when.", check: "Validated and recorded", tint: "var(--good)" },
 ];
 
 export function Pipeline({ height, hash }: { height: number | null; hash?: string | null }) {
@@ -95,7 +101,6 @@ export function Pipeline({ height, hash }: { height: number | null; hash?: strin
   }, []);
 
   const h = height ?? 3170723;
-  const hx = hash ?? "854a9df1b80613e4ba1be4dfb2402d7bcb77b7709de9ac33268e46781cff67c2";
 
   return (
     <section className="pipe" id="pipeline" ref={root} aria-label="How ForceX verifies a block">
@@ -130,15 +135,18 @@ export function Pipeline({ height, hash }: { height: number | null; hash?: strin
             </div>
             <div className="pipe__card">
               <span className="pipe__stamp">
-                <Check size={12} /> Worthy of display
+                <Check size={12} /> Verified before display
               </span>
               <div className="pipe__card-head">
-                <span>Litecoin block</span>
-                <b>{fmtInt(h)}</b>
+                <span>
+                  Litecoin block: <b>{fmtInt(h)}</b>
+                </span>
               </div>
-              <div className="pipe__hash">
-                <b>hash</b> {hx}
-              </div>
+              {hash ? (
+                <div className="pipe__hash">
+                  <b>hash</b> {hash}
+                </div>
+              ) : null}
               <ul className="pipe__checks">
                 {STAGES.map((s, i) => (
                   <li key={s.name} className={`pipe__check ${i === STAGES.length - 1 ? "is-final" : ""}`}>

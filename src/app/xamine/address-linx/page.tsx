@@ -41,6 +41,7 @@ export default function AddressLinxPage() {
       appPath="/xamine/diagrams/address-relationships"
       tint="var(--xplorer)"
       heroTint="xplorer"
+      heroVisual="graph"
       facts={[
         ["Relationship graph", "Counterparties and repeat interactions in one view"],
         ["Reconciled ledger", "Balances and links pass address integrity controls first"],

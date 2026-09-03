@@ -1,8 +1,13 @@
 import type { ReactNode } from "react";
-import { Split } from "@/components/fx/Split";
+import { HeroGate } from "@/components/fx/HeroGate";
 import { BlockClient } from "@/components/fx/BlockClient";
+import { BarField } from "@/components/fx/scenes/BarField";
+import { Streams } from "@/components/fx/scenes/Streams";
+import { StatusBoard } from "@/components/fx/scenes/StatusBoard";
+import { NodeGraph } from "@/components/fx/scenes/NodeGraph";
 
 export type HeroTint = "accent" | "xplorer" | "xamine" | "xtract" | "mcp" | "good";
+export type HeroVisual = "gate" | "bars" | "streams" | "board" | "graph" | "block";
 
 const TINTS: Record<HeroTint, { dark: string; light: string; css: string }> = {
   accent: { dark: "#3b82f6", light: "#2563eb", css: "var(--accent)" },
@@ -14,9 +19,12 @@ const TINTS: Record<HeroTint, { dark: string; light: string; css: string }> = {
 };
 
 /**
- * Cinematic opener for every secondary page: a page-tinted block bleeding
- * off the right edge, headline and one line of copy anchored bottom-left,
- * optional mono meta row. Same system everywhere, different tint and shape.
+ * Opener for every secondary page. Each page carries its own scene, built
+ * from what that product is: a bar terrain for analytics, data streams for
+ * the API, a control board for data quality, a relationship graph for MCP
+ * and Address LinX, the point-lattice block for the company pages. The
+ * scene sits to the right behind a left-aligned headline. Everything is
+ * present on first paint; nothing staggers in.
  */
 export function PageHero({
   eyebrow,
@@ -25,6 +33,7 @@ export function PageHero({
   actions,
   meta,
   tint = "accent",
+  visual = "block",
   shape = "cube",
   compact = false,
 }: {
@@ -34,37 +43,37 @@ export function PageHero({
   actions?: ReactNode;
   meta?: ReactNode;
   tint?: HeroTint;
+  visual?: HeroVisual;
+  /** Form of the point-lattice block when `visual` is `block`. */
   shape?: "cube" | "sphere" | "morph";
   compact?: boolean;
 }) {
   const t = TINTS[tint];
-  return (
-    <section className={`ph ${compact ? "ph--compact" : ""}`} style={{ ["--tint" as string]: t.css }}>
-      <div className="ph__glow" />
+  const scene =
+    visual === "gate" ? (
+      <HeroGate className="ph__gl" variant="page" tint={t.dark} tintLight={t.light} />
+    ) : visual === "bars" ? (
+      <BarField className="ph__gl" tint={t.dark} tintLight={t.light} />
+    ) : visual === "streams" ? (
+      <Streams className="ph__gl" tint={t.dark} tintLight={t.light} />
+    ) : visual === "board" ? (
+      <StatusBoard className="ph__gl" tint={t.dark} tintLight={t.light} />
+    ) : visual === "graph" ? (
+      <NodeGraph className="ph__gl" tint={t.dark} tintLight={t.light} />
+    ) : (
       <BlockClient className="ph__gl" tint={t.dark} tintLight={t.light} mode={shape} scale={0.92} x={4.6} y={0.6} density={24} opacity={0.9} spin={0.8} />
+    );
+  return (
+    <section className={`ph ${compact ? "ph--compact" : ""}`} style={{ ["--tint" as string]: t.css }} data-gate>
+      <div className="ph__glow" />
+      {scene}
       <div className="ph__veil" />
       <div className="container ph__inner">
-        <span className="eyebrow" data-reveal="fade">
-          {eyebrow}
-        </span>
-        <Split as="h1" type="words" now className="h1 ph__title">
-          {title}
-        </Split>
-        {lead && (
-          <Split as="p" type="lines" now delay={0.35} className="lead ph__lead">
-            {lead}
-          </Split>
-        )}
-        {actions && (
-          <div className="ph__actions" data-reveal style={{ ["--d" as string]: "500ms" }}>
-            {actions}
-          </div>
-        )}
-        {meta && (
-          <div className="ph__meta mono" data-reveal="fade" style={{ ["--d" as string]: "650ms" }}>
-            {meta}
-          </div>
-        )}
+        <span className="eyebrow">{eyebrow}</span>
+        <h1 className="h1 ph__title">{title}</h1>
+        {lead && <p className="lead ph__lead">{lead}</p>}
+        {actions && <div className="ph__actions">{actions}</div>}
+        {meta && <div className="ph__meta mono">{meta}</div>}
       </div>
     </section>
   );

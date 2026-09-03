@@ -1,19 +1,25 @@
 import Link from "next/link";
 import { Split } from "@/components/fx/Split";
-import { ArrowDown, Check } from "@/components/Icons";
+import { ArrowDown } from "@/components/Icons";
+import { LedgerRows, type LedgerRow } from "./LedgerRows";
 
 /**
  * The drift ledger: the ways an index silently diverges from the chain,
- * each paired with the live control that catches it. Rows reveal in
- * sequence and their status flips from risk to caught as they land.
+ * each paired with the live control that catches it. The section pins on
+ * desktop while the rows land in sequence; the copy on the left holds still.
  */
-const ROWS = [
-  { risk: "Bad joins", effect: "Balances attributed to the wrong address.", control: "LVR-005", name: "Address received cross-reconciliation" },
-  { risk: "Missed edge cases", effect: "Reorgs, duplicates, and null outputs miscounted.", control: "LVR-010", name: "Block transaction count match" },
-  { risk: "Incomplete reconciliation", effect: "Derived totals drift from canonical chain state.", control: "LVR-001", name: "Address balance reconciliation" },
-  { risk: "Improper supply logic", effect: "Scheduled issuance mistaken for coins actually claimed.", control: "LVR-011", name: "Issued supply cap verification" },
-  { risk: "Stale metadata", effect: "Yesterday's snapshot leaking into today's summaries.", control: "LVR-009", name: "Rolling snapshot reconciliation" },
-  { risk: "Unvalidated calculations", effect: "An authoritative-looking panel nobody cross-checked.", control: "LVR-014", name: "Independent node cross-check" },
+/**
+ * Each row pairs a way an index quietly drifts from the chain with the
+ * published live validation rule that catches it. Names and codes follow
+ * the public control catalog (FX-LVR-001 to FX-LVR-014).
+ */
+const ROWS: LedgerRow[] = [
+  { risk: "Two views that disagree", effect: "An address total and its transaction links are built separately. If they diverge, one of them is wrong.", control: "LVR-005", name: "Address received cross-reconciliation" },
+  { risk: "Reorgs, duplicates and null outputs", effect: "A transaction chart depends on how those cases were handled. The count stored on each block has to match what was written.", control: "LVR-010", name: "Block transaction count match" },
+  { risk: "Balances that were never reconciled", effect: "Every coin an address is shown to hold must be backed by a real, unspent output at the validated tip.", control: "LVR-001", name: "Address balance reconciliation" },
+  { risk: "Schedule mistaken for supply", effect: "Spendable LTC can never exceed what the halving schedule allows to exist, so scheduled issuance is not passed off as claimed subsidy.", control: "LVR-011", name: "Issued supply cap verification" },
+  { risk: "A snapshot that drifted", effect: "The summary numbers on every explorer page come from one rolling snapshot. It is re-anchored to the real tip at each new block.", control: "LVR-009", name: "Rolling snapshot reconciliation" },
+  { risk: "A number nobody checked externally", effect: "The indexed unspent output total is compared with what the Litecoin node itself reports, every 1,000 blocks.", control: "LVR-014", name: "Independent node cross-check" },
 ];
 
 export function Manifesto() {
@@ -35,29 +41,7 @@ export function Manifesto() {
           </Link>
         </div>
 
-        <ol className="ledger__rows" id="ledger-title">
-          {ROWS.map((r, i) => (
-            <li key={r.risk} className="ledger__row" data-reveal style={{ ["--d" as string]: `${i * 90}ms`, ["--i" as string]: i }}>
-              <span className="ledger__idx mono">0{i + 1}</span>
-              <span className="ledger__main">
-                <b>{r.risk}</b>
-                <span>{r.effect}</span>
-              </span>
-              <span className="ledger__status" aria-label={`Caught by ${r.control}, ${r.name}`}>
-                <span className="ledger__flip">
-                  <span className="ledger__risk">
-                    <i />
-                    Risk
-                  </span>
-                  <span className="ledger__caught">
-                    <Check size={11} />
-                    Caught · {r.control}
-                  </span>
-                </span>
-              </span>
-            </li>
-          ))}
-        </ol>
+        <LedgerRows rows={ROWS} />
       </div>
     </section>
   );

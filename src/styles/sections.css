@@ -1763,3 +1763,218 @@
   font-size: 20px;
   letter-spacing: -0.02em;
 }
+
+/* ------------------------------------------------------------------ */
+/*  Surfaces bus: four nodes fed by one rail with packets in flight    */
+/* ------------------------------------------------------------------ */
+
+.bus {
+  position: relative;
+  margin-top: clamp(40px, 5vw, 64px);
+}
+/* The rail runs exactly from the centre of the first node to the centre of the last:
+   four columns with 16px gaps, so half a column is (100% - 48px) / 8. */
+.bus__rail {
+  position: relative;
+  height: 1px;
+  margin: 0 calc((100% - 48px) / 8) 26px;
+  background: var(--line-strong);
+  overflow: visible;
+}
+.bus__rail::before,
+.bus__rail::after {
+  content: "";
+  position: absolute;
+  top: -3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+.bus__rail::before {
+  left: -3.5px;
+}
+.bus__rail::after {
+  right: -3.5px;
+  background: var(--good);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--good) 70%, transparent);
+}
+.bus__pkt {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 72px;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, var(--accent) 70%, #dbeafe);
+  box-shadow: 0 0 14px var(--accent-glow);
+  opacity: 0;
+  animation: bus-pkt 4.2s linear infinite;
+}
+.bus__pkt:nth-child(2) {
+  animation-delay: 1.4s;
+}
+.bus__pkt:nth-child(3) {
+  animation-delay: 2.8s;
+}
+@keyframes bus-pkt {
+  0% {
+    left: 0;
+    opacity: 0;
+  }
+  6% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    left: calc(100% - 72px);
+    opacity: 0;
+  }
+}
+.bus__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+.bus__node {
+  --tint: var(--accent);
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 16px;
+  min-height: 164px;
+  padding: 22px 22px 20px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--tint) 7%, var(--surface)), var(--surface) 55%);
+  overflow: visible;
+  transition:
+    border-color 0.3s var(--ease-out),
+    transform 0.6s var(--ease-out),
+    box-shadow 0.6s var(--ease-out);
+}
+.bus__node:hover {
+  border-color: color-mix(in srgb, var(--tint) 55%, var(--line));
+  transform: translateY(-3px);
+  box-shadow: 0 24px 60px -30px color-mix(in srgb, var(--tint) 60%, transparent);
+}
+/* The port: a drop from the rail into the node's top edge */
+.bus__port {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  width: 1px;
+  height: 27px;
+  background: linear-gradient(180deg, var(--line-strong), color-mix(in srgb, var(--tint) 70%, transparent));
+}
+.bus__port::before {
+  content: "";
+  position: absolute;
+  left: -2.5px;
+  bottom: -1px;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--tint);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--tint) 70%, transparent);
+  animation: bus-port 4.2s linear infinite;
+}
+.bus__node:nth-child(1) .bus__port::before {
+  animation-delay: 0.6s;
+}
+.bus__node:nth-child(2) .bus__port::before {
+  animation-delay: 1.5s;
+}
+.bus__node:nth-child(3) .bus__port::before {
+  animation-delay: 2.4s;
+}
+.bus__node:nth-child(4) .bus__port::before {
+  animation-delay: 3.3s;
+}
+@keyframes bus-port {
+  0%,
+  8%,
+  100% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  4% {
+    transform: scale(1.9);
+    opacity: 1;
+  }
+}
+.bus__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.bus__eyebrow i {
+  width: 5px;
+  height: 5px;
+  background: var(--tint);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--tint) 70%, transparent);
+}
+.bus__node h4 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  align-self: end;
+}
+.bus__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+.bus__meta {
+  font-size: 11px;
+  color: var(--muted);
+}
+.bus__open {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--tint);
+}
+.bus__open svg {
+  transition: transform 0.4s var(--ease-out);
+}
+.bus__node:hover .bus__open svg {
+  transform: translate(2px, -2px);
+}
+@media (max-width: 1000px) {
+  .bus__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .bus__rail {
+    display: none;
+  }
+  .bus__port {
+    display: none;
+  }
+}
+@media (max-width: 560px) {
+  .bus__grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bus__pkt,
+  .bus__port::before {
+    animation: none;
+  }
+}

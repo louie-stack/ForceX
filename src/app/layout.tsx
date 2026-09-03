@@ -6,6 +6,7 @@ import "@/styles/fx.css";
 import "@/styles/home.css";
 import "@/styles/polish.css";
 import "@/styles/hero.css";
+import "@/styles/pages.css";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { SmoothScroll } from "@/components/SmoothScroll";

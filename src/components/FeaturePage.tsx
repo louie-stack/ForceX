@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { PageHero, type HeroTint } from "@/components/PageHero";
+import { PageHero, type HeroTint, type HeroVisual } from "@/components/PageHero";
 import { CtaBand } from "@/components/CtaBand";
 import { ArrowUpRight } from "@/components/Icons";
 import { AUTH_LINKS_SERVER } from "@/lib/links";
@@ -19,6 +19,7 @@ export function FeaturePage({
   appPath,
   tint = "var(--xamine)",
   heroTint = "xamine",
+  heroVisual = "block",
 }: {
   eyebrow: string;
   title: ReactNode;
@@ -28,12 +29,14 @@ export function FeaturePage({
   appPath: string;
   tint?: string;
   heroTint?: HeroTint;
+  heroVisual?: HeroVisual;
 }) {
   return (
     <>
       <PageHero
         tint={heroTint}
-        shape="sphere"
+        visual={heroVisual}
+        shape="morph"
         eyebrow={eyebrow}
         title={title}
         lead={lead}

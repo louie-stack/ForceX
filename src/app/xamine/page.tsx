@@ -24,7 +24,7 @@ export default function XaminePage() {
     <>
       <PageHero
         tint="xamine"
-        shape="sphere"
+        visual="bars"
         eyebrow="Xamine · analytics and intelligence"
         title={
           <>
@@ -49,7 +49,7 @@ export default function XaminePage() {
 
       <section className="section" style={{ paddingTop: 0 }}>
         <div className="container">
-          <div className="values">
+          <div className="values" style={{ ["--tint" as string]: "var(--xamine)" }}>
             {FEATURES.map(({ Icon, title, body, href }, i) => {
               const external = href.startsWith("http");
               const inner = (

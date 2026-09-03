@@ -37,7 +37,8 @@ export default function AboutPage() {
     <>
       <PageHero
         tint="accent"
-        shape="sphere"
+        visual="block"
+        shape="cube"
         eyebrow="Who we are"
         title={
           <>

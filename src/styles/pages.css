@@ -1,0 +1,133 @@
+/* ------------------------------------------------------------------ */
+/*  Secondary pages: the node-card language from the home page,        */
+/*  applied to the shared card, stat, plan and callout primitives.      */
+/* ------------------------------------------------------------------ */
+
+/* Page hero: smaller, tighter headline; scene on the right */
+.ph__title {
+  font-size: clamp(34px, 4.2vw, 62px);
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+  max-width: 13ch;
+}
+.ph__lead {
+  font-size: clamp(16px, 1.2vw, 18px);
+  max-width: 42ch;
+}
+.ph__inner {
+  gap: 16px;
+  padding-block: clamp(40px, 8vh, 96px) clamp(36px, 5vw, 64px);
+}
+.ph__veil {
+  background:
+    linear-gradient(180deg, var(--bg) 0%, transparent 18%),
+    linear-gradient(0deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 70%, transparent) 16%, transparent 46%),
+    linear-gradient(90deg, var(--bg) 8%, color-mix(in srgb, var(--bg) 82%, transparent) 34%, transparent 58%);
+}
+
+/* Tinted node cards */
+.values,
+.plans,
+.feature__facts {
+  --tint: var(--accent);
+}
+.value,
+.plan,
+.feature__fact,
+.surface {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--tint, var(--accent)) 7%, var(--surface)), var(--surface) 58%);
+  border: 1px solid var(--line);
+  transition:
+    border-color 0.3s var(--ease-out),
+    transform 0.6s var(--ease-out),
+    box-shadow 0.6s var(--ease-out);
+}
+.value:hover,
+.plan:hover,
+.feature__fact:hover,
+.surface:hover {
+  border-color: color-mix(in srgb, var(--tint, var(--accent)) 55%, var(--line));
+  transform: translateY(-3px);
+  box-shadow: 0 24px 60px -30px color-mix(in srgb, var(--tint, var(--accent)) 60%, transparent);
+}
+.surface::before {
+  display: none;
+}
+.surface__body h3 {
+  font-size: 26px;
+}
+.value__ico,
+.surface__ico {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--tint, var(--accent)) 45%, var(--line));
+  background: color-mix(in srgb, var(--tint, var(--accent)) 12%, transparent);
+  color: var(--tint, var(--accent));
+}
+.value h3 {
+  font-size: 19px;
+}
+.value p,
+.surface__body p {
+  font-size: 14.5px;
+}
+
+/* Stats strip: mono values with a hairline system, not boxes */
+.stats {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 5%, var(--surface)), var(--surface) 60%);
+}
+.stat__label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.stat__value {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+.stat__meta {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+/* Definition rows: hover highlight and a hairline index */
+.list-row {
+  position: relative;
+  padding-inline: 12px;
+  margin-inline: -12px;
+  border-radius: 10px;
+  transition: background-color 0.3s var(--ease-out);
+}
+.list-row:hover {
+  background: color-mix(in srgb, var(--text) 3%, transparent);
+}
+.list-row h4 {
+  font-size: 16px;
+}
+
+/* Callouts read as notes from the methodology */
+.callout {
+  border-left: 2px solid color-mix(in srgb, var(--accent) 70%, transparent);
+  border-radius: 0 12px 12px 0;
+  background: color-mix(in srgb, var(--accent) 5%, var(--surface-2));
+}
+
+/* Plans: featured plan carries the accent wash */
+.plan--featured {
+  --tint: var(--accent);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 12%, var(--surface)), var(--surface) 60%);
+}
+
+@media (max-width: 760px) {
+  .ph__veil {
+    background:
+      linear-gradient(180deg, var(--bg) 0%, transparent 12%),
+      linear-gradient(0deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 85%, transparent) 45%, transparent 75%);
+  }
+}

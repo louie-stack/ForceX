@@ -48,7 +48,7 @@ export default function XtractDocsPage() {
     <>
       <PageHero
         tint="xtract"
-        shape="cube"
+        visual="streams"
         compact
         eyebrow="Xtract API documentation"
         title={

@@ -15,7 +15,7 @@ export default async function Home() {
   const summary = await getNetworkSummary();
   return (
     <>
-      <Hero summary={summary} />
+      <Hero />
       <Manifesto />
       <Pipeline height={summary.asOf.height} />
       <SurfacesStack />

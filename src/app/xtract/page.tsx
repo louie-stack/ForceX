@@ -54,7 +54,7 @@ export default async function XtractPage() {
     <>
       <PageHero
         tint="xtract"
-        shape="cube"
+        visual="streams"
         eyebrow="Xtract · API and data services"
         title={
           <>
@@ -131,7 +131,7 @@ export default async function XtractPage() {
               </span>
             </Link>
           </div>
-          <div className="values">
+          <div className="values" style={{ ["--tint" as string]: "var(--xtract)" }}>
             {COVERAGE.map(({ Icon, title, body }, i) => (
               <div key={title} className="value" data-spot="" data-reveal style={{ ["--d" as string]: `${(i % 3) * 60}ms` }}>
                 <span className="value__ico">

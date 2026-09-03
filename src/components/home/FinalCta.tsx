@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Split } from "@/components/fx/Split";
 import { Magnetic } from "@/components/fx/Magnetic";
 import { ArrowUpRight } from "@/components/Icons";
 
@@ -11,9 +10,13 @@ export function FinalCta() {
         <span className="eyebrow" data-reveal="fade" style={{ justifyContent: "center" }}>
           Public beta is open
         </span>
-        <Split as="h2" type="words" className="display final__title">
-          Trust is earned through <span className="hi">process</span>.
-        </Split>
+        <h2 className="display final__title" data-reveal>
+          <span className="hi">Verified</span> before
+          <span className="final__line">it is displayed.</span>
+        </h2>
+        <p className="final__lead" data-reveal>
+          Free explorer access today. API and MCP access when you are ready to build.
+        </p>
         <div className="final__actions" data-reveal>
           <Magnetic>
             <Link href="/signup" className="btn btn--accent btn--lg">

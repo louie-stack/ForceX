@@ -13,6 +13,7 @@ export default function ContactPage() {
     <>
       <PageHero
         tint="accent"
+        visual="block"
         shape="sphere"
         compact
         eyebrow="Contact"

@@ -16,6 +16,7 @@ export function Split({
   now = false,
   stagger,
   style,
+  accentWord,
 }: {
   as?: ElementType;
   type?: "lines" | "words" | "chars";
@@ -25,6 +26,8 @@ export function Split({
   now?: boolean;
   stagger?: number;
   style?: React.CSSProperties;
+  /** Word (exact text) that receives the `sw--hi` class after splitting, since SplitText lifts words out of nested spans. */
+  accentWord?: string;
 }) {
   const ref = useRef<HTMLElement>(null);
 
@@ -43,6 +46,11 @@ export function Split({
         charsClass: "sc",
         mask: "lines",
       });
+      if (accentWord && split.words) {
+        (split.words as HTMLElement[]).forEach((w) => {
+          if ((w.textContent ?? "").trim() === accentWord) w.classList.add("sw--hi");
+        });
+      }
       const targets = type === "chars" ? split.chars : type === "words" ? split.words : split.lines;
       const st_ = stagger ?? (type === "chars" ? 0.018 : type === "words" ? 0.045 : 0.1);
       gsap.set(el, { visibility: "visible" });
@@ -81,7 +89,7 @@ export function Split({
       tween?.kill();
       split?.revert();
     };
-  }, [type, delay, now, stagger]);
+  }, [type, delay, now, stagger, accentWord]);
 
   return (
     <Tag ref={ref} className={`st ${className ?? ""}`} style={style}>

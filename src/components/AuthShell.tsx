@@ -2,13 +2,13 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { Wordmark } from "./Wordmark";
 import { FooterStatus } from "./FooterStatus";
-import { BlockClient } from "./fx/BlockClient";
+import { HeroGate } from "./fx/HeroGate";
 
 export function AuthShell({ children, quote, eyebrow }: { children: ReactNode; quote: ReactNode; eyebrow: string }) {
   return (
     <section className="auth">
-      <aside className="auth__side">
-        <BlockClient className="auth__gl" mode="morph" scale={1} x={0} y={-0.4} density={22} opacity={0.85} />
+      <aside className="auth__side" data-gate>
+        <HeroGate className="auth__gl" variant="page" />
         <div className="auth__veil" />
         <div style={{ position: "relative" }}>
           <span className="eyebrow">{eyebrow}</span>

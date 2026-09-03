@@ -21,25 +21,10 @@ const ABOUT = [
 
 export function Nav() {
   const pathname = usePathname();
-  const [scrolled, setScrolled] = useState(false);
-  const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState<null | "products" | "about">(null);
   const [mobile, setMobile] = useState(false);
-  const lastY = useRef(0);
   const closeTimer = useRef<number | null>(null);
-
-  useEffect(() => {
-    const onScroll = () => {
-      const y = window.scrollY;
-      setScrolled(y > 24);
-      setHidden(y > 400 && y > lastY.current + 4 && !open && !mobile);
-      if (y < lastY.current - 4) setHidden(false);
-      lastY.current = y;
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [open, mobile]);
+  // The bar keeps one glass state at every scroll position: no shrink, no hide.
 
   // Close menus when the route changes (state adjustment during render, per React guidance).
   const [prevPath, setPrevPath] = useState(pathname);
@@ -66,7 +51,7 @@ export function Nav() {
 
   return (
     <>
-      <header className={`nav ${scrolled ? "is-scrolled" : ""} ${hidden ? "is-hidden" : ""}`}>
+      <header className="nav">
         <div className="container">
           <div className="nav__bar">
             <Link href="/" className="nav__brand" aria-label="ForceX home">

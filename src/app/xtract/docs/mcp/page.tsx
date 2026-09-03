@@ -23,7 +23,7 @@ export default function McpDocsPage() {
     <>
       <PageHero
         tint="mcp"
-        shape="sphere"
+        visual="graph"
         compact
         eyebrow="Xtract MCP"
         title={

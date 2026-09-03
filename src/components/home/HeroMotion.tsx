@@ -3,7 +3,7 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { gsap, reduceMotion } from "@/lib/gsap";
 
-/** Scroll depth for the hero: block recedes and fades, annotations drift, copy lifts. */
+/** Scroll depth for the hero DOM: copy lifts and fades, the scene dissolves into the next section. */
 export function HeroMotion({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -11,10 +11,10 @@ export function HeroMotion({ children }: { children: ReactNode }) {
     if (!el || reduceMotion()) return;
     const ctx = gsap.context(() => {
       const st = { trigger: el, start: "top top", end: "bottom top", scrub: true };
-      gsap.to(".hero3__gl", { scale: 1.18, y: -120, opacity: 0.15, ease: "none", scrollTrigger: st });
-      gsap.to(".hero3__glow", { opacity: 0, ease: "none", scrollTrigger: st });
-      gsap.to(".hero3__stage", { y: -60, opacity: 0, ease: "none", scrollTrigger: { ...st, end: "60% top" } });
-      gsap.to(".hero3__actions", { y: -100, ease: "none", scrollTrigger: st });
+      gsap.to(".vg__copy", { y: -90, opacity: 0, ease: "none", scrollTrigger: { ...st, end: "55% top" } });
+      gsap.to(".vg__cuewrap", { opacity: 0, ease: "none", scrollTrigger: { ...st, end: "30% top" } });
+      gsap.to(".vg__panel", { opacity: 0, ease: "none", scrollTrigger: { ...st, end: "40% top" } });
+      gsap.to(".vg__gl", { opacity: 0, ease: "none", scrollTrigger: { ...st, start: "55% top" } });
     }, el);
     return () => ctx.revert();
   }, []);

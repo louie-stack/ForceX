@@ -66,7 +66,7 @@ export function SurfacesStack() {
   }, []);
 
   return (
-    <section className="section" style={{ paddingBottom: 0 }}>
+    <section className="section">
       <div className="container">
         <div className="section-head">
           <div>
@@ -74,7 +74,7 @@ export function SurfacesStack() {
               Platform surfaces
             </span>
             <Split as="h2" type="lines" className="h2" style={{ margin: "18px 0 0" }}>
-              Three products. One verified foundation.
+              Product Suite
             </Split>
           </div>
           <Link href="/signup" className="btn btn--ghost" data-reveal>
@@ -166,21 +166,36 @@ export function SurfacesStack() {
           ))}
         </div>
 
-        <div className="extras" style={{ marginTop: 14 }}>
-          {[
-            { href: "/xtract/docs/mcp", eyebrow: "AI tools", title: "MCP Server", tint: "var(--mcp)" },
-            { href: "/data-quality", eyebrow: "Methodology", title: "Data Quality", tint: "var(--accent)" },
-            { href: "/xamine/economic-throughput", eyebrow: "Xamine", title: "Economic Throughput", tint: "var(--xamine)" },
-            { href: "/xamine/address-linx", eyebrow: "Xamine", title: "Address LinX", tint: "var(--xplorer)" },
-          ].map((x, i) => (
-            <Link key={x.href} href={x.href} className="extra extra--row" data-spot="tint" data-reveal style={{ ["--tint" as string]: x.tint, ["--d" as string]: `${i * 60}ms` }}>
-              <span className="eyebrow eyebrow--plain">{x.eyebrow}</span>
-              <h4>{x.title}</h4>
-              <span className="link-arrow" style={{ color: "var(--tint)", fontSize: 14 }}>
-                Open <ArrowUpRight size={14} />
-              </span>
-            </Link>
-          ))}
+        {/* Four more surfaces, fed by one verified data bus: packets travel left to right along the rail. */}
+        <div className="bus" aria-label="More surfaces">
+          <div className="bus__rail" aria-hidden="true">
+            <i className="bus__pkt" />
+            <i className="bus__pkt" />
+            <i className="bus__pkt" />
+          </div>
+          <div className="bus__grid">
+            {[
+              { href: "/xtract/docs/mcp", eyebrow: "AI tools", title: "MCP Server", tint: "var(--mcp)", meta: "Tools for agents" },
+              { href: "/data-quality", eyebrow: "Methodology", title: "Data Quality", tint: "var(--accent)", meta: "14 live controls" },
+              { href: "/xamine/economic-throughput", eyebrow: "Xamine", title: "Economic Throughput", tint: "var(--xamine)", meta: "Value moved on chain" },
+              { href: "/xamine/address-linx", eyebrow: "Xamine", title: "Address LinX", tint: "var(--xplorer)", meta: "Relationship graph" },
+            ].map((x, i) => (
+              <Link key={x.href} href={x.href} className="bus__node" data-spot="tint" data-reveal style={{ ["--tint" as string]: x.tint, ["--d" as string]: `${i * 60}ms` }}>
+                <i className="bus__port" aria-hidden="true" />
+                <span className="bus__eyebrow mono">
+                  <i />
+                  {x.eyebrow}
+                </span>
+                <h4>{x.title}</h4>
+                <span className="bus__foot">
+                  <span className="bus__meta mono">{x.meta}</span>
+                  <span className="bus__open">
+                    Open <ArrowUpRight size={13} />
+                  </span>
+                </span>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </section>

@@ -61,7 +61,7 @@ export default async function DataQualityPage() {
     <>
       <PageHero
         tint="good"
-        shape="cube"
+        visual="board"
         eyebrow="Data quality methodology"
         title={
           <>

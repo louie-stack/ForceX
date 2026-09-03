@@ -554,31 +554,24 @@ a, button, summary, [role="button"] {
   align-items: center;
   transition: transform 0.6s var(--ease-out);
 }
+/* The bar runs wider than the page grid so its contents always fit inside the pill. */
+.nav > .container {
+  max-width: 1520px;
+  padding-inline: clamp(12px, 1.6vw, 28px);
+}
 .nav__bar {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: 24px;
-  height: 52px;
-  padding: 0 8px 0 18px;
+  gap: 16px;
+  height: 56px;
+  padding: 0 12px 0 28px;
   border-radius: 999px;
-  border: 1px solid transparent;
-  background: transparent;
-  transition:
-    background-color 0.5s var(--ease-out),
-    border-color 0.5s var(--ease-out),
-    box-shadow 0.5s var(--ease-out),
-    backdrop-filter 0.5s var(--ease-out);
-}
-.nav.is-scrolled .nav__bar {
+  border: 1px solid var(--line);
   background: color-mix(in srgb, var(--bg) 72%, transparent);
-  border-color: var(--line);
   box-shadow: var(--shadow-md);
   backdrop-filter: blur(18px) saturate(160%);
   -webkit-backdrop-filter: blur(18px) saturate(160%);
-}
-.nav.is-hidden {
-  transform: translateY(-120%);
 }
 .nav__brand {
   display: inline-flex;

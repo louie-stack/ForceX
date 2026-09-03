@@ -35,15 +35,21 @@
 .ledger {
   padding-block: clamp(64px, 8vw, 112px);
 }
+/* Pinned on desktop: the section fills the viewport under the nav and holds while rows land. */
+.ledger--pin {
+  min-height: calc(100svh - var(--nav-h));
+  display: grid;
+  align-items: center;
+  padding-block: clamp(40px, 5vw, 72px);
+}
 .ledger__grid {
   display: grid;
   grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
   gap: clamp(32px, 6vw, 96px);
-  align-items: start;
+  align-items: center;
 }
 .ledger__copy {
-  position: sticky;
-  top: calc(var(--nav-h) + 32px);
+  position: relative;
 }
 .ledger__title {
   max-width: 14ch;
@@ -279,7 +285,7 @@
 .pipe__card-head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 12px;
   font-family: var(--font-mono);
   font-size: 11.5px;
@@ -554,7 +560,9 @@
   font-size: 16px;
   line-height: 1.55;
   color: var(--text-2);
-  max-width: 48ch;
+  max-width: 34ch;
+  min-height: calc(1.55em * 2);
+  text-wrap: balance;
 }
 .hz__panel--end {
   width: min(520px, 78vw);
@@ -655,6 +663,18 @@
 /*  Final CTA                                                          */
 /* ------------------------------------------------------------------ */
 
+/* ------------------------------------------------------------------ */
+/*  Closing statement: outline, scan fill, rotating seal               */
+/* ------------------------------------------------------------------ */
+
+/* ------------------------------------------------------------------ */
+/*  Closing record: muted statement, scan fill, status column, seal    */
+/* ------------------------------------------------------------------ */
+
+/* ------------------------------------------------------------------ */
+/*  Closing statement                                                  */
+/* ------------------------------------------------------------------ */
+
 .final {
   position: relative;
   padding-block: clamp(80px, 12vw, 160px) clamp(100px, 16vw, 220px);
@@ -663,18 +683,28 @@
 }
 .final__title {
   margin: 20px auto 0;
-  max-width: 14ch;
-  font-size: clamp(44px, 8vw, 128px);
+  font-size: clamp(40px, 6.4vw, 96px);
+}
+.final__line {
+  display: block;
 }
 .final__title .hi {
   color: var(--accent);
+}
+.final__lead {
+  margin: clamp(20px, 2.6vw, 30px) auto 0;
+  max-width: 40ch;
+  font-size: clamp(16px, 1.25vw, 19px);
+  line-height: 1.5;
+  color: var(--text-2);
+  text-wrap: balance;
 }
 .final__actions {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: clamp(32px, 4vw, 56px);
+  margin-top: clamp(28px, 3.5vw, 48px);
 }
 .final__glow {
   left: 50%;
