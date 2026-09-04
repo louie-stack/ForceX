@@ -1,113 +1,64 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { PageHero } from "@/components/PageHero";
-import { CtaBand } from "@/components/CtaBand";
-import { ArrowUpRight, Bolt, Chart, Layers, Nodes, Shield, Wallet } from "@/components/Icons";
-import { FX_APP_ORIGIN } from "@/lib/api";
+import { XamineHero, type HeroSeries } from "@/components/xamine/XamineHero";
+import { Dashboard } from "@/components/xamine/Dashboard";
+import { Subnav } from "@/components/xamine/Subnav";
+import { getDashboard } from "@/lib/xamine/provider";
+import { FX_APP_ORIGIN, getChainHome, getNetworkSummary } from "@/lib/api";
+
+export const revalidate = 60;
+
+/** Placeholder 30-day series for when the live one cannot be read; labelled as a sample in the UI. */
+function sampleSeries(base: number, amp: number, seed: number): { date: string; value: number }[] {
+  const out: { date: string; value: number }[] = [];
+  const day = 86_400_000;
+  const start = Date.now() - 29 * day;
+  let r = seed;
+  for (let i = 0; i < 30; i++) {
+    r = (r * 9301 + 49297) % 233280;
+    const noise = (r / 233280 - 0.5) * amp * 0.5;
+    const wave = Math.sin(i * 0.42 + seed) * amp * 0.45 + Math.sin(i * 0.11) * amp * 0.3;
+    out.push({ date: new Date(start + i * day).toISOString().slice(0, 10), value: Math.round(base + wave + noise) });
+  }
+  return out;
+}
 
 export const metadata: Metadata = {
   title: "Xamine: Litecoin Analytics on Governed Data",
   description: "The ForceX analytics and intelligence surface. Analyze trends, relationships, supply, network behavior, and address activity with governed, trusted Litecoin data.",
 };
 
-const FEATURES = [
-  { Icon: Bolt, title: "Economic throughput", body: "Adjusted volume that strips change outputs and self-transfers so you see real economic activity, not raw transfer totals.", href: "/xamine/economic-throughput" },
-  { Icon: Nodes, title: "Address LinX", body: "Investigate address interactions and map relationship patterns across on-chain activity.", href: "/xamine/address-linx" },
-  { Icon: Layers, title: "Supply methodology", body: "Scheduled issuance versus miner-claimed subsidy, circulating maximums, and MWEB-aware supply visibility.", href: `${FX_APP_ORIGIN}/xamine` },
-  { Icon: Chart, title: "Network behavior", body: "Transactions, fees, block sizes, and active addresses over time, with completed history kept separate from live windows.", href: `${FX_APP_ORIGIN}/xamine` },
-  { Icon: Wallet, title: "Watchlist alerts", body: "Follow addresses and get notified on activity, backed by the same validated address ledger.", href: `${FX_APP_ORIGIN}/xamine` },
-  { Icon: Shield, title: "Validation aware", body: "Every chart carries the validated height it was built from. Provisional windows are labelled, never silently mixed.", href: "/data-quality" },
-];
 
-export default function XaminePage() {
+export default async function XaminePage() {
+  const [summary, chain, dashboard] = await Promise.all([getNetworkSummary(), getChainHome(), getDashboard()]);
+  const tx = chain?.txDaily ?? [];
+  const mweb = chain?.mwebDaily ?? [];
+  const series: HeroSeries[] = [
+    {
+      key: "tx",
+      label: "Transactions",
+      divisor: 1,
+      zero: false,
+      unit: "",
+      data: tx.length > 1 ? tx : sampleSeries(118_000, 46_000, 7),
+      sample: tx.length <= 1,
+    },
+    {
+      key: "mweb",
+      label: "MWEB pool",
+      divisor: 1e8,
+      zero: false,
+      unit: " LTC",
+      data: mweb.length > 1 ? mweb : sampleSeries(182_000 * 1e8, 6_000 * 1e8, 3),
+      sample: mweb.length <= 1,
+    },
+  ];
+
   return (
-    <>
-      <PageHero
-        tint="xamine"
-        visual="bars"
-        eyebrow="Xamine · analytics and intelligence"
-        title={
-          <>
-            Analytics designed to reveal insights with <span className="hi">confidence</span>.
-          </>
-        }
-        lead="Trends, supply, network behavior, and address relationships on governed data."
-        actions={
-          <>
-            <a href={`${FX_APP_ORIGIN}/xamine`} className="btn btn--accent btn--lg">
-              Open Xamine
-              <span className="btn__ico">
-                <ArrowUpRight />
-              </span>
-            </a>
-            <Link href="/signup" className="btn btn--ghost btn--lg">
-              Create free account
-            </Link>
-          </>
-        }
-      />
+    <div className="page-xamine">
+      <XamineHero summary={summary} series={series} appHref={`${FX_APP_ORIGIN}/xamine`} />
 
-      <section className="section" style={{ paddingTop: 0 }}>
-        <div className="container">
-          <div className="values" style={{ ["--tint" as string]: "var(--xamine)" }}>
-            {FEATURES.map(({ Icon, title, body, href }, i) => {
-              const external = href.startsWith("http");
-              const inner = (
-                <>
-                  <span className="value__ico" style={{ color: "var(--xamine)" }}>
-                    <Icon />
-                  </span>
-                  <h3>{title}</h3>
-                  <p>{body}</p>
-                  <span className="link-arrow" style={{ color: "var(--xamine)", fontSize: 14 }}>
-                    Open <ArrowUpRight size={14} />
-                  </span>
-                </>
-              );
-              return external ? (
-                <a key={title} href={href} className="value card--hover" data-spot="" data-reveal style={{ ["--d" as string]: `${(i % 3) * 60}ms` }}>
-                  {inner}
-                </a>
-              ) : (
-                <Link key={title} href={href} className="value card--hover" data-spot="" data-reveal style={{ ["--d" as string]: `${(i % 3) * 60}ms` }}>
-                  {inner}
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      <section className="section quality">
-        <div className="container statement__grid">
-          <div>
-            <span className="eyebrow" data-reveal="fade">
-              Governed, not just graphed
-            </span>
-            <h2 className="statement__quote" data-reveal style={{ marginTop: 22 }}>
-              A chart can look authoritative even when the calculation behind it was never <span className="hi">verified</span>.
-            </h2>
-          </div>
-          <div data-reveal style={{ ["--d" as string]: "100ms" }}>
-            <p className="lead">
-              Xamine separates source-native data from derived calculations, labels provisional windows, and anchors every
-              series to the validated height it was built from. When the underlying data has not passed validation, the
-              panel says so instead of showing a number.
-            </p>
-            <Link href="/data-quality" className="link-arrow" style={{ marginTop: 22 }}>
-              Read the data quality methodology <ArrowUpRight size={16} />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <CtaBand
-        eyebrow="Included with every account"
-        title="Xamine is part of the public beta."
-        body="Create a free account to open analytics, watchlists, and Address LinX on verified Litecoin data."
-        primary={{ href: "/signup", label: "Create free account" }}
-        secondary={{ href: "/xplorer/litecoin", label: "Open the explorer" }}
-      />
-    </>
+      <Subnav appHref={`${FX_APP_ORIGIN}/xamine`} />
+      <Dashboard d={dashboard} appOrigin={FX_APP_ORIGIN} />
+    </div>
   );
 }
