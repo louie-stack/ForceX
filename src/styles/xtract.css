@@ -1,0 +1,677 @@
+/* ------------------------------------------------------------------ */
+/*  Xtract product page                                                */
+/*                                                                     */
+/*  Construction follows the reference set (Linear, Stripe, Alchemy,   */
+/*  Helius, Clerk): copy-led hero with one real product artifact       */
+/*  beneath it, then quiet hairline sections. One accent, used         */
+/*  sparingly. Motion is the site's own reveal, nothing more.          */
+/*  Prefix xtp- throughout: xamine.css owns the short prefixes.        */
+/* ------------------------------------------------------------------ */
+
+.xtp {
+  --tint: var(--xtract);
+  --xtp-cell: rgba(255, 255, 255, 0.07);
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+}
+.xtp::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: min(1800px, 165vh);
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(820px 620px at 80% 6%, color-mix(in srgb, var(--tint) 14%, transparent), transparent 66%),
+    radial-gradient(700px 520px at 6% 0%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 70%);
+}
+/* Light needs far less of it before the page starts to tint. */
+:root[data-theme="light"] .xtp {
+  --xtp-cell: rgba(10, 16, 32, 0.07);
+}
+:root[data-theme="light"] .xtp::before {
+  background:
+    radial-gradient(760px 560px at 82% 4%, color-mix(in srgb, var(--tint) 11%, transparent), transparent 66%),
+    radial-gradient(620px 460px at 4% 0%, color-mix(in srgb, var(--accent) 5%, transparent), transparent 72%);
+}
+
+/* ---------- Rhythm --------------------------------------------------- */
+
+.xtp-sec {
+  position: relative;
+  padding-block: clamp(88px, 10vw, 144px);
+}
+.xtp-sec--rule::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--line) 14%, var(--line) 86%, transparent);
+}
+.xtp-sec[id] {
+  scroll-margin-top: calc(var(--nav-h) + 24px);
+}
+.xtp-hero {
+  padding-top: clamp(56px, 7vw, 96px);
+  padding-bottom: clamp(72px, 8vw, 112px);
+}
+
+/* ---------- Shared type ---------------------------------------------- */
+
+.xtp-eyebrow::before {
+  background: var(--tint);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--tint) 55%, transparent);
+}
+.xtp-h1 {
+  margin: 26px 0 0;
+  font-size: clamp(44px, 6.2vw, 88px);
+  font-weight: 600;
+  line-height: 0.98;
+  letter-spacing: -0.048em;
+  color: var(--text);
+}
+.xtp-h1 .line {
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+.xtp-h1 em {
+  font-style: normal;
+  color: var(--tint);
+}
+.xtp-h2 {
+  margin: 20px 0 0;
+  max-width: 18ch;
+  font-size: clamp(32px, 3.6vw, 52px);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+  color: var(--text);
+}
+.xtp-lead {
+  margin: 22px 0 0;
+  max-width: 46ch;
+  font-size: clamp(16px, 1.2vw, 18px);
+  line-height: 1.55;
+  color: var(--text-2);
+  text-wrap: pretty;
+}
+.xtp-note {
+  margin: 28px 0 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+/* Section header: heading left, one link on the same baseline right. */
+.xtp-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 24px 40px;
+}
+.xtp-head .xtp-lead {
+  margin-top: 20px;
+}
+
+/* ---------- Hero ------------------------------------------------------ */
+
+.xtp-hero__top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.86fr);
+  gap: clamp(28px, 3.2vw, 56px);
+  align-items: center;
+}
+.xtp-hero__copy {
+  max-width: 100%;
+}
+
+/* The instrument. Rings are endpoint families, the marks are requests. */
+/* Pinned to the right edge and wider than its column, so it reaches back
+   across the gap and fills the space beside the copy. */
+.xtp-core {
+  position: relative;
+  isolation: isolate;
+  justify-self: end;
+  width: min(118%, 660px);
+  aspect-ratio: 1.2 / 1;
+}
+.xtp-core::before {
+  content: "";
+  position: absolute;
+  inset: -16%;
+  z-index: -2;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 48%, color-mix(in srgb, var(--tint) 15%, transparent), transparent 62%);
+  filter: blur(30px);
+}
+:root[data-theme="light"] .xtp-core::before {
+  background: radial-gradient(circle at 50% 48%, color-mix(in srgb, var(--tint) 9%, transparent), transparent 62%);
+}
+
+/* The grid the colour blocks are cut from. Hard edges, no softening: the
+   point is that the panels overlap a shape, not a glow. */
+.xtp-core__field {
+  position: absolute;
+  inset: 13% -4% 15% 9%;
+  z-index: -1;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  pointer-events: none;
+  background-image:
+    linear-gradient(90deg, var(--xtp-cell) 1px, transparent 1px),
+    linear-gradient(0deg, var(--xtp-cell) 1px, transparent 1px);
+  background-size: calc(100% / 5) calc(100% / 4);
+}
+.xtp-core__field i {
+  background: linear-gradient(150deg, color-mix(in srgb, var(--tint) 30%, transparent), color-mix(in srgb, var(--tint) 11%, transparent));
+}
+.xtp-core__field i.is-accent {
+  background: linear-gradient(150deg, color-mix(in srgb, var(--xamine) 24%, transparent), color-mix(in srgb, var(--xamine) 8%, transparent));
+}
+:root[data-theme="light"] .xtp-core__field i {
+  background: linear-gradient(150deg, color-mix(in srgb, var(--tint) 17%, transparent), color-mix(in srgb, var(--tint) 6%, transparent));
+}
+:root[data-theme="light"] .xtp-core__field i.is-accent {
+  background: linear-gradient(150deg, color-mix(in srgb, var(--xamine) 15%, transparent), color-mix(in srgb, var(--xamine) 5%, transparent));
+}
+.xtp-core__gl {
+  position: absolute;
+  inset: 0;
+  cursor: grab;
+  touch-action: none;
+}
+.xtp-core__gl canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+.xtp-hero__lead {
+  max-width: 44ch;
+  font-size: clamp(17px, 1.3vw, 20px);
+}
+.xtp-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 34px;
+}
+
+/* ---------- The console: request, response, connection ---------------- */
+
+.xtp-console {
+  margin-top: clamp(48px, 6vw, 84px);
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--tint) 5%, var(--surface)), var(--surface) 240px);
+  box-shadow:
+    var(--shadow-md),
+    0 48px 130px -70px color-mix(in srgb, var(--tint) 70%, transparent);
+  overflow: hidden;
+}
+.xtp-console__bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 46px;
+  padding: 0 18px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--text-2);
+}
+.xtp-console__dots {
+  display: inline-flex;
+  gap: 6px;
+  margin-right: 2px;
+}
+.xtp-console__dots i {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: var(--line-strong);
+}
+.xtp-console__method {
+  font-weight: 600;
+  color: var(--good);
+}
+.xtp-console__path {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text);
+}
+.xtp-console__status {
+  margin-left: auto;
+  white-space: nowrap;
+  color: var(--good);
+}
+.xtp-console__split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+}
+
+/* Response */
+.xtp-json {
+  padding: 22px 24px 26px;
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--text);
+  overflow-x: auto;
+}
+.xtp-json span.l {
+  display: block;
+  white-space: pre;
+}
+.xtp-json__v {
+  position: relative;
+  margin-inline: -24px;
+  padding-inline: 22px;
+  border-left: 2px solid var(--tint);
+  background: color-mix(in srgb, var(--tint) 8%, transparent);
+}
+
+/* Connection panel */
+.xtp-console__side {
+  border-left: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface-2) 70%, transparent);
+  padding: 6px 22px 8px;
+}
+.xtp-meta {
+  margin: 0;
+}
+.xtp-meta > div {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+}
+.xtp-meta > div:last-child {
+  border-bottom: 0;
+}
+.xtp-meta dt {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.xtp-meta dd {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 9px 0 0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  word-break: break-all;
+}
+.xtp-dot {
+  flex: 0 0 auto;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--good);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--good) 60%, transparent);
+}
+
+/* ---------- Item grids (coverage, use cases) -------------------------- */
+
+.xtp-grid {
+  display: grid;
+  gap: clamp(36px, 4vw, 56px) clamp(24px, 2.6vw, 40px);
+  margin-top: clamp(48px, 5vw, 72px);
+}
+.xtp-grid--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.xtp-grid--4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+/* The rule draws itself as the block rises, so the grid assembles. */
+.xtp-item {
+  position: relative;
+  padding-top: 22px;
+}
+.xtp-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+  background: var(--line-2);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.9s var(--ease-out) var(--d, 0ms);
+}
+.xtp-item.is-in::before {
+  transform: scaleX(1);
+}
+/* Each cell opens with its index and its mark, the way the reference
+   pages number a set so it reads as a considered series. */
+.xtp-item__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.xtp-item__n {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  color: var(--muted-2);
+}
+.xtp-item__ico {
+  display: inline-flex;
+  color: var(--tint);
+}
+.xtp-item h3 {
+  margin: 20px 0 0;
+  font-size: clamp(19px, 1.5vw, 23px);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.028em;
+  color: var(--text);
+}
+.xtp-item p {
+  margin: 10px 0 0;
+  max-width: 34ch;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+/* ---------- Data quality --------------------------------------------- */
+
+.xtp-two {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+  gap: clamp(40px, 6vw, 100px);
+  align-items: start;
+}
+.xtp-two .xtp-h2 {
+  max-width: 14ch;
+}
+.xtp-checks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line-2);
+}
+.xtp-check {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  gap: 16px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line);
+}
+.xtp-check__ico {
+  margin-top: 3px;
+  color: var(--good);
+}
+.xtp-check b {
+  display: block;
+  font-size: clamp(16px, 1.25vw, 18px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.xtp-check b + span {
+  display: block;
+  margin-top: 5px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* ---------- Plans ----------------------------------------------------- */
+
+.xtp-table {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(20px, 2.4vw, 36px);
+  margin-top: clamp(48px, 5vw, 72px);
+}
+.xtp-plan {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  padding-top: 22px;
+}
+.xtp-plan::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+  background: var(--line-2);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.9s var(--ease-out) var(--d, 0ms);
+}
+.xtp-plan.is-in::after {
+  transform: scaleX(1);
+}
+.xtp-plan--featured::after {
+  height: 2px;
+  background: var(--tint);
+}
+.xtp-plan--featured::before {
+  content: "";
+  position: absolute;
+  inset: 0 calc(clamp(20px, 2.4vw, 36px) / -2);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--tint) 7%, transparent), transparent 62%);
+  pointer-events: none;
+  z-index: -1;
+}
+.xtp-plan__top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.xtp-plan__name {
+  margin: 0;
+  font-size: clamp(18px, 1.35vw, 20px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.xtp-plan__pop {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tint);
+}
+.xtp-plan__credits {
+  margin-top: 26px;
+  font-size: clamp(40px, 4.2vw, 60px);
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+.xtp-plan__credits small {
+  display: block;
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.xtp-plan__rows {
+  margin: 28px 0 0;
+  border-top: 1px solid var(--line);
+}
+.xtp-plan__rows > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.xtp-plan__rows dt {
+  font-size: 14px;
+  color: var(--muted);
+}
+.xtp-plan__rows dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.xtp-plan__cta {
+  margin-top: 26px;
+}
+
+/* ---------- Close ----------------------------------------------------- */
+
+.xtp-close {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  padding-block: clamp(104px, 12vw, 168px);
+}
+.xtp-close::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--line) 14%, var(--line) 86%, transparent);
+}
+.xtp-close::after {
+  content: "";
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  top: -20%;
+  bottom: -40%;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(52% 52% at 26% 52%, color-mix(in srgb, var(--tint) 15%, transparent), transparent 70%);
+}
+:root[data-theme="light"] .xtp-close::after {
+  background: radial-gradient(52% 52% at 26% 52%, color-mix(in srgb, var(--tint) 8%, transparent), transparent 70%);
+}
+.xtp-close__title {
+  margin: 26px 0 0;
+  max-width: 15ch;
+  font-size: clamp(42px, 6.4vw, 96px);
+  font-weight: 600;
+  line-height: 0.98;
+  letter-spacing: -0.05em;
+  color: var(--text);
+}
+.xtp-close__title .line {
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+.xtp-close__title em {
+  font-style: normal;
+  color: var(--tint);
+}
+.xtp-close__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 36px;
+}
+
+/* ---------- Responsive ------------------------------------------------ */
+
+@media (max-width: 1080px) {
+  .xtp-console__split {
+    grid-template-columns: minmax(0, 1fr) 260px;
+  }
+  .xtp-grid--4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 1080px) {
+  .xtp-hero__top {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.62fr);
+  }
+}
+@media (max-width: 900px) {
+  .xtp-hero__top {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 48px;
+  }
+  .xtp-core {
+    justify-self: center;
+    width: 100%;
+    max-width: 460px;
+    aspect-ratio: 1.1 / 1;
+  }
+  .xtp-head {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+  .xtp-console__split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .xtp-console__side {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+    padding-block: 4px 6px;
+  }
+  .xtp-two {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 44px;
+  }
+  .xtp-two .xtp-h2 {
+    max-width: 18ch;
+  }
+  .xtp-grid--3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .xtp-table {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 44px;
+  }
+  .xtp-plan--featured::before {
+    inset: -22px -22px;
+  }
+}
+@media (max-width: 620px) {
+  .xtp-grid--3,
+  .xtp-grid--4 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .xtp-json {
+    font-size: 12.5px;
+  }
+  .xtp-hero__actions .btn,
+  .xtp-close__actions .btn {
+    flex: 1 1 auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xtp-item::before,
+  .xtp-plan::after {
+    transform: none;
+  }
+}
