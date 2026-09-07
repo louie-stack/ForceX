@@ -15,7 +15,6 @@ const PRODUCTS = [
 
 const ABOUT = [
   { href: "/about", title: "Who We Are", blurb: "Why ForceX exists." },
-  { href: "/data-quality", title: "Data Quality", blurb: "How every block is verified." },
   { href: "/contact", title: "Contact", blurb: "Reach the ForceX team." },
 ];
 
