@@ -10,6 +10,7 @@ import "@/styles/pages.css";
 import "@/styles/xamine.css";
 import "@/styles/xamine-charts.css";
 import "@/styles/xtract.css";
+import "@/styles/contact.css";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { SmoothScroll } from "@/components/SmoothScroll";
