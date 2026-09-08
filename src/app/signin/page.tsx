@@ -9,14 +9,7 @@ export const metadata: Metadata = {
 
 export default function SignInPage() {
   return (
-    <AuthShell
-      eyebrow="Welcome back"
-      quote={
-        <>
-          Data should become trusted because it has been <span className="hi">verified</span>, not because it was displayed.
-        </>
-      }
-    >
+    <AuthShell kicker="Welcome back">
       <SignInForm />
     </AuthShell>
   );

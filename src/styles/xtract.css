@@ -95,9 +95,33 @@
   padding-bottom: 0.08em;
   margin-bottom: -0.08em;
 }
+/* The highlighted word carries the home hero's treatment: a two-tone
+   gradient in the page tint with the slow light sweep, painted into the
+   text. Padding widens the paint area so the tight tracking is not clipped
+   by the reveal line. */
 .xtp-h1 em {
+  --hi-a: var(--tint);
+  --hi-b: color-mix(in srgb, var(--tint) 62%, #ffffff);
   font-style: normal;
-  color: var(--tint);
+  background-image:
+    linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.9) 50%, transparent 62%),
+    linear-gradient(100deg, var(--hi-a), var(--hi-b));
+  background-size:
+    260% 100%,
+    100% 100%;
+  background-position:
+    220% 0,
+    0 0;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: vg-sweep 4.6s linear infinite;
+  padding-inline: 0.08em;
+  margin-inline: -0.08em;
+}
+:root[data-theme="light"] .xtp-h1 em {
+  --hi-b: color-mix(in srgb, var(--tint) 70%, #c4b5fd);
 }
 .xtp-h2 {
   margin: 20px 0 0;
@@ -689,5 +713,8 @@
   .xtp-item::before,
   .xtp-plan::after {
     transform: none;
+  }
+  .xtp-h1 em {
+    animation: none;
   }
 }

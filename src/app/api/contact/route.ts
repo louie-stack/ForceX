@@ -26,11 +26,28 @@ export async function POST(req: Request) {
     // Honeypot filled: pretend success, drop silently.
     return NextResponse.json({ ok: true });
   }
+  // The optional context fields ride along inside the message so the
+  // upstream handler keeps its original shape (name, email, subject,
+  // message, website).
+  const company = String(payload.company ?? "").trim().slice(0, 200);
+  const role = String(payload.role ?? "").trim().slice(0, 60);
+  const products = Array.isArray(payload.products)
+    ? payload.products.map((p) => String(p).trim()).filter(Boolean).slice(0, 8).join(", ")
+    : "";
+  const trailer = [company && `Company: ${company}`, role && `Role: ${role}`, products && `Products: ${products}`].filter(Boolean);
+  const body = message.slice(0, 4000);
+  const upstreamPayload = {
+    name,
+    email,
+    subject: String(payload.subject ?? "General").trim().slice(0, 80),
+    message: trailer.length ? `${body}\n\n--\n${trailer.join("\n")}` : body,
+    website: "",
+  };
   try {
     const upstream = await fetch(`${FX_ORIGIN}/contactus/_internal/contact`, {
       method: "POST",
       headers: { "content-type": "application/json", accept: "application/json" },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(upstreamPayload),
     });
     if (upstream.ok) return NextResponse.json({ ok: true });
     const text = await upstream.text();

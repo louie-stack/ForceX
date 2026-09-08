@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { PageHero } from "@/components/PageHero";
 import { ArrowUpRight } from "@/components/Icons";
 
 export const metadata: Metadata = {
@@ -45,37 +44,39 @@ const STATUSES = [
 
 export default function XtractDocsPage() {
   return (
-    <>
-      <PageHero
-        tint="xtract"
-        visual="streams"
-        compact
-        eyebrow="Xtract API documentation"
-        title={
-          <>
-            Build against <span className="hi">validated</span> Litecoin data.
-          </>
-        }
-        lead="Authentication, response conventions, credits, limits, and the v0.2 Litecoin endpoint catalog."
-        actions={
-          <>
-            <Link href="/signup" className="btn btn--accent">
-              Get API access
-              <span className="btn__ico">
-                <ArrowUpRight />
-              </span>
-            </Link>
-            <a href="https://forcex.com/xtract/openapi.json" className="btn btn--ghost">
-              OpenAPI JSON
+    <div className="xtp dcp dcp--xt">
+      {/* Compact page header, same construction as Data Quality and MCP:
+          kicker and title left, the base URL and the two references
+          right, hairline beneath. The docs start straight after. */}
+      <header className="dcp-head" aria-label="Xtract API documentation">
+        <div className="container dcp-head__row" data-reveal="fade">
+          <div className="dcp-head__copy">
+            <span className="eyebrow xtp-eyebrow dcp-head__kicker">Xtract API</span>
+            <h1 className="dcp-head__title">Build against validated Litecoin data.</h1>
+            <p className="dcp-head__sub">
+              Authentication, response conventions, credits, limits, and the v0.2 Litecoin endpoint catalog.
+            </p>
+          </div>
+          <div className="dcp-head__aside">
+            <span className="dcp-head__status mono">
+              <span className="xtp-dot" aria-hidden="true" />
+              <span>v0.2</span>
+              <i className="dcp-head__sep" aria-hidden="true" />
+              <span>forcex.com/xtract/v1/litecoin</span>
+            </span>
+            <a href="https://forcex.com/xtract/openapi.json" className="dcp-head__status dcp-head__link mono">
+              <span>OpenAPI JSON</span>
+              <ArrowUpRight size={12} />
             </a>
-            <Link href="/xtract/docs/mcp" className="btn btn--ghost">
-              MCP docs
+            <Link href="/xtract/docs/mcp" className="dcp-head__status dcp-head__link mono">
+              <span>MCP docs</span>
+              <ArrowUpRight size={12} />
             </Link>
-          </>
-        }
-      />
+          </div>
+        </div>
+      </header>
 
-      <section className="section" style={{ paddingTop: 0 }}>
+      <section className="xtp-sec xtp-sec--rule dcp-docs">
         <div className="container docs">
           <nav className="docs__toc" aria-label="On this page">
             <h5>Getting started</h5>
@@ -319,6 +320,6 @@ X-Request-Id: req_...`}</code>
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }

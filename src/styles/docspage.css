@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------ */
-/*  Compact docs pages (Data Quality, MCP)                              */
+/*  Compact docs pages (Data Quality, MCP, Xtract API)                  */
 /*                                                                     */
 /*  A compact editorial header (kicker, title, one line of lead, one    */
 /*  small aside on the right) over a docs body, each page with its own  */
@@ -13,6 +13,17 @@
 }
 .dcp--mcp {
   --tint: var(--mcp);
+}
+.dcp--xt {
+  --tint: var(--xtract);
+}
+.dcp--legal {
+  --tint: var(--accent);
+}
+/* Legal text: the first heading sits on the top of the body, the rest keep
+   the docs rhythm. */
+.legal-body > h2:first-child {
+  margin-top: 0;
 }
 .dcp::before {
   height: min(900px, 90vh);
