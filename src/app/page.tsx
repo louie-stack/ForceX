@@ -1,6 +1,5 @@
 import { getNetworkSummary } from "@/lib/api";
 import { Hero } from "@/components/home/Hero";
-import { Manifesto } from "@/components/home/Manifesto";
 import { Pipeline } from "@/components/home/Pipeline";
 import { SurfacesStack } from "@/components/home/SurfacesStack";
 import { LayersScroll } from "@/components/home/LayersScroll";
@@ -16,7 +15,6 @@ export default async function Home() {
   return (
     <>
       <Hero />
-      <Manifesto />
       <Pipeline height={summary.asOf.height} />
       <SurfacesStack />
       <LayersScroll />

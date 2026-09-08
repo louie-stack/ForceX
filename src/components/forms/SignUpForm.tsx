@@ -71,10 +71,10 @@ export function SignUpForm({ returnTo }: { returnTo?: string }) {
       {SITEKEY && <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" strategy="afterInteractive" />}
       <div>
         <h1 className="h2" style={{ margin: 0 }}>
-          Create your account
+          Create account
         </h1>
         <p className="body" style={{ margin: "12px 0 0" }}>
-          Access verified on-chain data built for accuracy, transparency, and confidence.
+          Verified on-chain data. Free to start.
         </p>
       </div>
 

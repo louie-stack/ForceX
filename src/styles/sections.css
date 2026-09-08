@@ -1440,8 +1440,14 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 }
+/* The side panel is pinned at viewport height so the gate scene keeps the
+   same framing whether the form beside it is short (sign in) or long
+   (create account); the form column scrolls past it. */
 .auth__side {
-  position: relative;
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100dvh;
   display: grid;
   align-content: space-between;
   padding: calc(var(--nav-h) + 40px) clamp(24px, 5vw, 72px) 48px;
@@ -1464,15 +1470,20 @@
   display: grid;
   gap: 18px;
 }
-.auth__side-quote {
-  font-size: clamp(26px, 2.8vw, 40px);
-  line-height: 1.1;
-  letter-spacing: -0.03em;
-  font-weight: 500;
-  max-width: 16ch;
+/* The home hero's copy block, centred over the gate as on the home page,
+   scaled for a half-width panel. */
+.auth__copy {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  text-align: center;
 }
-.auth__side-quote .hi {
-  color: var(--accent);
+.auth__side .auth__title {
+  font-size: clamp(34px, 3.4vw, 50px);
+  color: var(--text);
+}
+.auth__side .auth__lead {
+  max-width: 34ch;
 }
 @media (max-width: 900px) {
   .auth {

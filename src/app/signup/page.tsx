@@ -11,14 +11,7 @@ export default async function SignUpPage({ searchParams }: { searchParams: Promi
   const { return_to } = await searchParams;
   const safe = return_to && /^\/(?!\/)/.test(return_to) ? return_to : undefined;
   return (
-    <AuthShell
-      eyebrow="Public beta is open"
-      quote={
-        <>
-          Verified Litecoin data, the explorer, analytics, watchlists, and API keys. <span className="hi">Free</span> to start.
-        </>
-      }
-    >
+    <AuthShell kicker="Public beta is open">
       <SignUpForm returnTo={safe} />
     </AuthShell>
   );

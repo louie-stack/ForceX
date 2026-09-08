@@ -1,10 +1,10 @@
 /* ------------------------------------------------------------------ */
 /*  Contact page                                                       */
 /*                                                                     */
-/*  Same construction as Xtract: copy-led opener, one real artifact,   */
-/*  hairline sections, one accent. The artifact here is the form,      */
-/*  framed as the request it becomes. Reuses xtp- rhythm and type;     */
-/*  ctp- owns everything that is only on this page.                    */
+/*  One artifact, centred: the form, framed as the request it          */
+/*  becomes. Headline above, the other channels on a line beneath.     */
+/*  Reuses xtp- rhythm and type; ctp- owns everything that is only on  */
+/*  this page.                                                         */
 /* ------------------------------------------------------------------ */
 
 .ctp {
@@ -23,13 +23,13 @@
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(820px 620px at 78% 4%, color-mix(in srgb, var(--tint) 13%, transparent), transparent 66%),
-    radial-gradient(640px 480px at 4% 8%, color-mix(in srgb, var(--xtract) 7%, transparent), transparent 70%);
+    radial-gradient(900px 620px at 50% 0%, color-mix(in srgb, var(--tint) 12%, transparent), transparent 66%),
+    radial-gradient(640px 480px at 6% 10%, color-mix(in srgb, var(--xtract) 6%, transparent), transparent 70%);
 }
 :root[data-theme="light"] .ctp::before {
   background:
-    radial-gradient(760px 560px at 80% 2%, color-mix(in srgb, var(--tint) 10%, transparent), transparent 66%),
-    radial-gradient(600px 440px at 2% 6%, color-mix(in srgb, var(--xtract) 5%, transparent), transparent 72%);
+    radial-gradient(860px 560px at 50% 0%, color-mix(in srgb, var(--tint) 9%, transparent), transparent 66%),
+    radial-gradient(600px 440px at 4% 8%, color-mix(in srgb, var(--xtract) 4%, transparent), transparent 72%);
 }
 
 /* ---------- Opener ---------------------------------------------------- */
@@ -38,11 +38,8 @@
   position: relative;
   isolation: isolate;
   overflow: clip;
-  display: grid;
-  align-content: center;
-  min-height: calc(100svh - var(--nav-h));
-  padding-top: clamp(96px, 11vw, 150px);
-  padding-bottom: clamp(96px, 10vw, 140px);
+  padding-top: clamp(72px, 8vw, 112px);
+  padding-bottom: clamp(88px, 9vw, 128px);
 }
 
 /* The scene, full-bleed behind everything on the page. */
@@ -58,123 +55,69 @@
   height: 100% !important;
 }
 /* Veil: fade the scene out at the top and bottom edges and quieten it
-   behind the copy, so the type stays the loudest thing on the left. */
+   in the middle, so the streams frame the form rather than cross it. */
 .ctp-veil {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
   background:
-    linear-gradient(180deg, var(--bg) 0%, transparent 22%),
-    linear-gradient(0deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 70%, transparent) 16%, transparent 48%),
-    linear-gradient(90deg, color-mix(in srgb, var(--bg) 82%, transparent) 18%, color-mix(in srgb, var(--bg) 40%, transparent) 42%, transparent 62%);
+    linear-gradient(180deg, var(--bg) 0%, transparent 24%),
+    linear-gradient(0deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 70%, transparent) 14%, transparent 44%),
+    radial-gradient(60% 55% at 50% 52%, color-mix(in srgb, var(--bg) 55%, transparent), transparent 100%);
 }
-.ctp-hero__grid {
+.ctp-hero__inner {
   position: relative;
   z-index: 2;
-}
-.ctp-hero__grid {
   display: grid;
-  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1fr);
-  gap: clamp(40px, 5.5vw, 88px);
-  align-items: start;
+  justify-items: center;
 }
-.ctp-hero .xtp-h1 {
-  font-size: clamp(56px, 7vw, 104px);
-  letter-spacing: -0.055em;
-}
-.ctp-hero .xtp-hero__lead {
-  max-width: 30ch;
-}
-
-/* Ways to reach the team, on hairlines beneath the lead. */
-.ctp-channels {
-  margin: 48px 0 0;
-  border-top: 1px solid var(--line-2);
-}
-.ctp-channels > div {
+/* Header: the home hero's kicker, title and lead, reused as-is so the
+   two pages open in one voice. */
+.ctp-hero__copy {
   display: grid;
-  grid-template-columns: 88px minmax(0, 1fr);
-  gap: 16px;
-  padding: 18px 0;
-  border-bottom: 1px solid var(--line);
+  justify-items: center;
+  text-align: center;
+  max-width: 760px;
 }
-.ctp-fine {
-  margin: 18px 0 0;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.04em;
-  color: var(--muted-2);
-}
-.ctp-channels dt {
-  padding-top: 3px;
-  font-family: var(--font-mono);
-  font-size: 10.5px;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.ctp-channels dd {
-  margin: 0;
-  font-size: 16px;
-  line-height: 1.5;
+.ctp-hero .ctp-title {
   color: var(--text);
 }
-.ctp-channels dd span {
-  display: block;
-  color: var(--muted);
-}
-.ctp-channels__mail {
-  font-size: 15px;
-  color: var(--text);
-  text-decoration: underline;
-  text-decoration-color: color-mix(in srgb, var(--text) 25%, transparent);
-  text-underline-offset: 4px;
-  transition: text-decoration-color 0.3s var(--ease-out);
-}
-.ctp-channels__mail:hover {
-  text-decoration-color: var(--tint);
-}
-.ctp-channels__x {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--text);
-}
-.ctp-channels__x svg {
-  color: var(--text-2);
+.ctp-hero .ctp-lead {
+  max-width: 48ch;
 }
 
 /* ---------- The composer: the message as a request ------------------- */
 
 .ctp-composer {
   position: relative;
+  width: min(100%, 960px);
+  margin-top: clamp(44px, 5vw, 64px);
   border: 1px solid color-mix(in srgb, var(--line-strong) 85%, transparent);
   border-radius: var(--radius-lg);
-  background: color-mix(in srgb, var(--surface) 72%, transparent);
+  background: color-mix(in srgb, var(--surface) 76%, transparent);
   -webkit-backdrop-filter: blur(24px) saturate(1.3);
   backdrop-filter: blur(24px) saturate(1.3);
   box-shadow:
     var(--shadow-md),
-    0 48px 130px -70px color-mix(in srgb, var(--tint) 70%, transparent),
+    0 60px 150px -70px color-mix(in srgb, var(--tint) 70%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.07);
   overflow: hidden;
   scroll-margin-top: calc(var(--nav-h) + 24px);
 }
 :root[data-theme="light"] .ctp-composer {
-  background: color-mix(in srgb, #ffffff 78%, transparent);
+  background: color-mix(in srgb, #ffffff 82%, transparent);
   box-shadow:
     var(--shadow-md),
-    0 48px 130px -70px color-mix(in srgb, var(--tint) 45%, transparent),
+    0 60px 150px -70px color-mix(in srgb, var(--tint) 45%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 .ctp-composer__bar {
   display: flex;
   align-items: center;
   gap: 10px;
-  height: 48px;
-  padding: 0 clamp(22px, 2.6vw, 34px);
+  height: 50px;
+  padding: 0 clamp(24px, 3.2vw, 44px);
   border-bottom: 1px solid var(--line);
   background: color-mix(in srgb, var(--tint) 6%, transparent);
   font-family: var(--font-mono);
@@ -226,31 +169,88 @@
 
 .ctp-composer__body {
   display: grid;
-  gap: 10px;
-  padding: clamp(18px, 2vw, 24px) clamp(22px, 2.6vw, 34px) clamp(24px, 2.8vw, 34px);
+  gap: 0;
+  padding: 0 clamp(24px, 3.2vw, 44px) clamp(28px, 3vw, 40px);
 }
 
-/* Topic chips replace the subject line. */
-.ctp-label {
+/* Groups: numbered like the steps on the docs pages, each on its own
+   hairline so the form reads in three short beats. */
+.ctp-group {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: clamp(24px, 2.6vw, 34px) 0 clamp(22px, 2.4vw, 30px);
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  min-inline-size: 0;
+}
+.ctp-group--last {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.ctp-group__head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 0;
+  margin-bottom: 4px;
+}
+.ctp-group__idx {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--tint);
+}
+.ctp-group__title {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+/* Labels. The optional marker sits inline in the label's own voice. */
+.ctp-label,
+.ctp-field label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px;
   font-family: var(--font-mono);
   font-size: 10.5px;
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--muted);
+  transition: color 0.25s var(--ease-out);
 }
-.ctp-field--topics {
-  padding-bottom: 6px;
+.ctp-label em,
+.ctp-field label em {
+  font-style: normal;
+  letter-spacing: 0.08em;
+  text-transform: none;
+  color: var(--muted-2);
 }
-.ctp-topics {
+.ctp-field:focus-within label {
+  color: var(--tint);
+}
+
+/* Chips: single-choice for the topic, multi-choice for products. */
+.ctp-field--chips {
+  padding-top: 14px;
+}
+.ctp-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 12px;
 }
 .ctp-chip {
-  height: 34px;
-  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 15px;
   border-radius: 999px;
   border: 1px solid var(--line-2);
   background: transparent;
@@ -277,34 +277,46 @@
   outline: 2px solid var(--tint);
   outline-offset: 2px;
 }
+.ctp-chip--multi {
+  padding-left: 11px;
+}
+.ctp-chip__box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  border-radius: 5px;
+  border: 1px solid var(--line-strong);
+  color: transparent;
+  transition:
+    border-color 0.25s var(--ease-out),
+    background-color 0.25s var(--ease-out),
+    color 0.25s var(--ease-out);
+}
+.ctp-chip--multi.is-on .ctp-chip__box {
+  border-color: var(--tint);
+  background: var(--tint);
+  color: #fff;
+}
 
 /* Hairline fields: label above, one rule beneath, the rule takes the
    accent on focus by growing in from the left. */
 .ctp-row {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0 32px;
+  gap: 0 40px;
 }
 .ctp-field {
   position: relative;
   display: grid;
   gap: 0;
-  padding-top: 16px;
-}
-.ctp-field label {
-  font-family: var(--font-mono);
-  font-size: 10.5px;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--muted);
-  transition: color 0.25s var(--ease-out);
-}
-.ctp-field:focus-within label {
-  color: var(--tint);
+  padding-top: 18px;
+  min-inline-size: 0;
 }
 .ctp-field input,
-.ctp-field textarea {
+.ctp-field textarea,
+.ctp-field select {
   width: 100%;
   padding: 0;
   border: 0;
@@ -313,16 +325,17 @@
   background: transparent;
   color: var(--text);
   font: inherit;
-  font-size: 16px;
+  font-size: 16.5px;
   line-height: 1.5;
   transition: border-color 0.25s var(--ease-out);
 }
-.ctp-field input {
-  height: 48px;
+.ctp-field input,
+.ctp-field select {
+  height: 50px;
 }
 .ctp-field textarea {
-  min-height: 148px;
-  padding: 12px 0 14px;
+  min-height: 176px;
+  padding: 12px 0 34px;
   resize: none;
   field-sizing: content;
 }
@@ -331,11 +344,9 @@
   color: var(--muted-2);
 }
 .ctp-field input:focus,
-.ctp-field textarea:focus {
+.ctp-field textarea:focus,
+.ctp-field select:focus {
   outline: none;
-}
-.ctp-field--topics::after {
-  content: none;
 }
 .ctp-field::after {
   content: "";
@@ -352,6 +363,11 @@
 .ctp-field:focus-within::after {
   transform: scaleX(1);
 }
+/* Chip rows have no hairline, so no focus rule either: declared after
+   the generic rule so it wins. */
+.ctp-field--chips::after {
+  content: none;
+}
 .ctp-field input:-webkit-autofill,
 .ctp-field input:-webkit-autofill:focus {
   -webkit-text-fill-color: var(--text);
@@ -359,8 +375,50 @@
   transition: background-color 9999s ease-out;
 }
 
+/* Native select on the same hairline, with the site's own chevron. */
+.ctp-field select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 28px;
+  cursor: pointer;
+}
+.ctp-field select.is-empty {
+  color: var(--muted-2);
+}
+.ctp-field select option {
+  color: var(--text);
+  background: var(--surface);
+}
+.ctp-field__chev {
+  position: absolute;
+  right: 2px;
+  bottom: 18px;
+  color: var(--muted);
+  pointer-events: none;
+  transition: color 0.25s var(--ease-out);
+}
+.ctp-field--select:focus-within .ctp-field__chev {
+  color: var(--tint);
+}
+
+/* Character count, tucked into the textarea's bottom corner. */
+.ctp-field__count {
+  position: absolute;
+  right: 0;
+  bottom: 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--muted-2);
+  pointer-events: none;
+  transition: color 0.25s var(--ease-out);
+}
+.ctp-field__count.is-low {
+  color: var(--bad);
+}
+
 .ctp-note {
-  margin-top: 16px;
+  margin-top: 20px;
 }
 .ctp-note a {
   color: var(--text);
@@ -372,19 +430,22 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
-  margin-top: 26px;
+  gap: 28px;
+  margin-top: clamp(24px, 2.6vw, 32px);
 }
 .ctp-composer__hint {
   margin: 0;
-  max-width: 30ch;
-  font-size: 13px;
-  line-height: 1.5;
+  max-width: 44ch;
+  font-size: 13.5px;
+  line-height: 1.55;
   color: var(--muted);
 }
 .ctp-composer__hint .mono {
-  font-size: 12px;
+  font-size: 12.5px;
   color: var(--text-2);
+}
+.ctp-send {
+  flex: none;
 }
 .ctp-send:disabled {
   opacity: 0.45;
@@ -394,22 +455,25 @@
 
 /* Sent state. Takes the body's place inside the same frame. */
 .ctp-done {
-  padding: clamp(36px, 4vw, 56px) clamp(22px, 2.6vw, 32px) clamp(40px, 4.4vw, 60px);
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  padding: clamp(48px, 5.5vw, 80px) clamp(24px, 3.2vw, 44px) clamp(52px, 6vw, 88px);
 }
 .ctp-done__ico {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: 999px;
   color: var(--good);
   background: color-mix(in srgb, var(--good) 12%, transparent);
   border: 1px solid color-mix(in srgb, var(--good) 40%, transparent);
 }
 .ctp-done__title {
-  margin: 22px 0 0;
-  font-size: clamp(28px, 2.6vw, 38px);
+  margin: 24px 0 0;
+  font-size: clamp(30px, 2.8vw, 42px);
   font-weight: 600;
   line-height: 1.05;
   letter-spacing: -0.035em;
@@ -427,7 +491,7 @@
   color: var(--text);
 }
 .ctp-done__again {
-  margin-top: 26px;
+  margin-top: 28px;
   padding: 0;
   border: 0;
   background: none;
@@ -435,23 +499,77 @@
   cursor: pointer;
 }
 
+/* ---------- Beneath the form: other channels, on one line ------------ */
+
+.ctp-after {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  margin-top: clamp(32px, 3.6vw, 48px);
+  text-align: center;
+}
+.ctp-channels {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ctp-channels li {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 28px;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--text);
+}
+.ctp-channels li + li {
+  border-left: 1px solid var(--line-2);
+}
+.ctp-channels__k {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.ctp-channels__mail {
+  font-size: 14.5px;
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--text) 25%, transparent);
+  text-underline-offset: 4px;
+  transition: text-decoration-color 0.3s var(--ease-out);
+}
+.ctp-channels__mail:hover {
+  text-decoration-color: var(--tint);
+}
+.ctp-channels__x {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+}
+.ctp-channels__x svg {
+  color: var(--text-2);
+}
+.ctp-fine {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--muted-2);
+}
+
 /* ---------- Responsive ------------------------------------------------ */
 
-@media (max-width: 1080px) {
-  .ctp-hero__grid {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 52px;
-  }
-  .ctp-hero .xtp-h1 {
-    font-size: clamp(56px, 9vw, 96px);
-  }
-  .ctp-channels {
-    max-width: 520px;
-  }
-}
 @media (max-width: 620px) {
   .ctp-hero {
-    padding-top: 88px;
+    padding-top: 64px;
   }
   .ctp-veil {
     background:
@@ -464,12 +582,23 @@
   .ctp-composer__foot {
     flex-direction: column;
     align-items: stretch;
+    text-align: center;
+  }
+  .ctp-composer__hint {
+    max-width: none;
   }
   .ctp-composer__foot .ctp-send {
     width: 100%;
   }
-  .ctp-channels > div {
-    grid-template-columns: 80px minmax(0, 1fr);
+  .ctp-channels {
+    flex-direction: column;
+    gap: 14px;
+  }
+  .ctp-channels li {
+    padding: 0;
+  }
+  .ctp-channels li + li {
+    border-left: 0;
   }
 }
 
