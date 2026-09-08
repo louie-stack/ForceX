@@ -1,13 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { PageHero } from "@/components/PageHero";
-import { CtaBand } from "@/components/CtaBand";
 import { fetchPublic, type QualityStatus } from "@/lib/api";
 import { fmtInt } from "@/lib/format";
-import { TimeAgo } from "@/components/TimeAgo";
 import catalog from "@/content/validation-content.json";
-import { ArrowUpRight } from "@/components/Icons";
-import { Counter } from "@/components/Counter";
 
 export const metadata: Metadata = {
   title: "Litecoin Data Validation: How ForceX Verifies Chain Data",
@@ -57,71 +51,38 @@ export default async function DataQualityPage() {
   const order = ["monetary", "address", "block_write"];
   const validated = status?.state === "validated";
 
-  return (
-    <>
-      <PageHero
-        tint="good"
-        visual="board"
-        eyebrow="Data quality methodology"
-        title={
-          <>
-            How ForceX verifies the <span className="hi">integrity</span> of published data.
-          </>
-        }
-        lead="Four layers of control, 242 enforcement points, and the full public control catalog behind the live Data Quality panel."
-        actions={
-          <>
-            <a href="#catalog" className="btn btn--accent">
-              Public control catalog
-              <span className="btn__ico">
-                <ArrowUpRight />
-              </span>
-            </a>
-            <Link href="/xplorer/litecoin" className="btn btn--ghost">
-              See the live panel
-            </Link>
-          </>
-        }
-      />
+  const passing = status?.controls.passing ?? null;
+  const total = status?.controls.total ?? 14;
 
-      {/* Live status band */}
-      <section className="section--tight" style={{ paddingTop: 0 }}>
-        <div className="container">
-          <div className="stats" data-reveal>
-            <div className="stat">
-              <span className="stat__value" style={{ color: validated ? "var(--good)" : "var(--warn)" }}>
-                {status ? (validated ? "Validated" : status.state) : "Pending"}
-              </span>
-              <span className="stat__label">{status ? `Through block ${fmtInt(status.tip_height)}` : "Live status unavailable"}</span>
-              <span className="stat__meta">{status ? <>Validated <TimeAgo iso={status.validated_at} /></> : "Status endpoint unreachable"}</span>
-            </div>
-            <div className="stat">
-              <span className="stat__value">
-                <Counter value={status?.controls.passing ?? null} />
-                <small>/ {status?.controls.total ?? 14}</small>
-              </span>
-              <span className="stat__label">Live controls passing</span>
-              <span className="stat__meta">{status ? `${status.controls_by_cadence.per_block.total} per block · ${status.controls_by_cadence.periodic_external.total} periodic` : "14 live rules"}</span>
-            </div>
-            <div className="stat">
-              <span className="stat__value" style={{ textTransform: "capitalize" }}>
-                {status?.node_cross_check.status ?? "aligned"}
-              </span>
-              <span className="stat__label">External node cross-check</span>
-              <span className="stat__meta">{status ? `Confirmed at block ${fmtInt(status.node_cross_check.last_confirmed_block)}` : "gettxoutsetinfo comparison"}</span>
-            </div>
-            <div className="stat">
-              <span className="stat__value">
-                <Counter value={status?.node_cross_check.next_due_in_blocks ?? null} />
-              </span>
-              <span className="stat__label">Blocks until next node check</span>
-              <span className="stat__meta">Cadence {fmtInt(status?.node_cross_check.cadence_blocks ?? 1000)} blocks</span>
-            </div>
+  return (
+    <div className="xtp dcp dcp--dq">
+      {/* Compact page header: one row, kicker and title left, live status
+          right, hairline beneath. The methodology starts straight after. */}
+      <header className="dcp-head" aria-label="Data quality methodology">
+        <div className="container dcp-head__row" data-reveal="fade">
+          <div className="dcp-head__copy">
+            <span className="eyebrow xtp-eyebrow dcp-head__kicker">Data quality</span>
+            <h1 className="dcp-head__title">How ForceX verifies the data it publishes.</h1>
+            <p className="dcp-head__sub">
+              Four layers of control, 242 enforcement points, and the public control catalog behind the live Data
+              Quality panel.
+            </p>
+          </div>
+          <div className="dcp-head__status mono">
+            <span className={`xtp-dot ${validated ? "" : "is-pending"}`} aria-hidden="true" />
+            <span>{status ? (validated ? "Validated" : status.state) : "Pending"}</span>
+            <i className="dcp-head__sep" aria-hidden="true" />
+            <span>Block {status ? fmtInt(status.tip_height) : "n/a"}</span>
+            <i className="dcp-head__sep" aria-hidden="true" />
+            <span>
+              {passing ?? "n/a"}
+              <span className="dcp-head__of"> / {total}</span> controls
+            </span>
           </div>
         </div>
-      </section>
+      </header>
 
-      <section className="section" style={{ paddingTop: "clamp(40px, 6vw, 80px)" }}>
+      <section className="xtp-sec xtp-sec--rule dcp-docs">
         <div className="container docs">
           <nav className="docs__toc" aria-label="On this page">
             <h5>On this page</h5>
@@ -349,14 +310,6 @@ export default async function DataQualityPage() {
           </div>
         </div>
       </section>
-
-      <CtaBand
-        eyebrow="See it live"
-        title="Every explorer page carries its own validation status."
-        body="Open the Litecoin explorer to see the Data Quality panel at the current tip."
-        primary={{ href: "/xplorer/litecoin", label: "Open the explorer" }}
-        secondary={{ href: "/xtract", label: "Build on validated data" }}
-      />
-    </>
+    </div>
   );
 }

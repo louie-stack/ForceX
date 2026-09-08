@@ -29,7 +29,7 @@ const USERS = [
 /** Coverage: heading and link on one baseline, then six hairline columns. */
 export function Coverage() {
   return (
-    <section className="xtp-sec xtp-sec--rule" id="endpoints" aria-label="Coverage">
+    <section className="xtp-sec xtp-sec--rule xtp-sec--band" id="endpoints" aria-label="Coverage">
       <div className="container">
         <div className="xtp-head">
           <div>

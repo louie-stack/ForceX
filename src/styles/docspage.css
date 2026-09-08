@@ -1,0 +1,142 @@
+/* ------------------------------------------------------------------ */
+/*  Compact docs pages (Data Quality, MCP)                              */
+/*                                                                     */
+/*  A compact editorial header (kicker, title, one line of lead, one    */
+/*  small aside on the right) over a docs body, each page with its own  */
+/*  tint. The page-level glow comes from .xtp::before; a second, cooler */
+/*  wash is fixed to the viewport so the long read never goes flat      */
+/*  black. The page map sits at the top and scrolls away with the read. */
+/* ------------------------------------------------------------------ */
+
+.dcp--dq {
+  --tint: var(--good);
+}
+.dcp--mcp {
+  --tint: var(--mcp);
+}
+.dcp::before {
+  height: min(900px, 90vh);
+  background:
+    radial-gradient(760px 480px at 78% 0%, color-mix(in srgb, var(--tint) 13%, transparent), transparent 66%),
+    radial-gradient(640px 420px at 6% 0%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 70%);
+}
+/* Fixed to the viewport, so the long read keeps a little colour under it
+   at every scroll position instead of going flat once the header is gone. */
+.dcp::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(70vw 60vh at 96% 96%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 70%),
+    radial-gradient(50vw 50vh at 0% 60%, color-mix(in srgb, var(--tint) 6%, transparent), transparent 70%);
+}
+:root[data-theme="light"] .dcp::before {
+  background:
+    radial-gradient(720px 460px at 78% 0%, color-mix(in srgb, var(--tint) 8%, transparent), transparent 66%),
+    radial-gradient(600px 400px at 6% 0%, color-mix(in srgb, var(--accent) 5%, transparent), transparent 70%);
+}
+:root[data-theme="light"] .dcp::after {
+  background:
+    radial-gradient(70vw 60vh at 96% 96%, color-mix(in srgb, var(--accent) 6%, transparent), transparent 70%),
+    radial-gradient(50vw 50vh at 0% 60%, color-mix(in srgb, var(--tint) 4%, transparent), transparent 70%);
+}
+
+/* ---------- Header --------------------------------------------------- */
+
+.dcp-head {
+  position: relative;
+  padding-top: calc(var(--nav-h) + clamp(44px, 5vw, 68px));
+  padding-bottom: clamp(26px, 3vw, 36px);
+}
+.dcp-head__row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px 40px;
+  flex-wrap: wrap;
+}
+.dcp-head__kicker {
+  font-size: 10.5px;
+}
+.dcp-head__title {
+  margin: 14px 0 0;
+  font-size: clamp(24px, 2.2vw, 32px);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  text-wrap: balance;
+}
+.dcp-head__sub {
+  margin: 10px 0 0;
+  max-width: 62ch;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+.dcp-head__aside {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dcp-head__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 32px;
+  padding: 0 14px 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--text-2);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.dcp-head__sep {
+  width: 1px;
+  height: 12px;
+  background: var(--line-2);
+}
+.dcp-head__of {
+  color: var(--muted);
+}
+/* The same pill as a link: quiet at rest, lifts on hover. */
+.dcp-head__link {
+  color: var(--text-2);
+  transition: color 0.2s, border-color 0.2s, background-color 0.2s;
+}
+.dcp-head__link svg {
+  width: 12px;
+  height: 12px;
+  color: var(--muted);
+  transition: color 0.2s, transform 0.3s var(--ease-out);
+}
+.dcp-head__link:hover {
+  color: var(--text);
+  border-color: var(--line-strong);
+  background: color-mix(in srgb, var(--surface-2) 85%, transparent);
+}
+.dcp-head__link:hover svg {
+  color: var(--text);
+  transform: translate(1px, -1px);
+}
+.dcp-head__status .xtp-dot.is-pending {
+  background: var(--warn);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--warn) 60%, transparent);
+}
+
+/* ---------- Body ----------------------------------------------------- */
+
+.dcp-docs {
+  padding-top: clamp(40px, 4.5vw, 64px);
+}
+/* The page map sits at the top of the section and scrolls away with the
+   read. No pinning on this page. */
+.dcp .docs__toc {
+  position: static;
+}

@@ -1,7 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { PageHero } from "@/components/PageHero";
-import { CtaBand } from "@/components/CtaBand";
 import { ArrowUpRight, Check } from "@/components/Icons";
 
 export const metadata: Metadata = {
@@ -20,34 +17,36 @@ const CLIENTS: [string, string, React.ReactNode][] = [
 
 export default function McpDocsPage() {
   return (
-    <>
-      <PageHero
-        tint="mcp"
-        visual="graph"
-        compact
-        eyebrow="Xtract MCP"
-        title={
-          <>
-            Connect AI tools to <span className="hi">verified</span> Litecoin data.
-          </>
-        }
-        lead="ChatGPT, Claude, Grok, Claude Code, the OpenAI API, or your own app, connected to validated Litecoin data."
-        actions={
-          <>
-            <a href="https://forcex.com/xtract/docs/mcp/tools/" className="btn btn--accent">
-              MCP tool reference
-              <span className="btn__ico">
-                <ArrowUpRight />
-              </span>
+    <div className="xtp dcp dcp--mcp">
+      {/* Compact page header, same construction as Data Quality: kicker and
+          title left, the endpoint and the tool reference right, hairline
+          beneath. The docs start straight after. */}
+      <header className="dcp-head" aria-label="Xtract MCP">
+        <div className="container dcp-head__row" data-reveal="fade">
+          <div className="dcp-head__copy">
+            <span className="eyebrow xtp-eyebrow dcp-head__kicker">Xtract MCP</span>
+            <h1 className="dcp-head__title">Connect AI tools to verified Litecoin data.</h1>
+            <p className="dcp-head__sub">
+              ChatGPT, Claude, Grok, Claude Code, the OpenAI API, or your own app, connected to validated Litecoin data over
+              the Model Context Protocol.
+            </p>
+          </div>
+          <div className="dcp-head__aside">
+            <span className="dcp-head__status mono">
+              <span className="xtp-dot" aria-hidden="true" />
+              <span>POST</span>
+              <i className="dcp-head__sep" aria-hidden="true" />
+              <span>forcex.com/xtract/mcp</span>
+            </span>
+            <a href="https://forcex.com/xtract/docs/mcp/tools/" className="dcp-head__status dcp-head__link mono">
+              <span>MCP tool reference</span>
+              <ArrowUpRight size={12} />
             </a>
-            <Link href="/xtract/docs" className="btn btn--ghost">
-              REST endpoints
-            </Link>
-          </>
-        }
-      />
+          </div>
+        </div>
+      </header>
 
-      <section className="section" style={{ paddingTop: 0 }}>
+      <section className="xtp-sec xtp-sec--rule dcp-docs">
         <div className="container docs">
           <nav className="docs__toc" aria-label="On this page">
             <h5>Setup</h5>
@@ -196,14 +195,6 @@ export default function McpDocsPage() {
           </div>
         </div>
       </section>
-
-      <CtaBand
-        eyebrow="Connect in minutes"
-        title="Give your assistant data it can cite."
-        body="Create a free account, generate an Xtract key or use a hosted connector, and start asking questions with evidence."
-        primary={{ href: "/signup", label: "Create free account" }}
-        secondary={{ href: "/xtract", label: "See Xtract plans" }}
-      />
-    </>
+    </div>
   );
 }

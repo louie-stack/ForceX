@@ -1,0 +1,480 @@
+/* ------------------------------------------------------------------ */
+/*  Contact page                                                       */
+/*                                                                     */
+/*  Same construction as Xtract: copy-led opener, one real artifact,   */
+/*  hairline sections, one accent. The artifact here is the form,      */
+/*  framed as the request it becomes. Reuses xtp- rhythm and type;     */
+/*  ctp- owns everything that is only on this page.                    */
+/* ------------------------------------------------------------------ */
+
+.ctp {
+  --tint: var(--accent);
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+}
+.ctp::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: min(1600px, 150vh);
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(820px 620px at 78% 4%, color-mix(in srgb, var(--tint) 13%, transparent), transparent 66%),
+    radial-gradient(640px 480px at 4% 8%, color-mix(in srgb, var(--xtract) 7%, transparent), transparent 70%);
+}
+:root[data-theme="light"] .ctp::before {
+  background:
+    radial-gradient(760px 560px at 80% 2%, color-mix(in srgb, var(--tint) 10%, transparent), transparent 66%),
+    radial-gradient(600px 440px at 2% 6%, color-mix(in srgb, var(--xtract) 5%, transparent), transparent 72%);
+}
+
+/* ---------- Opener ---------------------------------------------------- */
+
+.ctp-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  display: grid;
+  align-content: center;
+  min-height: calc(100svh - var(--nav-h));
+  padding-top: clamp(96px, 11vw, 150px);
+  padding-bottom: clamp(96px, 10vw, 140px);
+}
+
+/* The scene, full-bleed behind everything on the page. */
+.ctp-scene {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.ctp-scene canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+/* Veil: fade the scene out at the top and bottom edges and quieten it
+   behind the copy, so the type stays the loudest thing on the left. */
+.ctp-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, var(--bg) 0%, transparent 22%),
+    linear-gradient(0deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 70%, transparent) 16%, transparent 48%),
+    linear-gradient(90deg, color-mix(in srgb, var(--bg) 82%, transparent) 18%, color-mix(in srgb, var(--bg) 40%, transparent) 42%, transparent 62%);
+}
+.ctp-hero__grid {
+  position: relative;
+  z-index: 2;
+}
+.ctp-hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1fr);
+  gap: clamp(40px, 5.5vw, 88px);
+  align-items: start;
+}
+.ctp-hero .xtp-h1 {
+  font-size: clamp(56px, 7vw, 104px);
+  letter-spacing: -0.055em;
+}
+.ctp-hero .xtp-hero__lead {
+  max-width: 30ch;
+}
+
+/* Ways to reach the team, on hairlines beneath the lead. */
+.ctp-channels {
+  margin: 48px 0 0;
+  border-top: 1px solid var(--line-2);
+}
+.ctp-channels > div {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+.ctp-fine {
+  margin: 18px 0 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--muted-2);
+}
+.ctp-channels dt {
+  padding-top: 3px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.ctp-channels dd {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text);
+}
+.ctp-channels dd span {
+  display: block;
+  color: var(--muted);
+}
+.ctp-channels__mail {
+  font-size: 15px;
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--text) 25%, transparent);
+  text-underline-offset: 4px;
+  transition: text-decoration-color 0.3s var(--ease-out);
+}
+.ctp-channels__mail:hover {
+  text-decoration-color: var(--tint);
+}
+.ctp-channels__x {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+}
+.ctp-channels__x svg {
+  color: var(--text-2);
+}
+
+/* ---------- The composer: the message as a request ------------------- */
+
+.ctp-composer {
+  position: relative;
+  border: 1px solid color-mix(in srgb, var(--line-strong) 85%, transparent);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+  -webkit-backdrop-filter: blur(24px) saturate(1.3);
+  backdrop-filter: blur(24px) saturate(1.3);
+  box-shadow:
+    var(--shadow-md),
+    0 48px 130px -70px color-mix(in srgb, var(--tint) 70%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+  scroll-margin-top: calc(var(--nav-h) + 24px);
+}
+:root[data-theme="light"] .ctp-composer {
+  background: color-mix(in srgb, #ffffff 78%, transparent);
+  box-shadow:
+    var(--shadow-md),
+    0 48px 130px -70px color-mix(in srgb, var(--tint) 45%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+.ctp-composer__bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+  padding: 0 clamp(22px, 2.6vw, 34px);
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--tint) 6%, transparent);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--text-2);
+}
+.ctp-composer__method {
+  font-weight: 600;
+  color: var(--tint);
+}
+.ctp-composer__path {
+  color: var(--text);
+}
+.ctp-composer__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--muted);
+  transition: color 0.3s var(--ease-out);
+}
+.ctp-composer__status i {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: currentColor;
+  transition: box-shadow 0.3s var(--ease-out);
+}
+.ctp-composer__status.is-live {
+  color: var(--tint);
+}
+.ctp-composer__status.is-live i {
+  box-shadow: 0 0 8px color-mix(in srgb, var(--tint) 60%, transparent);
+}
+.ctp-composer__status.is-good {
+  color: var(--good);
+}
+.ctp-composer__status.is-good i {
+  box-shadow: 0 0 8px color-mix(in srgb, var(--good) 60%, transparent);
+}
+.ctp-composer__status.is-bad {
+  color: var(--bad);
+}
+
+.ctp-composer__body {
+  display: grid;
+  gap: 10px;
+  padding: clamp(18px, 2vw, 24px) clamp(22px, 2.6vw, 34px) clamp(24px, 2.8vw, 34px);
+}
+
+/* Topic chips replace the subject line. */
+.ctp-label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.ctp-field--topics {
+  padding-bottom: 6px;
+}
+.ctp-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.ctp-chip {
+  height: 34px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line-2);
+  background: transparent;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-2);
+  cursor: pointer;
+  transition:
+    border-color 0.25s var(--ease-out),
+    background-color 0.25s var(--ease-out),
+    color 0.25s var(--ease-out);
+}
+.ctp-chip:hover {
+  border-color: var(--line-strong);
+  color: var(--text);
+}
+.ctp-chip.is-on {
+  border-color: color-mix(in srgb, var(--tint) 70%, transparent);
+  background: color-mix(in srgb, var(--tint) 11%, transparent);
+  color: var(--text);
+}
+.ctp-chip:focus-visible {
+  outline: 2px solid var(--tint);
+  outline-offset: 2px;
+}
+
+/* Hairline fields: label above, one rule beneath, the rule takes the
+   accent on focus by growing in from the left. */
+.ctp-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 32px;
+}
+.ctp-field {
+  position: relative;
+  display: grid;
+  gap: 0;
+  padding-top: 16px;
+}
+.ctp-field label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color 0.25s var(--ease-out);
+}
+.ctp-field:focus-within label {
+  color: var(--tint);
+}
+.ctp-field input,
+.ctp-field textarea {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid var(--line-2);
+  border-radius: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.5;
+  transition: border-color 0.25s var(--ease-out);
+}
+.ctp-field input {
+  height: 48px;
+}
+.ctp-field textarea {
+  min-height: 148px;
+  padding: 12px 0 14px;
+  resize: none;
+  field-sizing: content;
+}
+.ctp-field input::placeholder,
+.ctp-field textarea::placeholder {
+  color: var(--muted-2);
+}
+.ctp-field input:focus,
+.ctp-field textarea:focus {
+  outline: none;
+}
+.ctp-field--topics::after {
+  content: none;
+}
+.ctp-field::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--tint);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s var(--ease-out);
+}
+.ctp-field:focus-within::after {
+  transform: scaleX(1);
+}
+.ctp-field input:-webkit-autofill,
+.ctp-field input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text);
+  -webkit-box-shadow: 0 0 0 1000px var(--surface) inset;
+  transition: background-color 9999s ease-out;
+}
+
+.ctp-note {
+  margin-top: 16px;
+}
+.ctp-note a {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.ctp-composer__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 26px;
+}
+.ctp-composer__hint {
+  margin: 0;
+  max-width: 30ch;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.ctp-composer__hint .mono {
+  font-size: 12px;
+  color: var(--text-2);
+}
+.ctp-send:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Sent state. Takes the body's place inside the same frame. */
+.ctp-done {
+  padding: clamp(36px, 4vw, 56px) clamp(22px, 2.6vw, 32px) clamp(40px, 4.4vw, 60px);
+}
+.ctp-done__ico {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  color: var(--good);
+  background: color-mix(in srgb, var(--good) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--good) 40%, transparent);
+}
+.ctp-done__title {
+  margin: 22px 0 0;
+  font-size: clamp(28px, 2.6vw, 38px);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  color: var(--text);
+}
+.ctp-done__body {
+  margin: 12px 0 0;
+  max-width: 40ch;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--text-2);
+}
+.ctp-done__body b {
+  font-weight: 500;
+  color: var(--text);
+}
+.ctp-done__again {
+  margin-top: 26px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+/* ---------- Responsive ------------------------------------------------ */
+
+@media (max-width: 1080px) {
+  .ctp-hero__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 52px;
+  }
+  .ctp-hero .xtp-h1 {
+    font-size: clamp(56px, 9vw, 96px);
+  }
+  .ctp-channels {
+    max-width: 520px;
+  }
+}
+@media (max-width: 620px) {
+  .ctp-hero {
+    padding-top: 88px;
+  }
+  .ctp-veil {
+    background:
+      linear-gradient(180deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 80%, transparent) 30%, color-mix(in srgb, var(--bg) 45%, transparent) 55%, transparent 80%),
+      linear-gradient(0deg, var(--bg) 0%, transparent 25%);
+  }
+  .ctp-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .ctp-composer__foot {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .ctp-composer__foot .ctp-send {
+    width: 100%;
+  }
+  .ctp-channels > div {
+    grid-template-columns: 80px minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ctp-field::after {
+    transition: none;
+  }
+}
