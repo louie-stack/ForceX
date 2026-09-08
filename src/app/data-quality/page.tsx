@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { fetchPublic, type QualityStatus } from "@/lib/api";
+import { fmtInt } from "@/lib/format";
 import catalog from "@/content/validation-content.json";
 
 export const metadata: Metadata = {
@@ -50,9 +51,38 @@ export default async function DataQualityPage() {
   const order = ["monetary", "address", "block_write"];
   const validated = status?.state === "validated";
 
+  const passing = status?.controls.passing ?? null;
+  const total = status?.controls.total ?? 14;
+
   return (
-    <>
-      <section className="section" style={{ paddingTop: "calc(var(--nav-h) + clamp(40px, 6vw, 80px))" }}>
+    <div className="xtp dcp dcp--dq">
+      {/* Compact page header: one row, kicker and title left, live status
+          right, hairline beneath. The methodology starts straight after. */}
+      <header className="dcp-head" aria-label="Data quality methodology">
+        <div className="container dcp-head__row" data-reveal="fade">
+          <div className="dcp-head__copy">
+            <span className="eyebrow xtp-eyebrow dcp-head__kicker">Data quality</span>
+            <h1 className="dcp-head__title">How ForceX verifies the data it publishes.</h1>
+            <p className="dcp-head__sub">
+              Four layers of control, 242 enforcement points, and the public control catalog behind the live Data
+              Quality panel.
+            </p>
+          </div>
+          <div className="dcp-head__status mono">
+            <span className={`xtp-dot ${validated ? "" : "is-pending"}`} aria-hidden="true" />
+            <span>{status ? (validated ? "Validated" : status.state) : "Pending"}</span>
+            <i className="dcp-head__sep" aria-hidden="true" />
+            <span>Block {status ? fmtInt(status.tip_height) : "n/a"}</span>
+            <i className="dcp-head__sep" aria-hidden="true" />
+            <span>
+              {passing ?? "n/a"}
+              <span className="dcp-head__of"> / {total}</span> controls
+            </span>
+          </div>
+        </div>
+      </header>
+
+      <section className="xtp-sec xtp-sec--rule dcp-docs">
         <div className="container docs">
           <nav className="docs__toc" aria-label="On this page">
             <h5>On this page</h5>
@@ -280,6 +310,6 @@ export default async function DataQualityPage() {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }

@@ -56,6 +56,22 @@
 .xtp-sec[id] {
   scroll-margin-top: calc(var(--nav-h) + 24px);
 }
+/* Alternating bands, as the home page does with its pipeline and layers
+   sections: every other section steps up to the second background tone
+   so the page reads as distinct rooms rather than one continuous scroll.
+   The band paints over the page-level glow, so its top edge is the
+   division; the following section's own rule closes the bottom. */
+.xtp-sec--band {
+  background: var(--xtp-band);
+}
+.xtp {
+  /* Dark: --bg-2 sits too close to --bg to read as a room change, so the
+     band steps up to the surface grey. Light: the second tone already reads. */
+  --xtp-band: var(--surface);
+}
+:root[data-theme="light"] .xtp {
+  --xtp-band: var(--bg-2);
+}
 .xtp-hero {
   padding-top: clamp(56px, 7vw, 96px);
   padding-bottom: clamp(72px, 8vw, 112px);

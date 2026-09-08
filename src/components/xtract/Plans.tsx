@@ -14,7 +14,7 @@ const compact = (n: number) => (n >= 1_000_000 ? `${Math.round(n / 1_000_000)}M`
 /** Plans as a hairline three-column table, not floating cards. */
 export function Plans() {
   return (
-    <section className="xtp-sec xtp-sec--rule" id="plans" aria-label="Plans">
+    <section className="xtp-sec xtp-sec--rule xtp-sec--band" id="plans" aria-label="Plans">
       <div className="container">
         <div className="xtp-head">
           <div>
