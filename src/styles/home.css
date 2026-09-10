@@ -33,10 +33,34 @@
 /* ------------------------------------------------------------------ */
 
 .pipe {
+  /* The specimen room. Dark in both themes so the block reads as a lit
+     object in space rather than a card on a page. */
+  --bg: #04060b;
+  --bg-2: #070a11;
+  --surface: #0b0f18;
+  --surface-2: #10151f;
+  --surface-3: #161c29;
+  --line: rgba(255, 255, 255, 0.08);
+  --line-2: rgba(255, 255, 255, 0.14);
+  --line-strong: rgba(255, 255, 255, 0.24);
+  --text: #f2f4f9;
+  --text-2: #b6bdcc;
+  --muted: #7c8497;
+  --muted-2: #545c6e;
+  --accent: #3b82f6;
+  --accent-2: #2563eb;
+  --accent-soft: rgba(59, 130, 246, 0.14);
+  --accent-glow: rgba(59, 130, 246, 0.45);
+  --good: #4ade80;
+  color-scheme: dark;
   position: relative;
+  color: var(--text);
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
-  background: var(--bg-2);
+  background:
+    radial-gradient(60% 50% at 68% 42%, rgba(59, 130, 246, 0.09), transparent 70%),
+    radial-gradient(40% 30% at 30% 90%, rgba(59, 130, 246, 0.05), transparent 70%),
+    var(--bg-2);
 }
 .pipe__pin {
   min-height: 100svh;
@@ -136,117 +160,172 @@
   line-height: 1.5;
   color: var(--text-2);
 }
-.pipe__card {
-  --tint: var(--muted-2);
+
+/* Specimen: the block in its measurement frame */
+.spec {
+  --tint: var(--muted);
+  --draw: 0;
+  --handles: 0;
   position: relative;
-  border-radius: var(--radius-xl);
-  border: 1px solid color-mix(in srgb, var(--tint) 45%, var(--line));
-  background:
-    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, var(--tint) 16%, transparent), transparent 60%),
-    color-mix(in srgb, var(--surface) 90%, transparent);
-  box-shadow: var(--shadow-lg);
-  padding: 26px;
-  display: grid;
-  gap: 18px;
-  transition: border-color 0.5s var(--ease-out);
+  width: 100%;
+  max-width: min(100%, 64svh, 620px);
+  aspect-ratio: 1 / 1;
+  justify-self: center;
+  transition: --tint 0.5s;
 }
-.pipe__card-head {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 12px;
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  letter-spacing: 0.1em;
+.spec__scene {
+  position: absolute;
+  inset: 0;
+}
+.spec__scene canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+.spec__frame,
+.spec__marks {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.spec__frame {
+  clip-path: inset(0 calc((1 - var(--draw)) * 100%) 0 0);
+}
+.spec__box {
+  fill: none;
+  stroke: color-mix(in srgb, var(--tint) 60%, var(--line-strong));
+  stroke-width: 1;
+  stroke-dasharray: 1 0.9;
+  transition: stroke 0.5s;
+}
+.spec.is-verified .spec__box {
+  stroke: color-mix(in srgb, var(--good) 70%, var(--line-strong));
+}
+.spec__corners path {
+  fill: none;
+  stroke: var(--text);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+  opacity: var(--handles);
+}
+.spec__handles {
+  opacity: var(--handles);
+}
+.spec__handles line {
+  stroke: var(--tint);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  transition: stroke 0.5s;
+}
+.spec__handles circle {
+  fill: var(--tint);
+  transition: fill 0.5s;
+}
+.spec__hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--muted);
+  line-height: 1.5;
 }
-.pipe__card-head b {
+.spec__hud b {
   font-weight: 500;
   color: var(--text);
   font-variant-numeric: tabular-nums;
 }
-.pipe__hash {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--muted);
-  word-break: break-all;
-  line-height: 1.5;
+.spec__k {
+  display: block;
 }
-.pipe__hash b {
-  color: var(--text);
-  font-weight: 500;
+.spec__k--gap {
+  margin-top: 6px;
 }
-.pipe__checks {
-  display: grid;
-  gap: 6px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.pipe__check {
-  display: grid;
-  grid-template-columns: 22px minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid var(--line);
-  background: color-mix(in srgb, var(--surface-2) 70%, transparent);
-  font-size: 13.5px;
-  color: var(--muted);
-  transition: color 0.4s, border-color 0.4s, background-color 0.4s;
-}
-.pipe__check i {
-  display: grid;
-  place-items: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 999px;
-  border: 1px solid var(--line-2);
-  color: transparent;
-  transition: all 0.4s var(--ease-out);
-}
-.pipe__check small {
-  font-family: var(--font-mono);
-  font-size: 10.5px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-.pipe__check.is-on {
-  color: var(--text);
-  border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
-}
-.pipe__check.is-on i {
-  color: #fff;
-  background: var(--accent);
-  border-color: var(--accent);
-}
-.pipe__check.is-final.is-on {
-  border-color: color-mix(in srgb, var(--good) 50%, var(--line));
-}
-.pipe__check.is-final.is-on i {
-  background: var(--good);
-  border-color: var(--good);
-  color: #04120a;
-}
-.pipe__stamp {
+.spec__tl,
+.spec__tr,
+.spec__bl,
+.spec__br {
   position: absolute;
-  right: 22px;
-  top: 22px;
+  display: grid;
+  gap: 1px;
+}
+.spec__tl { left: calc(6% + 14px); top: calc(6% + 12px); }
+.spec__tr { right: calc(6% + 14px); top: calc(6% + 12px); text-align: right; justify-items: end; }
+.spec__bl { left: calc(6% + 14px); bottom: calc(6% + 12px); }
+.spec__br { right: calc(6% + 14px); bottom: calc(6% + 12px); text-align: right; justify-items: end; }
+.spec__states {
+  position: relative;
+  display: block;
+  height: 1.5em;
+  min-width: 22ch;
+}
+.spec__state {
+  position: absolute;
+  right: 0;
+  top: 0;
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  white-space: nowrap;
+  color: var(--text);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.35s var(--ease-out), transform 0.35s var(--ease-out);
+}
+.spec__state.is-on {
+  opacity: 1;
+  transform: none;
+}
+.spec__state i {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  border: 1px solid var(--tint);
+  box-shadow: 0 0 0 0 var(--tint);
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+.spec__state.is-done i {
+  background: var(--tint);
+  box-shadow: 0 0 12px 0 color-mix(in srgb, var(--tint) 70%, transparent);
+}
+.spec__state .spec__done { display: none; }
+.spec__state.is-done .spec__live { display: none; }
+.spec__state.is-done .spec__done { display: inline; }
+.spec__gate {
+  color: var(--text-2);
+}
+.spec__stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
   padding: 6px 12px;
   border-radius: 999px;
   border: 1px solid var(--good);
   color: var(--good);
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 10.5px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   opacity: 0;
   transform: scale(0.9) rotate(-4deg);
+  transform-origin: right bottom;
+}
+.spec__hash {
+  position: absolute;
+  left: 50%;
+  bottom: calc(6% + 12px);
+  transform: translateX(-50%);
+  max-width: 40%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-transform: none;
+  letter-spacing: 0.04em;
+  color: var(--muted-2);
 }
 @media (max-width: 900px) {
   .pipe__grid {
@@ -259,8 +338,29 @@
   .pipe__rail span {
     display: none;
   }
-  .pipe__card {
-    padding: 18px;
+  .spec {
+    max-width: min(100%, 56svh);
+  }
+  .spec__hud {
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+  }
+  .spec__tl, .spec__tr, .spec__bl, .spec__br {
+    --i: 10px;
+  }
+  .spec__tl, .spec__bl { left: calc(6% + var(--i)); }
+  .spec__tr, .spec__br { right: calc(6% + var(--i)); }
+  .spec__tl, .spec__tr { top: calc(6% + 8px); }
+  .spec__bl, .spec__br { bottom: calc(6% + 8px); }
+  .spec__hash,
+  .spec__extra {
+    display: none;
+  }
+  .spec__stamp {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    padding: 4px 9px;
+    gap: 6px;
   }
 }
 
@@ -438,6 +538,242 @@
   align-content: center;
   background: radial-gradient(90% 80% at 100% 100%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%), var(--surface);
 }
+
+/* Layer cards: an instrument figure per layer in the specimen's chrome */
+.hz__card {
+  --tint: var(--accent);
+  --ink: #f2f4f9;
+  position: relative;
+  overflow: hidden;
+  width: min(640px, 78vw);
+  min-height: min(520px, 68svh);
+  padding: clamp(20px, 2.4vw, 28px) clamp(22px, 2.8vw, 34px) clamp(22px, 2.6vw, 30px);
+  border-color: rgba(255, 255, 255, 0.1);
+  background:
+    radial-gradient(60% 50% at 80% 0%, color-mix(in srgb, var(--tint) 16%, transparent), transparent 60%),
+    linear-gradient(180deg, #0b111d, #070a11);
+  color: var(--ink);
+  color-scheme: dark;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  align-content: stretch;
+  gap: clamp(14px, 1.6vw, 20px);
+}
+.hz__spec {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px 16px;
+  flex-wrap: wrap;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ink) 55%, transparent);
+}
+.hz__spec b {
+  font-weight: 500;
+  color: var(--ink);
+  margin-right: 6px;
+}
+.hz__fig {
+  position: relative;
+  display: grid;
+  place-items: center;
+  border: 1px dashed color-mix(in srgb, var(--ink) 16%, transparent);
+  border-radius: 14px;
+  padding: clamp(10px, 1.4vw, 18px);
+  min-height: 0;
+}
+.hz__fig::before,
+.hz__fig::after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--tint);
+  top: -3px;
+}
+.hz__fig::before { left: -3px; }
+.hz__fig::after { right: -3px; }
+.lf {
+  width: 100%;
+  max-width: 440px;
+  height: auto;
+  display: block;
+  font-family: var(--font-mono);
+  overflow: visible;
+}
+.hz__caption {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  padding-top: clamp(14px, 1.6vw, 18px);
+  border-top: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+}
+.hz__caption h3 {
+  color: var(--ink);
+  font-size: clamp(20px, 1.7vw, 24px);
+}
+.hz__card .hz__caption p {
+  font-size: 14.5px;
+  min-height: 0;
+  margin-top: 8px;
+  color: color-mix(in srgb, var(--ink) 66%, transparent);
+  max-width: 30ch;
+}
+.hz__tag {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 11px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ink) 78%, transparent);
+  white-space: nowrap;
+}
+.hz__tag i {
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--good);
+  box-shadow: 0 0 8px var(--good);
+}
+
+/* Figure primitives */
+.lf-cap {
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  fill: color-mix(in srgb, var(--ink) 48%, transparent);
+}
+.lf-cap--hi {
+  fill: var(--ink);
+}
+.lf-axis,
+.lf-rail {
+  stroke: color-mix(in srgb, var(--ink) 22%, transparent);
+  stroke-width: 1;
+}
+.lf-minor { stroke: color-mix(in srgb, var(--ink) 22%, transparent); stroke-width: 1; }
+.lf-major { stroke: color-mix(in srgb, var(--ink) 60%, transparent); stroke-width: 1; }
+.lf-lead { stroke: var(--tint); stroke-width: 1; }
+.lf-dot { fill: color-mix(in srgb, var(--ink) 40%, transparent); }
+.lf-dot--hi { fill: var(--tint); }
+
+/* 01 lattice: a write sweep lights cells in turn; one is rejected */
+.lf-cell {
+  fill: color-mix(in srgb, var(--ink) 7%, transparent);
+  stroke: color-mix(in srgb, var(--ink) 12%, transparent);
+  stroke-width: 1;
+  animation: lf-cell 6s ease-in-out infinite;
+}
+@keyframes lf-cell {
+  0%, 8% { fill: color-mix(in srgb, var(--ink) 7%, transparent); }
+  14%, 60% { fill: color-mix(in srgb, var(--tint) 55%, transparent); }
+  70%, 100% { fill: color-mix(in srgb, var(--ink) 7%, transparent); }
+}
+.lf-cell-dash {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1;
+  stroke-dasharray: 3 2.5;
+}
+.lf-x {
+  stroke: var(--ink);
+  stroke-width: 1.2;
+  fill: none;
+}
+.lf-reject {
+  opacity: 0.35;
+  animation: lf-reject 6s ease-in-out infinite;
+}
+@keyframes lf-reject {
+  0%, 8% { opacity: 0.35; }
+  14%, 60% { opacity: 1; }
+  70%, 100% { opacity: 0.35; }
+}
+
+/* 02 write path: a ring travels the rail, leaving a mark above each block */
+.lf-block {
+  fill: color-mix(in srgb, var(--ink) 7%, transparent);
+  stroke: color-mix(in srgb, var(--ink) 28%, transparent);
+  stroke-width: 1;
+}
+.lf-tick {
+  fill: none;
+  stroke: var(--good);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+  animation: lf-tick 4.5s ease-out infinite;
+  animation-delay: inherit;
+}
+@keyframes lf-tick {
+  0%, 6% { opacity: 0; transform: translateY(3px); }
+  12%, 80% { opacity: 1; transform: none; }
+  90%, 100% { opacity: 0; }
+}
+.lf-ring {
+  fill: none;
+  stroke: var(--tint);
+  stroke-width: 1;
+  animation: lf-ring 4.5s linear infinite;
+}
+@keyframes lf-ring {
+  0% { transform: translateX(0); opacity: 0; }
+  4% { opacity: 1; }
+  80% { transform: translateX(var(--lf-travel)); opacity: 1; }
+  88%, 100% { transform: translateX(var(--lf-travel)); opacity: 0; }
+}
+
+/* 03 mirror: bar pairs breathe together, never apart */
+.lf-bar {
+  fill: color-mix(in srgb, var(--tint) 62%, transparent);
+}
+.lf-pair {
+  animation: lf-pair 5s ease-in-out infinite;
+}
+@keyframes lf-pair {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+/* 04 ruler: the checkpoint window lights as the playhead reaches it */
+.lf-cp {
+  fill: color-mix(in srgb, var(--tint) 10%, transparent);
+  stroke: color-mix(in srgb, var(--tint) 45%, transparent);
+  stroke-width: 1;
+  stroke-dasharray: 3 2.5;
+  animation: lf-cp 6s ease-in-out infinite;
+}
+@keyframes lf-cp {
+  0%, 30% { opacity: 0.35; }
+  40%, 70% { opacity: 1; }
+  80%, 100% { opacity: 0.35; }
+}
+.lf-play {
+  stroke: var(--tint);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 400;
+  animation: lf-play 6s linear infinite;
+}
+@keyframes lf-play {
+  0% { stroke-dashoffset: 0; opacity: 0; }
+  5% { opacity: 1; }
+  95% { opacity: 1; }
+  100% { stroke-dashoffset: -304; opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lf-cell, .lf-reject, .lf-tick, .lf-ring, .lf-pair, .lf-cp, .lf-play { animation: none !important; }
+  .lf-tick { opacity: 1; }
+}
+
 @media (max-width: 900px) {
   .hz {
     overflow: visible;
@@ -449,6 +785,18 @@
   .hz__track {
     flex-direction: column;
     padding-inline: var(--gutter);
+  }
+  .hz__card {
+    min-height: 0;
+    width: 100%;
+  }
+  .hz__fig {
+    padding: 12px;
+  }
+  .hz__caption {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
   }
   .hz__panel,
   .hz__panel--intro,

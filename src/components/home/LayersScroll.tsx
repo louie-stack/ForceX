@@ -4,12 +4,42 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { gsap, reduceMotion } from "@/lib/gsap";
 import { ArrowUpRight } from "@/components/Icons";
+import { LayerFigure, type FigureKind } from "./LayerFigure";
 
+/**
+ * Four layers of integrity control as a horizontal run of dark panels.
+ * Each panel is an instrument figure for that layer inside a dashed
+ * frame, spec-sheet labels above, the published copy beneath.
+ */
 const LAYERS = [
-  { title: "Structural constraints", body: "Schema design blocks invalid rows before they are committed.", tag: "190 enforcement points at write time" },
-  { title: "Write-path controls", body: "Per-block checks confirm the writer committed exactly what it intended.", tag: "Runs on every block" },
-  { title: "Accounting reconciliation", body: "Independently built data paths are reconciled so they never disagree.", tag: "Per-block trust signal" },
-  { title: "External source cross-check", body: "The index is compared against the Litecoin node, the source of truth.", tag: "Every 1,000 blocks" },
+  {
+    title: "Structural constraints",
+    body: "Schema design blocks invalid rows before they are committed.",
+    tag: "190 enforcement points at write time",
+    kind: "schema",
+    figure: "lattice" as FigureKind,
+  },
+  {
+    title: "Write-path controls",
+    body: "Per-block checks confirm the writer committed exactly what it intended.",
+    tag: "Runs on every block",
+    kind: "write path",
+    figure: "writepath" as FigureKind,
+  },
+  {
+    title: "Accounting reconciliation",
+    body: "Independently built data paths are reconciled so they never disagree.",
+    tag: "Per-block trust signal",
+    kind: "ledger",
+    figure: "mirror" as FigureKind,
+  },
+  {
+    title: "External source cross-check",
+    body: "The index is compared against the Litecoin node, the source of truth.",
+    tag: "Every 1,000 blocks",
+    kind: "node",
+    figure: "ruler" as FigureKind,
+  },
 ];
 
 export function LayersScroll() {
@@ -21,19 +51,16 @@ export function LayersScroll() {
     const track = el.querySelector<HTMLElement>(".hz__track")!;
     const ctx = gsap.context(() => {
       const dist = () => track.scrollWidth - window.innerWidth;
-      gsap.to(track, {
-        x: () => -dist(),
-        ease: "none",
-        scrollTrigger: {
-          trigger: el,
-          start: "top top",
-          end: () => `+=${dist()}`,
-          pin: el.querySelector(".hz__pin"),
-          scrub: 0.6,
-          invalidateOnRefresh: true,
-          anticipatePin: 1,
-        },
-      });
+      const st = {
+        trigger: el,
+        start: "top top",
+        end: () => `+=${dist()}`,
+        pin: el.querySelector(".hz__pin"),
+        scrub: 0.6,
+        invalidateOnRefresh: true,
+        anticipatePin: 1,
+      };
+      gsap.to(track, { x: () => -dist(), ease: "none", scrollTrigger: st });
     }, el);
     return () => ctx.revert();
   }, []);
@@ -57,17 +84,27 @@ export function LayersScroll() {
             </span>
           </div>
           {LAYERS.map((l, i) => (
-            <div key={l.title} className="hz__panel" data-spot="">
-              <span className="hz__num">0{i + 1}</span>
-              <div>
-                <h3>{l.title}</h3>
-                <p>{l.body}</p>
-                <span className="chip" style={{ marginTop: 20 }}>
-                  <span className="chip__dot" />
+            <article key={l.title} className="hz__panel hz__card" aria-label={l.title}>
+              <header className="hz__spec mono">
+                <span>
+                  <b>0{i + 1}</b> {l.kind}
+                </span>
+                <span>Layer {i + 1} of 4</span>
+              </header>
+              <div className="hz__fig">
+                <LayerFigure kind={l.figure} />
+              </div>
+              <div className="hz__caption">
+                <div>
+                  <h3>{l.title}</h3>
+                  <p>{l.body}</p>
+                </div>
+                <span className="hz__tag mono">
+                  <i />
                   {l.tag}
                 </span>
               </div>
-            </div>
+            </article>
           ))}
           <div className="hz__panel hz__panel--end">
             <span className="eyebrow">242 enforcement points</span>

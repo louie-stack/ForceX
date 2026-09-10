@@ -217,16 +217,6 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
-@media (max-width: 900px) {
-  .pipe__stamp {
-    position: static;
-    justify-self: start;
-    order: -1;
-  }
-  .pipe__card {
-    padding-top: 22px;
-  }
-}
 .belief {
   padding-top: clamp(56px, 8vw, 96px);
 }
