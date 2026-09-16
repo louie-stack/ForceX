@@ -76,6 +76,7 @@ uniform vec3 uFlash;
 uniform vec3 uLight;
 uniform vec3 uRawFill;
 uniform vec3 uRawFill2;
+uniform float uMode;
 varying vec3 vN;
 varying vec2 vUv;
 varying float vVer;
@@ -96,6 +97,27 @@ void main() {
   if (solid < 0.5 && vRaw < 0.03) discard;
   vec3 n = normalize(vN);
   float ndl = clamp(dot(n, normalize(uLight)), 0.0, 1.0);
+  if (uMode > 0.5) {
+    // Light theme: solid matte blocks that read by their faces, not their
+    // outlines. Top face brightest, front a step down, sides darker; a 1px
+    // hairline only. Unverified blocks are white and grey, verified blocks
+    // are the accent in three tones. No rim light, no bloom.
+    float top = max(n.y, 0.0);
+    float front = max(n.z, 0.0) + max(-n.z, 0.0) * 0.6;
+    float side = abs(n.x);
+    float bottom = max(-n.y, 0.0);
+    float hair = 1.0 - smoothstep(max(fw.x, fw.y) * 0.6, max(fw.x, fw.y) * 1.6, e);
+    vec3 rFace = top * vec3(1.0) + front * uRawFill + side * uRawFill2 + bottom * uRawFill2;
+    vec3 rCol = mix(rFace, uRaw, hair * 0.55);
+    vec3 vFace = top * uFlash + front * uVerified + side * uVerified2 + bottom * uVerified2;
+    vec3 vCol = mix(vFace, uVerified2, hair * 0.35);
+    vec3 lc = solid > 0.5 ? vCol : mix(uBg, rCol, vRaw);
+    lc = mix(lc, vec3(1.0), vFlash * 0.35);
+    lc = mix(lc, uFlash, vGlow * 0.3);
+    lc = mix(lc, uBg, vDepth * solid * 0.85);
+    gl_FragColor = vec4(lc, 1.0);
+    return;
+  }
   float rim = pow(1.0 - clamp(dot(normalize(vNv), normalize(vV)), 0.0, 1.0), 3.0);
   // Verified: lit accent cube with light edges.
   vec3 fill = mix(uVerified2, uVerified, 0.25 + 0.75 * ndl);
@@ -129,10 +151,19 @@ precision highp float;
 uniform vec3 uColor;
 uniform float uTime;
 uniform float uAlpha;
+uniform float uMode;
 varying vec2 vUv;
 void main() {
   vec2 d = min(vUv, 1.0 - vUv);
   float e = min(d.x, d.y);
+  if (uMode > 0.5) {
+    // Light theme: a frosted sheet with a hairline frame and a fine scan line.
+    float fr = 1.0 - smoothstep(0.0, 0.004, e);
+    float sc = exp(-abs(vUv.y - fract(uTime * 0.16)) * 140.0);
+    vec3 c = mix(vec3(1.0), uColor, max(fr, sc));
+    gl_FragColor = vec4(c, (0.26 + fr * 0.55 + sc * 0.22) * uAlpha);
+    return;
+  }
   float frame = 1.0 - smoothstep(0.0, 0.006, e);
   float glow = exp(-e * 12.0) * 0.22;
   float scanPos = fract(uTime * 0.16);
@@ -161,6 +192,7 @@ uniform vec3 uVerified;
 uniform float uLane;
 uniform float uGate;
 uniform float uAlpha;
+uniform float uMode;
 uniform vec2 uRes;
 varying vec3 vP;
 varying float vDist;
@@ -175,7 +207,7 @@ void main() {
   // The grid runs to the edges of the viewport and dissolves in the last stretch on each side.
   float sx = gl_FragCoord.x / uRes.x;
   fade *= smoothstep(0.0, 0.22, min(sx, 1.0 - sx));
-  float a = (line * mix(0.3, 0.7, ver) + ver * 0.07) * fade * uAlpha;
+  float a = (line * mix(0.3, 0.7, ver) + ver * 0.07 * (1.0 - uMode)) * fade * uAlpha * mix(1.0, 0.55, uMode);
   gl_FragColor = vec4(col, a);
 }
 `;
@@ -210,7 +242,7 @@ export function HeroGate({ className = "vg__gl", variant = "home", tint = "#3b82
     const camera = new THREE.PerspectiveCamera(isMobile ? 36 : 30, 1, 0.1, 140);
     const camHome = { y: 6.5, z: 17 };
     let zExtra = 0;
-    const look = new THREE.Vector3(0, isMobile ? 6.0 : 3.6, -12);
+    const look = new THREE.Vector3(0, isMobile ? (isPage ? 6.0 : 2.4) : 3.6, -12);
 
     // ---- Lattice
     const lanesX = isMobile ? 6 : 8;
@@ -248,14 +280,15 @@ export function HeroGate({ className = "vg__gl", variant = "home", tint = "#3b82
       return light()
         ? {
             bg: new THREE.Color("#f5f6f9"),
-            raw: new THREE.Color("#8e9ab4"),
-            rawFill: new THREE.Color("#e2e6ef"),
-            rawFill2: new THREE.Color("#b7c0d3"),
-            verified: base.clone().lerp(WHITE, 0.12),
-            verified2: base.clone().lerp(BLACK, 0.25),
-            flash: base.clone().lerp(WHITE, 0.82),
-            gate: base.clone(),
-            gateAlpha: 0.5,
+            raw: new THREE.Color("#c3cad6"),
+            rawFill: new THREE.Color("#eef1f6"),
+            rawFill2: new THREE.Color("#d8dde6"),
+            verified: base.clone().lerp(WHITE, 0.08),
+            verified2: base.clone().lerp(BLACK, 0.18),
+            flash: base.clone().lerp(WHITE, 0.42),
+            gate: base.clone().lerp(new THREE.Color("#9aa4b8"), 0.45),
+            gateAlpha: 1,
+            mode: 1,
           }
         : {
             bg: new THREE.Color("#04060b"),
@@ -267,6 +300,7 @@ export function HeroGate({ className = "vg__gl", variant = "home", tint = "#3b82
             flash: base.clone().lerp(WHITE, 0.8),
             gate: base.clone().lerp(WHITE, 0.25),
             gateAlpha: 1,
+            mode: 0,
           };
     };
     const pal = palette();
@@ -290,6 +324,7 @@ export function HeroGate({ className = "vg__gl", variant = "home", tint = "#3b82
         uLight: { value: new THREE.Vector3(-0.4, 1, 0.7) },
         uRawFill: { value: pal.rawFill },
         uRawFill2: { value: pal.rawFill2 },
+        uMode: { value: pal.mode },
       },
     });
     const mesh = new THREE.Mesh(geo, mat);
@@ -310,7 +345,7 @@ export function HeroGate({ className = "vg__gl", variant = "home", tint = "#3b82
       depthWrite: false,
       side: THREE.DoubleSide,
       blending: light() ? THREE.NormalBlending : THREE.AdditiveBlending,
-      uniforms: { uColor: { value: pal.gate }, uTime: { value: 0 }, uAlpha: { value: 0 } },
+      uniforms: { uColor: { value: pal.gate }, uTime: { value: 0 }, uAlpha: { value: 0 }, uMode: { value: pal.mode } },
     });
     const gate = new THREE.Mesh(new THREE.PlaneGeometry(gateW, gateH), gateMat);
     gate.position.set(0, gateY, GATE_Z);
@@ -328,6 +363,7 @@ export function HeroGate({ className = "vg__gl", variant = "home", tint = "#3b82
         uLane: { value: LANE },
         uGate: { value: GATE_Z },
         uAlpha: { value: 0 },
+        uMode: { value: pal.mode },
         uRes: { value: new THREE.Vector2(1, 1) },
       },
     });
@@ -354,6 +390,9 @@ export function HeroGate({ className = "vg__gl", variant = "home", tint = "#3b82
       mat.uniforms.uVerified.value = p.verified;
       mat.uniforms.uVerified2.value = p.verified2;
       mat.uniforms.uFlash.value = p.flash;
+      mat.uniforms.uMode.value = p.mode;
+      gateMat.uniforms.uMode.value = p.mode;
+      floorMat.uniforms.uMode.value = p.mode;
       gateMat.uniforms.uColor.value = p.gate;
       floorMat.uniforms.uRaw.value = p.raw;
       floorMat.uniforms.uVerified.value = p.verified;
@@ -402,7 +441,8 @@ export function HeroGate({ className = "vg__gl", variant = "home", tint = "#3b82
       floorMat.uniforms.uRes.value.set(w * renderer.getPixelRatio(), h * renderer.getPixelRatio());
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
-      camHome.z = 17 * THREE.MathUtils.clamp(1.6 / camera.aspect, 1, 2.2) + zExtra;
+      // Phones: the scene has its own band under the copy, so the camera comes in close enough for the lattice to fill the width.
+      camHome.z = isMobile && !isPage ? 13 * THREE.MathUtils.clamp(0.9 / camera.aspect, 1, 1.5) : 17 * THREE.MathUtils.clamp(1.6 / camera.aspect, 1, 2.2) + zExtra;
       measureBounds();
       placeHud();
     };

@@ -47,9 +47,13 @@ export function LayersScroll() {
 
   useEffect(() => {
     const el = root.current;
-    if (!el || reduceMotion() || window.innerWidth < 900) return;
+    if (!el || reduceMotion()) return;
     const track = el.querySelector<HTMLElement>(".hz__track")!;
-    const ctx = gsap.context(() => {
+    // matchMedia builds the horizontal pin only while the viewport is wide and
+    // fully reverts it (pin spacer, transform) when it narrows, so a phone or a
+    // resized window never keeps a desktop offset on the stacked cards.
+    const mm = gsap.matchMedia(el);
+    mm.add("(min-width: 900px)", () => {
       const dist = () => track.scrollWidth - window.innerWidth;
       const st = {
         trigger: el,
@@ -61,8 +65,8 @@ export function LayersScroll() {
         anticipatePin: 1,
       };
       gsap.to(track, { x: () => -dist(), ease: "none", scrollTrigger: st });
-    }, el);
-    return () => ctx.revert();
+    });
+    return () => mm.revert();
   }, []);
 
   return (

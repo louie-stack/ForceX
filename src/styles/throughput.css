@@ -1,0 +1,725 @@
+/* ------------------------------------------------------------------ */
+/*  Economic Throughput                                                */
+/*                                                                     */
+/*  The Xamine hero (xh/xi) opens the page with its own instrument:    */
+/*  gross output as a column, payment filled inside it, the hatched    */
+/*  remainder is what the methodology removed. Below it the Xtract     */
+/*  house sections (xtp-). et- owns only what is unique here.          */
+/* ------------------------------------------------------------------ */
+
+.etp {
+  --xtp-band: var(--surface);
+  --et-cut: color-mix(in srgb, var(--text) 22%, transparent);
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+}
+:root[data-theme="light"] .etp {
+  --xtp-band: var(--bg-2);
+  --et-cut: color-mix(in srgb, var(--text) 26%, transparent);
+}
+.etp .xtp-h2 em,
+.etp .xtp-close__title em {
+  font-style: normal;
+  color: var(--tint);
+}
+
+/* ---------- Hero instrument ------------------------------------------- */
+
+.xi__state.is-sample {
+  color: var(--warn);
+}
+.xi__state.is-sample i {
+  background: var(--warn);
+}
+
+.et-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.et-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.et-sw {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+.et-sw--pay {
+  background: var(--tint);
+}
+.et-sw--cut {
+  background: repeating-linear-gradient(135deg, var(--et-cut) 0 1.5px, transparent 1.5px 4px);
+  box-shadow: inset 0 0 0 1px var(--et-cut);
+}
+
+.et-plot {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 0 10px;
+  height: clamp(240px, 32vh, 340px);
+  padding: 22px 22px 12px 16px;
+}
+.et-plot__axis {
+  position: relative;
+  margin-block: 0;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.et-plot__axis span {
+  position: absolute;
+  right: 0;
+  transform: translateY(50%);
+  line-height: 1;
+}
+.et-plot__cols {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: clamp(2px, 0.4vw, 6px);
+  cursor: crosshair;
+  touch-action: pan-y;
+}
+.et-plot__grid {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--line);
+  pointer-events: none;
+}
+.et-plot__x {
+  grid-column: 2;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.et-col {
+  position: relative;
+  flex: 1 1 0;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+.et-col__gross {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  height: calc(var(--g) * 100%);
+  border-radius: 3px 3px 1px 1px;
+  background: repeating-linear-gradient(135deg, var(--et-cut) 0 1px, transparent 1px 4px);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text) 12%, transparent);
+  transform-origin: bottom;
+  animation: et-grow 0.9s var(--ease-out) both;
+  animation-delay: calc(var(--i) * 18ms);
+  transition: box-shadow 0.25s var(--ease-out);
+}
+.et-col__pay {
+  display: block;
+  width: 100%;
+  height: calc(var(--p) * 100%);
+  border-radius: 2px 2px 1px 1px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--tint) 92%, #fff), var(--tint));
+  opacity: 0.78;
+  transition: opacity 0.25s var(--ease-out);
+}
+.et-col.is-active .et-col__gross {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tint) 70%, transparent);
+}
+.et-col.is-active .et-col__pay {
+  opacity: 1;
+}
+@keyframes et-grow {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+/* The readout rides above the active column. */
+.et-read {
+  --x: 1;
+  position: absolute;
+  top: -6px;
+  left: calc(var(--x) * 100%);
+  display: grid;
+  gap: 4px;
+  min-width: 148px;
+  padding: 10px 12px;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--tint) 35%, var(--line)),
+    0 12px 30px -12px rgba(0, 0, 0, 0.55);
+  transform: translateX(calc(var(--x) * -100%));
+  transition:
+    left 0.45s var(--ease-out),
+    transform 0.45s var(--ease-out);
+  pointer-events: none;
+  z-index: 2;
+}
+:root[data-theme="light"] .et-read {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--tint) 30%, var(--line)),
+    0 10px 24px -14px rgba(20, 30, 60, 0.28);
+}
+.et-read__date {
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.et-read__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+}
+.et-read__row em {
+  font-style: normal;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.et-read__row b {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.et-read__row.is-pay b {
+  color: var(--tint);
+}
+.et-read__cut {
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--text-2);
+}
+.et-stat--pay {
+  color: var(--tint);
+}
+
+/* ---------- Methodology ----------------------------------------------- */
+
+.et-anat {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(32px, 5vw, 80px);
+  align-items: center;
+  margin-top: clamp(40px, 5vw, 64px);
+}
+.et-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line-2);
+}
+.et-step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 14px;
+  width: 100%;
+  padding: 20px 0 20px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: none;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.et-step__n {
+  padding-top: 3px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--muted-2);
+  transition: color 0.3s var(--ease-out);
+}
+.et-step__copy b {
+  display: block;
+  font-size: clamp(16px, 1.25vw, 18px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--muted);
+  transition: color 0.3s var(--ease-out);
+}
+.et-step__copy span {
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  margin-top: 0;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--muted);
+  opacity: 0;
+  transition:
+    opacity 0.4s var(--ease-out),
+    margin 0.4s var(--ease-out),
+    max-height 0.5s var(--ease-out);
+  max-height: 0;
+}
+.et-step.is-active .et-step__copy span {
+  margin-top: 8px;
+  max-height: 120px;
+  opacity: 1;
+}
+.et-step.is-active .et-step__n,
+.et-step.is-done .et-step__n {
+  color: var(--tint);
+}
+.et-step.is-active .et-step__copy b {
+  color: var(--text);
+}
+.et-step:hover .et-step__copy b {
+  color: var(--text);
+}
+.et-step__bar {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 1px;
+  width: 100%;
+  background: var(--tint);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.et-step.is-active .et-step__bar {
+  animation: et-bar 2.8s linear both;
+}
+@keyframes et-bar {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* The transaction card */
+.et-tx {
+  background: var(--glass, color-mix(in srgb, var(--surface) 88%, transparent));
+}
+.et-tx__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 22px 14px;
+  border-bottom: 1px solid var(--line);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.et-tx__head > span:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+.et-tx__step {
+  color: var(--tint);
+}
+.et-tx__body {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) 36px minmax(0, 1.2fr);
+  align-items: center;
+  gap: 8px;
+  padding: 22px;
+}
+.et-tx__col {
+  display: grid;
+  gap: 8px;
+}
+.et-tx__label {
+  margin-bottom: 2px;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.et-tx__flow {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+}
+.et-tx__flow svg {
+  width: 100%;
+  height: 70%;
+}
+.et-tx__flow path {
+  fill: none;
+  stroke: var(--line-strong);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.et-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px 12px;
+  padding: 10px 12px;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--text) 3%, transparent);
+  box-shadow: inset 0 0 0 1px var(--line);
+  font-size: 12px;
+  transition:
+    background-color 0.45s var(--ease-out),
+    box-shadow 0.45s var(--ease-out),
+    opacity 0.45s var(--ease-out);
+}
+.et-row span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-2);
+}
+.et-row b {
+  font-weight: 500;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  transition: color 0.45s var(--ease-out);
+}
+.et-row b::after {
+  content: " LTC";
+  color: var(--muted);
+  font-size: 0.85em;
+}
+.et-tag {
+  grid-column: 1 / -1;
+  justify-self: start;
+  font-style: normal;
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  border-radius: 4px;
+  opacity: 0;
+  transform: translateY(-3px);
+  transition:
+    opacity 0.4s var(--ease-out),
+    transform 0.4s var(--ease-out);
+}
+.et-tag--pay {
+  color: var(--tint);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tint) 50%, transparent);
+}
+.et-tag--cut {
+  color: var(--text-2);
+  box-shadow: inset 0 0 0 1px var(--line-2);
+}
+
+/* Step 1: outputs are classified. */
+.et-tx:is(.is-s0, .is-s1, .is-s2, .is-s3) .et-row--pay .et-tag,
+.et-tx:is(.is-s0, .is-s1, .is-s2, .is-s3) .et-row--change .et-tag {
+  opacity: 1;
+  transform: none;
+}
+.et-tx:is(.is-s0, .is-s1, .is-s2, .is-s3) .et-row--pay {
+  background: color-mix(in srgb, var(--tint) 9%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tint) 45%, transparent);
+}
+.et-tx:is(.is-s0, .is-s1, .is-s2, .is-s3) .et-row--change {
+  background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--text) 6%, transparent) 0 1px, transparent 1px 5px);
+}
+.et-tx:is(.is-s0, .is-s1, .is-s2, .is-s3) .et-row--change b {
+  color: var(--muted);
+  text-decoration: line-through;
+  text-decoration-color: var(--et-cut);
+}
+/* Step 2: the self-transfer is excluded. */
+.et-tx:is(.is-s1, .is-s2, .is-s3) .et-row--self .et-tag {
+  opacity: 1;
+  transform: none;
+}
+.et-tx:is(.is-s1, .is-s2, .is-s3) .et-row--self {
+  background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--text) 6%, transparent) 0 1px, transparent 1px 5px);
+}
+.et-tx:is(.is-s1, .is-s2, .is-s3) .et-row--self b {
+  color: var(--muted);
+  text-decoration: line-through;
+  text-decoration-color: var(--et-cut);
+}
+
+.et-tx__tally {
+  display: grid;
+  gap: 12px;
+  padding: 18px 22px 22px;
+  border-top: 1px solid var(--line);
+}
+.et-bar {
+  display: grid;
+  grid-template-columns: 128px minmax(0, 1fr) 118px;
+  align-items: center;
+  gap: 14px;
+}
+.et-bar__label {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.et-bar__track {
+  position: relative;
+  height: 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text) 5%, transparent);
+  overflow: hidden;
+}
+.et-bar__track i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: inherit;
+  background: repeating-linear-gradient(135deg, var(--et-cut) 0 1px, transparent 1px 4px);
+  box-shadow: inset 0 0 0 1px var(--et-cut);
+  transition: width 1s var(--ease-out);
+}
+.et-bar--pay .et-bar__track i {
+  background: color-mix(in srgb, var(--text) 10%, transparent);
+  box-shadow: none;
+}
+.et-bar--pay.is-on .et-bar__track i {
+  background: var(--tint);
+}
+.et-bar b {
+  justify-self: end;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.et-bar--pay.is-on b {
+  color: var(--tint);
+}
+.et-anchor {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  justify-self: start;
+  margin-top: 4px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+  box-shadow: inset 0 0 0 1px var(--line);
+  transition:
+    color 0.4s var(--ease-out),
+    box-shadow 0.4s var(--ease-out);
+}
+.et-anchor i {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--muted-2);
+  transition: background-color 0.4s var(--ease-out);
+}
+.et-anchor.is-on {
+  color: var(--good);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--good) 45%, transparent);
+}
+.et-anchor.is-on i {
+  background: var(--good);
+}
+
+/* ---------- Surfaces --------------------------------------------------- */
+
+.et-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: clamp(48px, 5vw, 72px);
+}
+.et-card {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--line-2);
+  overflow: hidden;
+  color: inherit;
+  text-decoration: none;
+  transition:
+    box-shadow 0.35s var(--ease-out),
+    transform 0.35s var(--ease-out);
+}
+.et-card:hover {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tint) 55%, var(--line-2));
+  transform: translateY(-2px);
+}
+.et-card__fig {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 150px;
+  padding: 26px 26px 0;
+  border-bottom: 1px solid var(--line);
+  background:
+    linear-gradient(var(--line) 1px, transparent 1px) 0 26px / 100% 41px,
+    color-mix(in srgb, var(--tint) 3%, transparent);
+}
+.et-card__fig--bars span {
+  flex: 1 1 0;
+  display: flex;
+  align-items: flex-end;
+  height: calc(var(--g) * 100%);
+  border-radius: 2px 2px 0 0;
+  background: repeating-linear-gradient(135deg, var(--et-cut) 0 1px, transparent 1px 4px);
+}
+.et-card__fig--bars i {
+  width: 100%;
+  height: calc(var(--p) * 100%);
+  border-radius: 2px 2px 0 0;
+  background: var(--tint);
+  opacity: 0.85;
+}
+.et-card__fig--dist {
+  gap: 6px;
+}
+.et-card__fig--dist span {
+  flex: 1 1 0;
+  height: calc(var(--h) * 100%);
+  min-height: 3px;
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(180deg, var(--tint), color-mix(in srgb, var(--tint) 45%, transparent));
+}
+.et-card__copy {
+  display: grid;
+  align-content: start;
+  padding: 22px 26px 26px;
+}
+.et-card__k {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.et-card h3 {
+  margin: 12px 0 0;
+  font-size: clamp(19px, 1.5vw, 23px);
+  font-weight: 600;
+  letter-spacing: -0.028em;
+  color: var(--text);
+}
+.et-card p {
+  margin: 8px 0 0;
+  max-width: 40ch;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+.et-card .link-arrow {
+  margin-top: 18px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tint);
+}
+
+.et-close__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  list-style: none;
+  margin: 26px 0 0;
+  padding: 0;
+  font-size: 14.5px;
+  color: var(--text-2);
+}
+.et-close__list li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.et-close__list svg {
+  color: var(--tint);
+}
+
+/* ---------- Responsive -------------------------------------------------- */
+
+@media (max-width: 1080px) {
+  .et-legend {
+    display: none;
+  }
+}
+@media (max-width: 900px) {
+  .et-anat {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .et-cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 620px) {
+  .et-plot {
+    grid-template-columns: 30px minmax(0, 1fr);
+    gap: 0 6px;
+    height: 250px;
+    padding: 18px 14px 10px 10px;
+  }
+  .et-plot__cols {
+    gap: 2px;
+  }
+  .et-read {
+    min-width: 124px;
+    padding: 8px 10px;
+  }
+  .et-read__row b {
+    font-size: 13px;
+  }
+  .et-tx__head,
+  .et-tx__body,
+  .et-tx__tally {
+    padding-inline: 16px;
+  }
+  .et-tx__body {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .et-tx__flow {
+    display: none;
+  }
+  .et-bar {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px 12px;
+  }
+  .et-bar__track {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .et-card__fig {
+    height: 120px;
+    padding: 20px 18px 0;
+  }
+  .et-card__copy {
+    padding: 18px 20px 22px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .et-col__gross {
+    animation: none;
+  }
+  .et-step.is-active .et-step__bar {
+    animation: none;
+    transform: scaleX(1);
+  }
+}

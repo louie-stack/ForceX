@@ -59,6 +59,18 @@ export function parseLinxQuery(sp: Record<string, string | string[] | undefined>
   return { address: (one("address") ?? "").trim().slice(0, 100), start, end, min: num(one("min")), max: num(one("max")) };
 }
 
+/**
+ * Shown when no address has been entered, so the tool opens on a worked
+ * example instead of an empty frame. The checksum is not valid, so it can
+ * never collide with a real address; it only ever renders sample data.
+ */
+export const EXAMPLE_ADDRESS = "ltc1q5feryxhrdz9m6y09mr8wrerwzgj6f8ntxvhxyr";
+
+export function exampleQuery(): LinxQuery {
+  const today = Math.floor(Date.now() / DAY) * DAY;
+  return { address: EXAMPLE_ADDRESS, start: iso(today - 29 * DAY), end: iso(today + DAY), min: null, max: null };
+}
+
 /* ---------- sample ---------- */
 
 function rng(seed: number) {
@@ -224,6 +236,7 @@ function touch(agg: Map<string, Counterparty>, addr: string, delta: number, heig
 }
 
 export async function getLinx(q: LinxQuery, tipHeight?: number | null): Promise<LinxPayload> {
+  if (q.address === EXAMPLE_ADDRESS) return sampleLinx(q, tipHeight ?? undefined);
   const live = await liveLinx(q);
   if (live) return live;
   return sampleLinx(q, tipHeight ?? undefined);

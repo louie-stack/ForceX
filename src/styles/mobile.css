@@ -1,0 +1,405 @@
+/* ------------------------------------------------------------------ */
+/*  Phones and small tablets                                           */
+/*                                                                     */
+/*  The desktop compositions are left alone; this file re-composes     */
+/*  them for a thumb and a narrow column: bars that sit where the      */
+/*  thumb is, full-width actions, scrollable chip rows instead of      */
+/*  squeezed grids, and type sized for 360 to 430px screens.           */
+/*  Loaded after the page stylesheets so it can re-flow them.          */
+/* ------------------------------------------------------------------ */
+
+/* ---------- Nav --------------------------------------------------------- */
+
+@media (max-width: 960px) {
+  /* With the link row hidden the actions fell into the middle column and
+     sat against the wordmark. Pin them to the right edge. */
+  .nav__bar {
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding: 0 8px 0 22px;
+  }
+  .nav__actions {
+    grid-column: 2;
+    justify-self: end;
+    gap: 2px;
+  }
+}
+@media (max-width: 620px) {
+  :root {
+    --nav-h: 64px;
+    --gutter: 18px;
+  }
+  .nav > .container {
+    padding-inline: 10px;
+  }
+  .nav__bar {
+    height: 50px;
+    padding: 0 6px 0 18px;
+  }
+  .nav__icon {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Mobile menu: a real sheet rather than a list of big words. */
+.mobile-menu {
+  display: flex;
+  flex-direction: column;
+  padding-top: calc(var(--nav-h) + 20px);
+  padding-bottom: calc(28px + env(safe-area-inset-bottom));
+}
+.mobile-menu nav {
+  display: grid;
+}
+.mobile-menu a.big {
+  padding: 16px 2px;
+  font-size: clamp(26px, 7.4vw, 34px);
+  transform: translateY(10px);
+  opacity: 0;
+  transition:
+    opacity 0.5s var(--ease-out),
+    transform 0.5s var(--ease-out),
+    color 0.2s;
+}
+.mobile-menu.is-open a.big {
+  opacity: 1;
+  transform: none;
+}
+.mobile-menu.is-open a.big:nth-child(1) { transition-delay: 40ms; }
+.mobile-menu.is-open a.big:nth-child(2) { transition-delay: 70ms; }
+.mobile-menu.is-open a.big:nth-child(3) { transition-delay: 100ms; }
+.mobile-menu.is-open a.big:nth-child(4) { transition-delay: 130ms; }
+.mobile-menu.is-open a.big:nth-child(5) { transition-delay: 160ms; }
+.mobile-menu.is-open a.big:nth-child(6) { transition-delay: 190ms; }
+.mobile-menu.is-open a.big:nth-child(7) { transition-delay: 220ms; }
+.mobile-menu a.big:active {
+  color: var(--accent);
+}
+.mobile-menu > div {
+  margin-top: auto !important;
+  padding-top: 28px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mobile-menu a.big {
+    transform: none;
+    opacity: 1;
+    transition: none;
+  }
+}
+
+/* ---------- Home hero ---------------------------------------------------- */
+
+@media (max-width: 759px) {
+  .vg {
+    min-height: max(760px, 100svh);
+  }
+  /* The scene owns the lower part of the screen; copy and actions sit above
+     it instead of over the gate. */
+  .vg__gl {
+    inset: auto 0 0 0;
+    height: 60%;
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 22%);
+    mask-image: linear-gradient(180deg, transparent 0%, #000 22%);
+  }
+  .vg__veil {
+    background: linear-gradient(0deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 60%, transparent) 8%, transparent 22%);
+  }
+  .vg__inner {
+    grid-template-rows: auto auto minmax(0, 1fr);
+    padding-top: 0;
+  }
+  .vg__copy {
+    padding-top: clamp(28px, 6vh, 56px);
+  }
+  .vg__kicker {
+    font-size: 10px;
+    margin-bottom: 16px;
+  }
+  .vg__title {
+    font-size: clamp(38px, 11.4vw, 50px);
+    max-width: 11ch;
+  }
+  .vg__lead {
+    margin-top: 16px;
+    max-width: 27ch;
+    font-size: 15.5px;
+  }
+  .vg__panel {
+    margin-top: 26px;
+  }
+  .vg__actions {
+    width: min(100%, 320px);
+    gap: 10px;
+  }
+  .vg__actions .vgb {
+    width: 100%;
+    height: 48px;
+    justify-content: center;
+  }
+  .vg__actions .vgb__dot {
+    position: absolute;
+    left: 18px;
+  }
+  .vg__actions .vgb__ico {
+    position: absolute;
+    right: 16px;
+  }
+}
+
+/* HUD buttons elsewhere (Xamine, Economic Throughput, tool headers). */
+@media (max-width: 759px) {
+  .xh__actions {
+    width: min(100%, 320px);
+  }
+  .xh__actions .vgb {
+    width: 100%;
+    height: 48px;
+    justify-content: center;
+  }
+  .xh__actions .vgb__dot {
+    position: absolute;
+    left: 18px;
+  }
+  .xh__actions .vgb__ico {
+    position: absolute;
+    right: 16px;
+  }
+  .xh__rail {
+    margin-top: 26px;
+  }
+  .xh__stage {
+    margin-top: 32px;
+  }
+}
+
+/* ---------- Home sections ---------------------------------------------- */
+
+@media (max-width: 900px) {
+  /* The layers stack vertically on touch, so there is nothing to scroll sideways. */
+  .hz__panel--intro .hero2__scroll {
+    display: none;
+  }
+}
+@media (max-width: 480px) {
+  .bigstats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .bigstat {
+    padding: 22px 14px 22px 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .bigstat:nth-child(even) {
+    padding-left: 16px;
+    border-left: 1px solid var(--line);
+  }
+  .bigstat:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+  .bigstat__v {
+    font-size: 40px;
+  }
+  .bigstat__l {
+    font-size: 13.5px;
+  }
+  .bigstat__m {
+    font-size: 9.5px;
+  }
+}
+
+/* ---------- Docs, legal, data quality ---------------------------------- */
+
+@media (max-width: 900px) {
+  /* 1fr would let a wide code block set the column width and push the read
+     off the right edge. */
+  .docs {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .docs__body {
+    min-width: 0;
+  }
+  .docs__body pre,
+  .docs__body table {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  /* Page map: one scrollable row of chips instead of a squeezed two-column list. */
+  .docs__toc,
+  .dcp .docs__toc {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    margin-inline: calc(var(--gutter) * -1);
+    padding: 2px var(--gutter) 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 var(--gutter), #000 calc(100% - 28px), transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 var(--gutter), #000 calc(100% - 28px), transparent);
+  }
+  .docs__toc::-webkit-scrollbar {
+    display: none;
+  }
+  .docs__toc h5 {
+    display: none;
+  }
+  .docs__toc a {
+    flex: none;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: color-mix(in srgb, var(--surface) 70%, transparent);
+    font-size: 13px;
+    white-space: nowrap;
+  }
+}
+@media (max-width: 620px) {
+  .dcp-head__aside {
+    flex-wrap: wrap;
+    max-width: 100%;
+  }
+  .dcp-head__status {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .dcp-head__title {
+    font-size: 28px;
+  }
+}
+
+/* ---------- Xamine ----------------------------------------------------- */
+
+@media (max-width: 620px) {
+  .xd__surfaces-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .xc__head-actions .vgb {
+    height: 42px;
+  }
+  /* Tool controls: address full width, dates and bounds in pairs, apply full width. */
+  .xl__ctl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 12px;
+    padding: 16px;
+  }
+  .xl__ctl .xl__addr,
+  .xl__ctl .xctl__apply {
+    grid-column: 1 / -1;
+  }
+  .xl__ctl .xctl__input,
+  .xl__num {
+    width: 100%;
+    min-width: 0;
+  }
+  .xl__ctl .xctl__apply {
+    height: 46px;
+    margin-left: 0;
+    justify-content: center;
+  }
+}
+
+/* ---------- Touch targets ------------------------------------------------ */
+
+@media (hover: none) and (pointer: coarse) {
+  .btn--sm {
+    min-height: 40px;
+  }
+}
+
+/* ---------- Docs details ------------------------------------------------- */
+
+@media (max-width: 640px) {
+  /* The endpoint reference sets two columns inline; on a phone the path sits above its description. */
+  .docs__body .list-row {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 6px;
+    padding-block: 16px;
+  }
+  .docs__body .list-row h4 code {
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+  }
+  .docs__body .list-row p {
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .docs__body .plan__rows div {
+    flex-direction: column;
+    gap: 4px;
+  }
+  .docs__body .plan__rows b {
+    font-size: 12.5px;
+  }
+}
+
+/* ---------- Economic Throughput ------------------------------------------ */
+
+@media (max-width: 620px) {
+  .et-tx__head {
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+  }
+  .et-tx__head > span {
+    white-space: nowrap;
+  }
+  .et-step {
+    padding-block: 16px;
+  }
+}
+
+/* ---------- Chart pages ---------------------------------------------------- */
+
+@media (max-width: 620px) {
+  /* Controls as a tidy two-column form: segmented controls span the row, dates pair up. */
+  .xctl:not(.xl__ctl) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 12px;
+    padding: 16px;
+  }
+  .xctl:not(.xl__ctl) .xctl__field:has(.xctl__seg) {
+    grid-column: 1 / -1;
+  }
+  .xctl:not(.xl__ctl) .xctl__seg {
+    display: flex;
+  }
+  .xctl:not(.xl__ctl) .xctl__seg-btn {
+    flex: 1 1 0;
+    padding-inline: 8px;
+  }
+  .xctl:not(.xl__ctl) .xctl__input {
+    width: 100%;
+    min-width: 0;
+  }
+  .xctl:not(.xl__ctl) .xctl__apply {
+    grid-column: 1 / -1;
+    height: 46px;
+    margin-left: 0;
+    justify-content: center;
+  }
+  .xc__card-head {
+    flex-wrap: wrap;
+  }
+  .xc__title {
+    font-size: clamp(30px, 8.6vw, 38px);
+  }
+}
+
+@media (max-width: 620px) {
+  .xi__stat-label {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+  }
+}
+
+/* The layers run as a vertical stack on touch widths; nothing may shift it sideways. */
+@media (max-width: 899px) {
+  .hz__track {
+    transform: none !important;
+    will-change: auto;
+  }
+}

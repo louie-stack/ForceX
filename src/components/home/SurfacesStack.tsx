@@ -43,9 +43,10 @@ export function SurfacesStack() {
 
   useEffect(() => {
     const el = root.current;
-    if (!el || reduceMotion() || window.innerWidth < 960) return;
+    if (!el || reduceMotion()) return;
     const cards = Array.from(el.querySelectorAll<HTMLElement>(".stack__card"));
-    const ctx = gsap.context(() => {
+    const mm = gsap.matchMedia(el);
+    mm.add("(min-width: 960px)", () => {
       cards.forEach((card, i) => {
         if (i === cards.length - 1) return;
         gsap.to(card, {
@@ -61,8 +62,8 @@ export function SurfacesStack() {
           },
         });
       });
-    }, el);
-    return () => ctx.revert();
+    });
+    return () => mm.revert();
   }, []);
 
   return (

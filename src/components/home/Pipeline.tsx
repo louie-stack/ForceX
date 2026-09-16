@@ -61,7 +61,7 @@ export function Pipeline({ height, hash }: { height: number | null; hash?: strin
     };
     apply(0);
 
-    if (reduceMotion() || window.innerWidth < 900) {
+    const runOnce = () => {
       // No pinning: the specimen runs its six gates once it comes into view.
       steps.forEach((s, i) => gsap.set(s, { autoAlpha: i === 0 ? 1 : 0 }));
       const proxy = { p: 0 };
@@ -89,9 +89,16 @@ export function Pipeline({ height, hash }: { height: number | null; hash?: strin
       );
       io.observe(spec);
       return () => io.disconnect();
-    }
+    };
 
-    const ctx = gsap.context(() => {
+    if (reduceMotion()) return runOnce();
+
+    // The pin exists only on wide viewports and is fully reverted when the
+    // viewport narrows (and rebuilt when it widens), so it never leaves a
+    // pin spacer or offset behind on a phone-width layout.
+    const mm = gsap.matchMedia(el);
+    mm.add("(max-width: 899px)", () => runOnce());
+    mm.add("(min-width: 900px)", () => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: el,
@@ -117,8 +124,8 @@ export function Pipeline({ height, hash }: { height: number | null; hash?: strin
         tl.to({}, { duration: 0.3 }, at + 0.7);
       });
       ScrollTrigger.refresh();
-    }, el);
-    return () => ctx.revert();
+    });
+    return () => mm.revert();
   }, []);
 
   const h = height ?? 3170723;

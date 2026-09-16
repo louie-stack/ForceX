@@ -48,6 +48,8 @@ uniform vec3 uTintB;
 uniform vec3 uGoodA;
 uniform vec3 uGoodB;
 uniform vec3 uEdge;
+uniform vec3 uHi;
+uniform float uMode;
 uniform vec3 uLight;
 uniform float uState;
 uniform float uGood;
@@ -78,14 +80,15 @@ void main() {
   vec3 col = mix(raw, tint, uState);
   col = mix(col, good, uGood);
   col *= 0.9 + 0.1 * vUv.y;
-  col = mix(col, uEdge, rim * (0.22 + 0.25 * uState));
-  col = mix(col, mix(col, uEdge, 0.35), edge * (0.5 + 0.5 * uState));
+  // Light theme: no rim light and no added glow; edges are a darker hairline.
+  col = mix(col, uEdge, rim * (0.22 + 0.25 * uState) * (1.0 - uMode));
+  col = mix(col, mix(col, uEdge, 0.35), edge * mix(0.5 + 0.5 * uState, 0.55, uMode));
 
   // Validation scan: a thin luminous band travelling up the block.
   float band = exp(-abs(vP.y - uScan) * 22.0) * uScanOn;
-  col = mix(col, uEdge, band * 0.85);
-  col = mix(col, uEdge, uFlash * 0.75);
-  col += uEdge * uGlow * 0.18;
+  col = mix(col, uHi, band * 0.85);
+  col = mix(col, uHi, uFlash * 0.75);
+  col += uHi * uGlow * 0.18 * (1.0 - uMode);
 
   if (uGhost > 0.5) {
     float a = 0.10 + edge * 0.85 + rim * 0.25;
@@ -110,6 +113,7 @@ uniform vec3 uLine;
 uniform vec3 uBg;
 uniform float uAlpha;
 uniform float uShadow;
+uniform float uShadowK;
 varying vec3 vP;
 void main() {
   vec2 g = abs(fract(vP.xy * 0.9 + 0.5) - 0.5) / fwidth(vP.xy * 0.9);
@@ -117,7 +121,7 @@ void main() {
   float r = length(vP.xy);
   float fade = 1.0 - smoothstep(1.2, 5.2, r);
   float shadow = exp(-r * r * 0.9) * uShadow;
-  float a = (line * 0.8 * fade + shadow * 0.9) * uAlpha;
+  float a = (line * 0.8 * fade + shadow * uShadowK) * uAlpha;
   vec3 col = mix(uLine, uBg * 0.2, shadow);
   gl_FragColor = vec4(col, a);
 }
@@ -144,19 +148,27 @@ export const BlockSpecimen = forwardRef<SpecimenHandle, { className?: string }>(
       tint: "#3b82f6",
       tintLight: "#3b82f6",
       fov: 28,
-      build: ({ scene, camera }) => {
+      build: ({ scene, camera, theme }) => {
         camera.position.set(0, 1.6, 7.4);
         camera.lookAt(0, 0.02, 0);
 
-        const edge = new THREE.Color("#dbe7ff");
+        // Dark: a lit object in a dark room. Light: a matte object on a pale
+        // bench, white raw block with grey sides, hairline edges, no bloom.
+        const palette = (light: boolean) =>
+          light
+            ? { rawA: "#ffffff", rawB: "#c3cad8", tintA: "#4f8df7", tintB: "#1d4ed8", goodA: "#4ade80", goodB: "#16a34a", edge: "#5b6478", hi: "#ffffff", ring: "#2563eb", line: "#d6dbe4", bg: "#f5f6f9", shadow: 0.32, mode: 1 }
+            : { rawA: "#5a6580", rawB: "#1a2130", tintA: "#5b9dff", tintB: "#1e3fa6", goodA: "#5fe39a", goodB: "#146b44", edge: "#dbe7ff", hi: "#dbe7ff", ring: "#8fb6ff", line: "#3a4766", bg: "#04060b", shadow: 0.9, mode: 0 };
+        const pal = palette(theme().light);
         const uniforms = {
-          uRawA: { value: new THREE.Color("#5a6580") },
-          uRawB: { value: new THREE.Color("#1a2130") },
-          uTintA: { value: new THREE.Color("#5b9dff") },
-          uTintB: { value: new THREE.Color("#1e3fa6") },
-          uGoodA: { value: new THREE.Color("#5fe39a") },
-          uGoodB: { value: new THREE.Color("#146b44") },
-          uEdge: { value: edge },
+          uRawA: { value: new THREE.Color(pal.rawA) },
+          uRawB: { value: new THREE.Color(pal.rawB) },
+          uTintA: { value: new THREE.Color(pal.tintA) },
+          uTintB: { value: new THREE.Color(pal.tintB) },
+          uGoodA: { value: new THREE.Color(pal.goodA) },
+          uGoodB: { value: new THREE.Color(pal.goodB) },
+          uEdge: { value: new THREE.Color(pal.edge) },
+          uHi: { value: new THREE.Color(pal.hi) },
+          uMode: { value: pal.mode },
           uLight: { value: new THREE.Vector3(0.55, 1.0, 0.8) },
           uState: { value: 0 },
           uGood: { value: 0 },
@@ -190,7 +202,7 @@ export const BlockSpecimen = forwardRef<SpecimenHandle, { className?: string }>(
         // Ledger rings.
         const ringGeo = new THREE.TorusGeometry(1.18, 0.011, 8, 160);
         const rings = [0, 1, 2].map(() => {
-          const m = new THREE.MeshBasicMaterial({ color: new THREE.Color("#8fb6ff"), transparent: true, opacity: 0, depthWrite: false });
+          const m = new THREE.MeshBasicMaterial({ color: new THREE.Color(pal.ring), transparent: true, opacity: 0, depthWrite: false });
           const r = new THREE.Mesh(ringGeo, m);
           scene.add(r);
           return r;
@@ -208,10 +220,11 @@ export const BlockSpecimen = forwardRef<SpecimenHandle, { className?: string }>(
 
         // Floor with contact shadow.
         const floorU = {
-          uLine: { value: new THREE.Color("#3a4766") },
-          uBg: { value: new THREE.Color("#04060b") },
+          uLine: { value: new THREE.Color(pal.line) },
+          uBg: { value: new THREE.Color(pal.bg) },
           uAlpha: { value: 0 },
           uShadow: { value: 0 },
+          uShadowK: { value: pal.shadow },
         };
         const floor = new THREE.Mesh(
           new THREE.PlaneGeometry(14, 14),
@@ -277,8 +290,28 @@ export const BlockSpecimen = forwardRef<SpecimenHandle, { className?: string }>(
           uniforms.uGlow.value = good * (0.5 + 0.5 * Math.sin(t * 2.2));
         };
 
+        const onTheme = (th: { light: boolean }) => {
+          const p2 = palette(th.light);
+          for (const u of [uniforms, ghostUniforms]) {
+            u.uRawA.value.set(p2.rawA);
+            u.uRawB.value.set(p2.rawB);
+            u.uTintA.value.set(p2.tintA);
+            u.uTintB.value.set(p2.tintB);
+            u.uGoodA.value.set(p2.goodA);
+            u.uGoodB.value.set(p2.goodB);
+            u.uEdge.value.set(p2.edge);
+            u.uHi.value.set(p2.hi);
+            u.uMode.value = p2.mode;
+          }
+          rings.forEach((r) => (r.material as THREE.MeshBasicMaterial).color.set(p2.ring));
+          floorU.uLine.value.set(p2.line);
+          floorU.uBg.value.set(p2.bg);
+          floorU.uShadowK.value = p2.shadow;
+        };
+
         return {
           update,
+          onTheme,
           dispose: () => {
             geo.dispose();
             ringGeo.dispose();

@@ -1,0 +1,228 @@
+/* ------------------------------------------------------------------ */
+/*  Light theme refinements                                            */
+/*                                                                     */
+/*  Tinted blooms, coloured drop shadows and corner glows are built    */
+/*  for a dark room: on a pale page they read as haze and smudges.     */
+/*  In light the same surfaces follow the Xtract hero's language       */
+/*  instead: white sheets, hairline borders, a neutral soft shadow,    */
+/*  one accent used as a colour rather than a light source.            */
+/*  Everything here is scoped to [data-theme="light"]; dark is         */
+/*  untouched. Loaded last so it wins over the page stylesheets.       */
+/* ------------------------------------------------------------------ */
+
+:root[data-theme="light"] {
+  --fx-sheet-shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 12px 32px -14px rgba(16, 24, 40, 0.14);
+  --fx-sheet-shadow-lg: 0 1px 2px rgba(16, 24, 40, 0.05), 0 30px 70px -34px rgba(16, 24, 40, 0.22);
+}
+
+/* ---------- Ambient blooms behind heroes and instruments ------------- */
+
+:root[data-theme="light"] .vg__glow,
+:root[data-theme="light"] .vg__beam,
+:root[data-theme="light"] .xh__glow,
+:root[data-theme="light"] .xh__beam,
+:root[data-theme="light"] .ph__glow {
+  display: none;
+}
+
+/* Home hero headline: the white sweep vanishes on a pale page and leaves
+   the word looking washed out. Solid two-tone accent, no sweep. */
+:root[data-theme="light"] .vg__hi,
+:root[data-theme="light"] .vg__title .sw--hi,
+:root[data-theme="light"] .xh__hi,
+:root[data-theme="light"] .xtp-h1 em {
+  background-image: linear-gradient(100deg, var(--hi-a), var(--hi-b));
+  background-size: 100% 100%;
+  background-position: 0 0;
+  animation: none;
+}
+:root[data-theme="light"] .vg__hi,
+:root[data-theme="light"] .vg__title .sw--hi {
+  --hi-a: #1d4ed8;
+  --hi-b: #3b82f6;
+}
+:root[data-theme="light"] .xh__hi {
+  --hi-a: #0f766e;
+  --hi-b: #0d9488;
+}
+
+/* ---------- Instrument panels (Xamine, Economic Throughput, LinX) ------ */
+
+:root[data-theme="light"] .xi {
+  background: #ffffff;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow:
+    inset 0 0 0 1px var(--line-2),
+    var(--fx-sheet-shadow-lg);
+}
+:root[data-theme="light"] .xi--card {
+  box-shadow:
+    inset 0 0 0 1px var(--line-2),
+    var(--fx-sheet-shadow);
+}
+:root[data-theme="light"] .xi__corner {
+  border-color: color-mix(in srgb, var(--tint) 70%, transparent);
+}
+:root[data-theme="light"] .xi__dot,
+:root[data-theme="light"] .xi__state.is-ok i,
+:root[data-theme="light"] .xprov--live i {
+  box-shadow: none;
+}
+:root[data-theme="light"] .xi__tip,
+:root[data-theme="light"] .et-read {
+  background: #ffffff;
+  box-shadow:
+    inset 0 0 0 1px var(--line-2),
+    0 8px 20px -12px rgba(16, 24, 40, 0.25);
+}
+
+/* ---------- Xtract / About / Contact consoles -------------------------- */
+
+:root[data-theme="light"] .xtp-console {
+  background: #ffffff;
+  box-shadow: var(--fx-sheet-shadow-lg);
+}
+
+/* ---------- Home: product suite, data bus, layers end card, CTA -------- */
+
+:root[data-theme="light"] .stack__card {
+  border-color: var(--line-2);
+  background: #ffffff;
+  box-shadow: var(--fx-sheet-shadow-lg);
+}
+:root[data-theme="light"] .stack__art {
+  background: var(--surface-2);
+}
+:root[data-theme="light"] .bus__node {
+  border-color: var(--line-2);
+  background: #ffffff;
+  box-shadow: var(--fx-sheet-shadow);
+}
+:root[data-theme="light"] .bus__node:hover {
+  border-color: color-mix(in srgb, var(--tint) 45%, var(--line-2));
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 18px 40px -18px rgba(16, 24, 40, 0.2);
+}
+:root[data-theme="light"] .hz__panel--end {
+  background: #ffffff;
+  box-shadow: var(--fx-sheet-shadow-lg);
+}
+:root[data-theme="light"] .cta,
+:root[data-theme="light"] .quote-card,
+:root[data-theme="light"] .panel,
+:root[data-theme="light"] .plan--featured {
+  background: #ffffff;
+  box-shadow: var(--fx-sheet-shadow);
+}
+:root[data-theme="light"] .compare__row--fx {
+  background: color-mix(in srgb, var(--accent) 4%, #ffffff);
+}
+:root[data-theme="light"] .surface::before {
+  display: none;
+}
+:root[data-theme="light"] .glow {
+  display: none;
+}
+
+/* Pointer spotlight: a neutral lift instead of a coloured bloom. */
+:root[data-theme="light"] [data-spot]::after,
+:root[data-theme="light"] [data-spot="tint"]::after {
+  background: radial-gradient(380px circle at var(--mx) var(--my), rgba(16, 24, 40, 0.035), transparent 60%);
+}
+
+/* Buttons keep their fill; the coloured halo under them goes. */
+:root[data-theme="light"] .btn--accent {
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.1), 0 6px 16px -8px rgba(16, 24, 40, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+:root[data-theme="light"] .btn--accent:hover {
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.1), 0 10px 22px -10px rgba(16, 24, 40, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+/* Small status dots keep their colour without a halo. */
+:root[data-theme="light"] .eyebrow::before,
+:root[data-theme="light"] .xtp-eyebrow::before,
+:root[data-theme="light"] .xtp-dot {
+  box-shadow: none;
+}
+
+:root[data-theme="light"] .abt-frame {
+  background: #ffffff;
+  box-shadow: var(--fx-sheet-shadow-lg);
+}
+:root[data-theme="light"] .ctp-composer {
+  background: #ffffff;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: var(--fx-sheet-shadow-lg);
+}
+:root[data-theme="light"] :is(.value, .plan, .feature__fact, .surface):hover {
+  border-color: color-mix(in srgb, var(--tint, var(--accent)) 40%, var(--line-2));
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 18px 40px -18px rgba(16, 24, 40, 0.2);
+}
+:root[data-theme="light"] .bus__rail::after,
+:root[data-theme="light"] .gate.is-hot .gate__node {
+  box-shadow: none;
+}
+:root[data-theme="light"] .bus__pkt {
+  background: linear-gradient(90deg, transparent, var(--accent));
+  box-shadow: none;
+}
+
+/* The nav pill stays a white sheet over the dark pipeline room instead of turning grey. */
+:root[data-theme="light"] .nav__bar {
+  background: color-mix(in srgb, #ffffff 88%, transparent);
+  border-color: var(--line-2);
+}
+
+/* ---------- Home: pipeline room and layer cards --------------------------- */
+
+/* The pipeline section pins its own dark tokens; in light it takes the page's
+   light tokens back so the specimen sits on a pale bench. */
+:root[data-theme="light"] .pipe {
+  --bg: #f5f6f9;
+  --bg-2: #eef0f5;
+  --surface: #ffffff;
+  --surface-2: #f7f8fb;
+  --surface-3: #eceff5;
+  --line: rgba(10, 16, 32, 0.09);
+  --line-2: rgba(10, 16, 32, 0.14);
+  --line-strong: rgba(10, 16, 32, 0.28);
+  --text: #0a1020;
+  --text-2: #3c4458;
+  --muted: #6b7386;
+  --muted-2: #98a0b3;
+  --accent: #2563eb;
+  --accent-2: #1d4ed8;
+  --accent-soft: rgba(37, 99, 235, 0.1);
+  --accent-glow: rgba(37, 99, 235, 0.3);
+  --good: #16a34a;
+  color-scheme: light;
+  background: var(--bg-2);
+}
+:root[data-theme="light"] .spec__state.is-done i {
+  box-shadow: none;
+}
+
+:root[data-theme="light"] .hz__card {
+  --ink: #0a1020;
+  border-color: var(--line-2);
+  background: #ffffff;
+  color-scheme: light;
+  box-shadow: var(--fx-sheet-shadow-lg);
+}
+:root[data-theme="light"] .hz__fig {
+  background: var(--surface-2);
+}
+:root[data-theme="light"] .hz__tag i {
+  box-shadow: none;
+}
+:root[data-theme="light"] .lf-bar {
+  fill: color-mix(in srgb, var(--tint) 78%, transparent);
+}
+
+/* Home hero: a short bottom fade so the blue blocks do not wash into a lilac haze. */
+:root[data-theme="light"] .vg__veil {
+  background:
+    linear-gradient(180deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 70%, transparent) 10%, transparent 26%),
+    linear-gradient(0deg, var(--bg) 0%, transparent 12%);
+}
