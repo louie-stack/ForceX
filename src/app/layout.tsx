@@ -53,15 +53,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#04060b" },
-    { media: "(prefers-color-scheme: light)", color: "#f5f6f9" },
-  ],
+  themeColor: "#04060b",
   width: "device-width",
   initialScale: 1,
 };
 
-const THEME_BOOT = `(function(){var d=document.documentElement;try{var t=localStorage.getItem('fx-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}d.setAttribute('data-theme',t)}catch(e){d.setAttribute('data-theme','dark')}try{var r=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;if(!r&&sessionStorage.getItem('fx-loaded')!=='1'){d.setAttribute('data-pre','1')}else{d.setAttribute('data-loaded','1')}}catch(e){d.setAttribute('data-loaded','1')}})();`;
+const THEME_BOOT = `(function(){var d=document.documentElement;d.setAttribute('data-theme','dark');try{var r=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;if(!r&&sessionStorage.getItem('fx-loaded')!=='1'){d.setAttribute('data-pre','1')}else{d.setAttribute('data-loaded','1')}}catch(e){d.setAttribute('data-loaded','1')}})();`;
 
 const JSON_LD = {
   "@context": "https://schema.org",
