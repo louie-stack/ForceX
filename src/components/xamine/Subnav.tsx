@@ -14,6 +14,26 @@ export function Subnav({ appHref }: { appHref: string }) {
   const path = usePathname();
   const [open, setOpen] = useState<"charts" | "tools" | null>(null);
   const root = useRef<HTMLElement>(null);
+  const [stuck, setStuck] = useState(false);
+  // The bar only needs its backdrop once it pins; at rest it stays clear so the hero glow fades through it.
+  useEffect(() => {
+    let raf = 0;
+    const check = () => {
+      raf = 0;
+      if (root.current) setStuck(root.current.getBoundingClientRect().top <= 0);
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(check);
+    };
+    check();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
   useEffect(() => {
     if (!open) return;
     const away = (e: PointerEvent) => {
@@ -30,7 +50,7 @@ export function Subnav({ appHref }: { appHref: string }) {
 
   const activeChart = CHARTS.find((c) => path === `/xamine/charts/${c.slug}`);
   return (
-    <nav className="xs" ref={root} aria-label="Xamine">
+    <nav className={`xs ${stuck ? "is-stuck" : ""}`} ref={root} aria-label="Xamine">
       <div className="container xs__inner">
         <Link href="/xamine" className={`xs__link ${path === "/xamine" ? "is-active" : ""}`}>
           Xamine

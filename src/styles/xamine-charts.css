@@ -8,7 +8,19 @@
   top: 0;
   z-index: 40;
   padding-top: var(--nav-h);
+}
+.xs::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background: linear-gradient(180deg, var(--bg) 70%, color-mix(in srgb, var(--bg) 70%, transparent));
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+.xs.is-stuck::before {
+  opacity: 1;
 }
 .xs__inner {
   display: flex;
