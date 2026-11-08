@@ -35,9 +35,9 @@ export function Hero() {
 
           <div className="vg__panel">
             <div className="vg__actions">
-              <Link href="/signup" className="vgb vgb--primary">
+              <Link href="/xamine" className="vgb vgb--primary">
                 <i className="vgb__dot" aria-hidden="true" />
-                <span className="vgb__label">Create free account</span>
+                <span className="vgb__label">Open Xamine</span>
                 <span className="vgb__ico" aria-hidden="true">
                   <ArrowUpRight size={14} />
                 </span>

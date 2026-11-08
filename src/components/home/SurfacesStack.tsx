@@ -78,8 +78,8 @@ export function SurfacesStack() {
               Product Suite
             </Split>
           </div>
-          <Link href="/signup" className="btn btn--ghost" data-reveal>
-            Get access
+          <Link href="/xtract" className="btn btn--ghost" data-reveal>
+            Get API access
             <span className="btn__ico">
               <ArrowUpRight />
             </span>

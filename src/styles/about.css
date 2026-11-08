@@ -841,3 +841,48 @@
     display: grid;
   }
 }
+
+/* ---------- Scout / Sentinel drafts ---------------------------------- */
+/* The draft bar and logo slot are removed when the one-sheets land.     */
+
+.prd-draft {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 96px auto 0;
+  width: fit-content;
+  max-width: calc(100% - 32px);
+  padding: 9px 16px;
+  border: 1px dashed var(--line-strong);
+  border-radius: 999px;
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--text-2);
+  background: color-mix(in srgb, var(--bg) 70%, transparent);
+}
+.prd-draft__dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #e8b04b;
+}
+.prd .abt-hero {
+  padding-top: clamp(40px, 5vw, 64px);
+}
+.prd-logo {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 28px;
+  border: 1px dashed var(--line-strong);
+  border-radius: 16px;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}

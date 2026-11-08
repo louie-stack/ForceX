@@ -5,6 +5,7 @@ import { Provenance } from "@/components/xamine/Provenance";
 import { Subnav } from "@/components/xamine/Subnav";
 import { ArrowUpRight } from "@/components/Icons";
 import { FX_APP_ORIGIN, getNetworkSummary } from "@/lib/api";
+import { getViewer } from "@/lib/session";
 import { fmtDateLong, inclusiveEnd } from "@/lib/xamine/format";
 import {
   exampleQuery,
@@ -37,8 +38,17 @@ export default async function AddressLinxPage({
   const shown = hasAddress ? query : exampleQuery();
   const summary = await getNetworkSummary().catch(() => null);
   const tip = summary?.quality?.tip_height ?? summary?.asOf.height ?? null;
-  const r = await getLinx(shown, tip);
+  const viewer = await getViewer();
+  const r = await getLinx(shown, tip, viewer.signedIn);
   const invalid = hasAddress && !r.valid;
+  // Address LinX is behind the registration wall: anyone can see the worked
+  // example, but running it on an address of your own needs an account.
+  const walled = hasAddress && !invalid && !viewer.signedIn;
+  const returnTo = `/xamine/tools/address-linx?${new URLSearchParams({
+    address: query.address,
+    start: query.start,
+    end: inclusiveEnd(query.end),
+  }).toString()}`;
   const isExample = !hasAddress;
   const appHref = `${FX_APP_ORIGIN}/xamine/diagrams/address-relationships`;
 
@@ -83,6 +93,44 @@ export default async function AddressLinxPage({
                 <p>
                   Enter a legacy (L, M, 3) or bech32 (ltc1) Litecoin address.
                 </p>
+              </div>
+            </article>
+          ) : walled ? (
+            <article className="xi xi--card xc__card lx-wall">
+              <header className="xc__card-head">
+                <div>
+                  <span className="xc__caption mono">Selected address</span>
+                  <h2 className="xc__card-title xl__addr-title">
+                    <span className="mono">{query.address}</span>
+                  </h2>
+                </div>
+              </header>
+              <div className="lx-wall__body">
+                <span className="lx-wall__lock" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="4.5" y="10.5" width="15" height="10" rx="2" />
+                    <path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" />
+                  </svg>
+                </span>
+                <h3 className="lx-wall__title">Sign in to run Address LinX</h3>
+                <p className="lx-wall__text">
+                  Address forensics need a free ForceX account. The example
+                  address stays open to everyone.
+                </p>
+                <div className="lx-wall__actions">
+                  <a
+                    href={`/signup?return_to=${encodeURIComponent(returnTo)}`}
+                    className="btn btn--accent"
+                  >
+                    Create account
+                  </a>
+                  <a href="/signin" className="btn btn--ghost">
+                    Sign in
+                  </a>
+                </div>
+                <a href="/xamine/tools/address-linx" className="link-arrow mono lx-wall__back">
+                  View the example
+                </a>
               </div>
             </article>
           ) : (

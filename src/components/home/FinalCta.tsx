@@ -19,8 +19,8 @@ export function FinalCta() {
         </p>
         <div className="final__actions" data-reveal>
           <Magnetic>
-            <Link href="/signup" className="btn btn--accent btn--lg">
-              Create free account
+            <Link href="/xplorer/litecoin" className="btn btn--accent btn--lg">
+              Open the explorer
               <span className="btn__ico">
                 <ArrowUpRight />
               </span>

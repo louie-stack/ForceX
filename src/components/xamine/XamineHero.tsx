@@ -118,9 +118,9 @@ export function XamineHero({ summary, series, appHref }: { summary: NetworkSumma
                 <ArrowUpRight size={14} />
               </span>
             </a>
-            <Link href="/signup" className="vgb vgb--glass">
+            <Link href="/xplorer/litecoin" className="vgb vgb--glass">
               <i className="vgb__dot" aria-hidden="true" />
-              <span className="vgb__label">Create free account</span>
+              <span className="vgb__label">Open the explorer</span>
               <span className="vgb__ico" aria-hidden="true">
                 <ArrowUpRight size={14} />
               </span>

@@ -625,3 +625,60 @@
   opacity: 0.28;
   animation: none;
 }
+
+/* Registration wall: shown in place of results when a signed-out visitor
+   enters an address. Same card frame as the explorer, centred and quiet. */
+.lx-wall__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 72px 24px 80px;
+  border-top: 1px solid var(--line);
+}
+.lx-wall__lock {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid var(--line-2);
+  color: var(--text-2);
+  margin-bottom: 22px;
+}
+.lx-wall__title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.lx-wall__text {
+  margin: 10px 0 0;
+  max-width: 400px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--text-2);
+}
+.lx-wall__actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 28px;
+}
+.lx-wall__back {
+  margin-top: 22px;
+  font-size: 13px;
+  color: var(--muted);
+}
+@media (max-width: 560px) {
+  .lx-wall__body {
+    padding: 52px 18px 60px;
+  }
+  .lx-wall__actions {
+    flex-direction: column;
+    align-self: stretch;
+  }
+  .lx-wall__actions .btn {
+    justify-content: center;
+  }
+}

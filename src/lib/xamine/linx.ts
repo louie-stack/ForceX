@@ -235,8 +235,13 @@ function touch(agg: Map<string, Counterparty>, addr: string, delta: number, heig
   agg.set(addr, cur);
 }
 
-export async function getLinx(q: LinxQuery, tipHeight?: number | null): Promise<LinxPayload> {
-  if (q.address === EXAMPLE_ADDRESS) return sampleLinx(q, tipHeight ?? undefined);
+/**
+ * `allowLive` must only be true for a signed-in viewer (see lib/session.ts).
+ * Address LinX is the one page behind the registration wall, and the live
+ * query spends the site's FX_API_KEY, so anonymous visitors never reach it.
+ */
+export async function getLinx(q: LinxQuery, tipHeight?: number | null, allowLive = false): Promise<LinxPayload> {
+  if (!allowLive || q.address === EXAMPLE_ADDRESS) return sampleLinx(q, tipHeight ?? undefined);
   const live = await liveLinx(q);
   if (live) return live;
   return sampleLinx(q, tipHeight ?? undefined);
